@@ -1,13 +1,16 @@
 @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap");
 
-.cl-root {
+:root {
   --ink: #12151c;
   --panel: #191e27;
   --paper: #eeeae1;
   --muted: #8b93a4;
   --brass: #c9a34e;
   --teal: #49d3c4;
+}
 
+.cl-root,
+.cl-analysis {
   min-height: 100vh;
 
   background:
@@ -39,7 +42,8 @@
   box-sizing: border-box;
 }
 
-.cl-root::before {
+.cl-root::before,
+.cl-analysis::before {
   content: "";
 
   position: absolute;
@@ -518,5 +522,118 @@
 
   .cl-eyebrow {
     justify-content: center;
+  }
+}
+
+/* Analysis page */
+
+.cl-analysis-container {
+  max-width: 34rem;
+  width: 100%;
+
+  position: relative;
+  z-index: 1;
+}
+
+.cl-analysis-form {
+  margin-top: 2.5rem;
+
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  background: var(--panel);
+
+  border:
+    1px solid rgba(238, 234, 225, 0.1);
+
+  border-radius: 1.1rem;
+
+  padding: 1.75rem;
+
+  box-shadow:
+    0 30px 60px -20px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(0, 0, 0, 0.2);
+}
+
+.cl-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.cl-field label {
+  font-family: "IBM Plex Mono", monospace;
+
+  font-size: 0.7rem;
+
+  letter-spacing: 0.14em;
+
+  text-transform: uppercase;
+
+  color: var(--muted);
+}
+
+.cl-field input,
+.cl-field textarea {
+  font-family: "Inter", sans-serif;
+
+  font-size: 0.95rem;
+
+  color: var(--paper);
+
+  background: rgba(238, 234, 225, 0.04);
+
+  border:
+    1px solid rgba(238, 234, 225, 0.12);
+
+  border-radius: 0.6rem;
+
+  padding: 0.7rem 0.85rem;
+
+  outline: none;
+
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    background 0.15s ease;
+}
+
+.cl-field input::placeholder,
+.cl-field textarea::placeholder {
+  color: rgba(139, 147, 164, 0.7);
+}
+
+.cl-field input:hover,
+.cl-field textarea:hover {
+  border-color: rgba(238, 234, 225, 0.22);
+}
+
+.cl-field input:focus,
+.cl-field textarea:focus {
+  border-color: var(--teal);
+
+  background: rgba(73, 211, 196, 0.05);
+
+  box-shadow: 0 0 0 3px rgba(73, 211, 196, 0.15);
+}
+
+.cl-field textarea {
+  min-height: 110px;
+
+  resize: vertical;
+
+  line-height: 1.5;
+}
+
+.cl-analysis-form .cl-cta {
+  align-self: flex-start;
+
+  margin-top: 0.25rem;
+}
+
+@media (max-width: 899px) {
+  .cl-analysis {
+    padding: 3rem 1.5rem;
   }
 }
