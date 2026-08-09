@@ -1,8 +1,8 @@
-# CareerLens
+# CareerLenz
 
 > Find the gap. Close the gap.
 
-CareerLens is an AI-powered career readiness platform that helps students understand how well their skills match a target job and provides a personalized roadmap to close their skill gaps.
+CareerLenz is an AI-powered career readiness platform that helps students understand how well their skills match a target job and provides a personalized roadmap to close their skill gaps.
 
 ## 🚧 Project Status
 
@@ -10,7 +10,7 @@ Currently under active development.
 
 ## 🎯 Vision
 
-CareerLens aims to transform:
+CareerLenz aims to transform:
 
 Resume + Job Description
 
