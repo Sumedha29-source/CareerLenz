@@ -1,0 +1,522 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap");
+
+.cl-root {
+  --ink: #12151c;
+  --panel: #191e27;
+  --paper: #eeeae1;
+  --muted: #8b93a4;
+  --brass: #c9a34e;
+  --teal: #49d3c4;
+
+  min-height: 100vh;
+
+  background:
+    radial-gradient(
+      circle at 78% 22%,
+      rgba(73, 211, 196, 0.1),
+      transparent 45%
+    ),
+    radial-gradient(
+      circle at 12% 85%,
+      rgba(201, 163, 78, 0.08),
+      transparent 40%
+    ),
+    var(--ink);
+
+  background-color: var(--ink);
+
+  position: relative;
+  overflow: hidden;
+
+  font-family: "Inter", sans-serif;
+  color: var(--paper);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 4rem 2rem;
+  box-sizing: border-box;
+}
+
+.cl-root::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  background-image:
+    radial-gradient(
+      rgba(238, 234, 225, 0.06) 1px,
+      transparent 1px
+    );
+
+  background-size: 28px 28px;
+
+  mask-image:
+    radial-gradient(
+      circle at 50% 40%,
+      black 0%,
+      transparent 75%
+    );
+
+  pointer-events: none;
+}
+
+/* Main layout */
+
+.cl-grid {
+  display: grid;
+
+  grid-template-columns: 1fr;
+
+  gap: 3rem;
+
+  max-width: 72rem;
+  width: 100%;
+
+  position: relative;
+  z-index: 1;
+
+  align-items: center;
+}
+
+@media (min-width: 900px) {
+  .cl-grid {
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 2rem;
+  }
+}
+
+/* Eyebrow */
+
+.cl-eyebrow {
+  font-family: "IBM Plex Mono", monospace;
+
+  font-size: 0.75rem;
+
+  letter-spacing: 0.32em;
+
+  text-transform: uppercase;
+
+  color: var(--brass);
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 0.6rem;
+
+  margin: 0 0 1.75rem;
+}
+
+.cl-eyebrow-dot {
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+
+  background: var(--teal);
+
+  box-shadow: 0 0 8px 1px var(--teal);
+}
+
+/* Heading */
+
+.cl-heading {
+  font-family: "Space Grotesk", sans-serif;
+
+  font-weight: 700;
+
+  font-size: clamp(2.6rem, 5.4vw, 4.2rem);
+
+  line-height: 1.04;
+
+  letter-spacing: -0.02em;
+
+  color: var(--paper);
+
+  margin: 0;
+}
+
+/* Description */
+
+.cl-body {
+  margin-top: 1.75rem;
+
+  max-width: 34rem;
+
+  font-size: 1.08rem;
+
+  line-height: 1.65;
+
+  color: var(--muted);
+}
+
+/* Button */
+
+.cl-cta {
+  margin-top: 2.75rem;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 0.6rem;
+
+  background: var(--brass);
+
+  color: var(--ink);
+
+  font-family: "Inter", sans-serif;
+
+  font-weight: 600;
+
+  font-size: 1rem;
+
+  padding: 0.85rem 1.6rem;
+
+  border-radius: 0.7rem;
+
+  border: none;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 8px 24px -8px rgba(201, 163, 78, 0.55);
+
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease;
+}
+
+.cl-cta:hover {
+  transform: translateY(-2px);
+
+  background: #d9b664;
+
+  box-shadow:
+    0 12px 28px -8px rgba(201, 163, 78, 0.65);
+}
+
+.cl-cta:focus-visible {
+  outline: 2px solid var(--teal);
+
+  outline-offset: 3px;
+}
+
+.cl-cta svg {
+  transition: transform 0.18s ease;
+}
+
+.cl-cta:hover svg {
+  transform: translateX(3px);
+}
+
+/* ID Card */
+
+.cl-card-wrap {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  transform-origin: top center;
+}
+
+.cl-lanyard {
+  width: 2px;
+
+  height: 44px;
+
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(238, 234, 225, 0.02),
+      rgba(238, 234, 225, 0.28)
+    );
+}
+
+.cl-card {
+  width: min(78vw, 280px);
+
+  background: var(--panel);
+
+  border:
+    1px solid rgba(238, 234, 225, 0.1);
+
+  border-radius: 1.1rem;
+
+  padding: 1.5rem 1.35rem 1.25rem;
+
+  box-shadow:
+    0 30px 60px -20px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(0, 0, 0, 0.2);
+
+  position: relative;
+}
+
+.cl-card-hole {
+  position: absolute;
+
+  top: 0.7rem;
+
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  width: 30px;
+
+  height: 6px;
+
+  border-radius: 4px;
+
+  background: rgba(0, 0, 0, 0.35);
+}
+
+/* Card header */
+
+.cl-card-head {
+  display: flex;
+
+  align-items: center;
+
+  gap: 0.75rem;
+
+  margin-top: 0.75rem;
+}
+
+.cl-avatar {
+  width: 42px;
+
+  height: 42px;
+
+  border-radius: 50%;
+
+  flex-shrink: 0;
+
+  background:
+    conic-gradient(
+      from 180deg,
+      var(--teal),
+      var(--brass),
+      var(--teal)
+    );
+
+  opacity: 0.9;
+}
+
+.cl-lines {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 0.4rem;
+
+  flex: 1;
+}
+
+.cl-line {
+  display: block;
+
+  height: 7px;
+
+  border-radius: 4px;
+
+  background: rgba(238, 234, 225, 0.16);
+}
+
+.cl-line-1 {
+  width: 78%;
+}
+
+.cl-line-2 {
+  width: 46%;
+
+  background: rgba(238, 234, 225, 0.09);
+}
+
+/* Divider */
+
+.cl-card-divider {
+  height: 1px;
+
+  background: rgba(238, 234, 225, 0.08);
+
+  margin: 1.1rem 0;
+}
+
+/* Card body */
+
+.cl-card-body {
+  display: flex;
+
+  align-items: center;
+
+  gap: 1rem;
+}
+
+/* Readiness ring */
+
+.cl-ring-svg {
+  width: 88px;
+
+  height: 88px;
+
+  flex-shrink: 0;
+}
+
+.cl-ring-track {
+  fill: none;
+
+  stroke: rgba(238, 234, 225, 0.1);
+
+  stroke-width: 6;
+}
+
+.cl-ring-progress {
+  fill: none;
+
+  stroke: var(--teal);
+
+  stroke-width: 6;
+
+  stroke-linecap: round;
+
+  transform: rotate(-90deg);
+
+  transform-origin: 44px 44px;
+
+  transition: stroke-dashoffset 0.5s ease;
+}
+
+.cl-ring-num {
+  fill: var(--paper);
+
+  font-family: "Space Grotesk", sans-serif;
+
+  font-weight: 700;
+
+  font-size: 15px;
+}
+
+.cl-ring-label {
+  fill: var(--muted);
+
+  font-family: "IBM Plex Mono", monospace;
+
+  font-size: 6px;
+
+  letter-spacing: 0.1em;
+}
+
+/* Skill tags */
+
+.cl-tags {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 0.5rem;
+}
+
+.cl-tag {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 0.4rem;
+
+  font-family: "IBM Plex Mono", monospace;
+
+  font-size: 0.7rem;
+
+  color: var(--muted);
+
+  background: rgba(238, 234, 225, 0.05);
+
+  border:
+    1px solid rgba(238, 234, 225, 0.08);
+
+  padding: 0.25rem 0.55rem;
+
+  border-radius: 999px;
+}
+
+.cl-tag-dot {
+  width: 5px;
+
+  height: 5px;
+
+  border-radius: 50%;
+
+  background: var(--brass);
+}
+
+/* Barcode */
+
+.cl-barcode {
+  display: flex;
+
+  align-items: flex-end;
+
+  gap: 2px;
+
+  height: 22px;
+
+  margin-top: 1.25rem;
+}
+
+.cl-bar {
+  display: block;
+
+  height: 100%;
+
+  background: var(--paper);
+
+  border-radius: 1px;
+}
+
+/* Card animation */
+
+@media (prefers-reduced-motion: no-preference) {
+  .cl-card-wrap {
+    animation: cl-sway 7s ease-in-out infinite;
+  }
+}
+
+@keyframes cl-sway {
+  0%,
+  100% {
+    transform: rotate(-2.5deg) translateY(0px);
+  }
+
+  50% {
+    transform: rotate(2deg) translateY(-6px);
+  }
+}
+
+/* Mobile */
+
+@media (max-width: 899px) {
+  .cl-root {
+    padding: 3rem 1.5rem;
+  }
+
+  .cl-grid {
+    text-align: center;
+  }
+
+  .cl-body {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .cl-eyebrow {
+    justify-content: center;
+  }
+}
