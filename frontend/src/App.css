@@ -1,22 +1,140 @@
-@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap");
+/* =========================================================
+   RESULTS PAGE
+========================================================= */
 
-:root {
+.cl-result-card {
+  margin-top: 1.2rem;
+
+  padding: 1.3rem 1.5rem;
+
+  border: 1px solid rgba(238, 234, 225, 0.10);
+
+  border-radius: 0.9rem;
+
+  background: rgba(238, 234, 225, 0.04);
+}
+
+.cl-result-label {
+  margin: 0 0 0.5rem;
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 0.7rem;
+
+  letter-spacing: 0.14em;
+
+  color: var(--muted);
+}
+
+.cl-result-card h2 {
+  margin: 0;
+
+  font-family:
+    "Space Grotesk",
+    sans-serif;
+
+  color: var(--paper);
+
+  font-size: 1.5rem;
+}
+
+.cl-result-text {
+  margin: 0;
+
+  color: var(--muted);
+
+  line-height: 1.5;
+}
+
+
+/* Readiness score */
+
+.cl-result-score {
+  margin-top: 1.5rem;
+
+  padding: 1.5rem;
+
+  border-radius: 1rem;
+
+  background: var(--panel);
+
+  border:
+    1px solid
+    rgba(238, 234, 225, 0.10);
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 1.5rem;
+}
+
+.cl-result-score h2 {
+  margin: 0.2rem 0;
+
+  font-family:
+    "Space Grotesk",
+    sans-serif;
+
+  font-size: 2rem;
+
+  color: var(--paper);
+}
+
+.cl-result-score .cl-result-label {
+  margin-bottom: 0.2rem;
+}
+
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+/* =========================================================
+   GLOBAL
+   ========================================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  background: #12151c;
+}
+
+button,
+input,
+textarea {
+  font-family: inherit;
+}
+
+
+/* =========================================================
+   LANDING PAGE
+   ========================================================= */
+
+.cl-root {
   --ink: #12151c;
   --panel: #191e27;
   --paper: #eeeae1;
   --muted: #8b93a4;
   --brass: #c9a34e;
   --teal: #49d3c4;
-}
 
-.cl-root,
-.cl-analysis {
   min-height: 100vh;
 
   background:
     radial-gradient(
       circle at 78% 22%,
-      rgba(73, 211, 196, 0.1),
+      rgba(73, 211, 196, 0.10),
       transparent 45%
     ),
     radial-gradient(
@@ -25,8 +143,6 @@
       transparent 40%
     ),
     var(--ink);
-
-  background-color: var(--ink);
 
   position: relative;
   overflow: hidden;
@@ -38,12 +154,13 @@
   align-items: center;
   justify-content: center;
 
-  padding: 4rem 2rem;
-  box-sizing: border-box;
+  padding: 3rem 2rem;
 }
 
-.cl-root::before,
-.cl-analysis::before {
+
+/* Background dotted effect */
+
+.cl-root::before {
   content: "";
 
   position: absolute;
@@ -67,7 +184,8 @@
   pointer-events: none;
 }
 
-/* Main layout */
+
+/* Main grid */
 
 .cl-grid {
   display: grid;
@@ -92,7 +210,10 @@
   }
 }
 
-/* Eyebrow */
+
+/* =========================================================
+   TYPOGRAPHY
+   ========================================================= */
 
 .cl-eyebrow {
   font-family: "IBM Plex Mono", monospace;
@@ -106,7 +227,6 @@
   color: var(--brass);
 
   display: inline-flex;
-
   align-items: center;
 
   gap: 0.6rem;
@@ -122,17 +242,21 @@
 
   background: var(--teal);
 
-  box-shadow: 0 0 8px 1px var(--teal);
+  box-shadow:
+    0 0 8px 1px var(--teal);
 }
 
-/* Heading */
 
 .cl-heading {
   font-family: "Space Grotesk", sans-serif;
 
   font-weight: 700;
 
-  font-size: clamp(2.6rem, 5.4vw, 4.2rem);
+  font-size: clamp(
+    2.6rem,
+    5.4vw,
+    4.2rem
+  );
 
   line-height: 1.04;
 
@@ -143,7 +267,6 @@
   margin: 0;
 }
 
-/* Description */
 
 .cl-body {
   margin-top: 1.75rem;
@@ -155,9 +278,14 @@
   line-height: 1.65;
 
   color: var(--muted);
+
+  margin-bottom: 0;
 }
 
-/* Button */
+
+/* =========================================================
+   BUTTON
+   ========================================================= */
 
 .cl-cta {
   margin-top: 2.75rem;
@@ -165,6 +293,7 @@
   display: inline-flex;
 
   align-items: center;
+  justify-content: center;
 
   gap: 0.6rem;
 
@@ -187,7 +316,8 @@
   cursor: pointer;
 
   box-shadow:
-    0 8px 24px -8px rgba(201, 163, 78, 0.55);
+    0 8px 24px -8px
+    rgba(201, 163, 78, 0.55);
 
   transition:
     transform 0.18s ease,
@@ -201,7 +331,8 @@
   background: #d9b664;
 
   box-shadow:
-    0 12px 28px -8px rgba(201, 163, 78, 0.65);
+    0 12px 28px -8px
+    rgba(201, 163, 78, 0.65);
 }
 
 .cl-cta:focus-visible {
@@ -218,7 +349,10 @@
   transform: translateX(3px);
 }
 
-/* ID Card */
+
+/* =========================================================
+   ID CARD
+   ========================================================= */
 
 .cl-card-wrap {
   display: flex;
@@ -245,24 +379,33 @@
     );
 }
 
+
 .cl-card {
   width: min(78vw, 280px);
 
   background: var(--panel);
 
   border:
-    1px solid rgba(238, 234, 225, 0.1);
+    1px solid
+    rgba(238, 234, 225, 0.10);
 
   border-radius: 1.1rem;
 
-  padding: 1.5rem 1.35rem 1.25rem;
+  padding:
+    1.5rem
+    1.35rem
+    1.25rem;
 
   box-shadow:
-    0 30px 60px -20px rgba(0, 0, 0, 0.55),
-    0 0 0 1px rgba(0, 0, 0, 0.2);
+    0 30px 60px -20px
+    rgba(0, 0, 0, 0.55),
+
+    0 0 0 1px
+    rgba(0, 0, 0, 0.2);
 
   position: relative;
 }
+
 
 .cl-card-hole {
   position: absolute;
@@ -279,10 +422,10 @@
 
   border-radius: 4px;
 
-  background: rgba(0, 0, 0, 0.35);
+  background:
+    rgba(0, 0, 0, 0.35);
 }
 
-/* Card header */
 
 .cl-card-head {
   display: flex;
@@ -294,9 +437,9 @@
   margin-top: 0.75rem;
 }
 
+
 .cl-avatar {
   width: 42px;
-
   height: 42px;
 
   border-radius: 50%;
@@ -313,6 +456,7 @@
 
   opacity: 0.9;
 }
+
 
 .cl-lines {
   display: flex;
@@ -331,7 +475,8 @@
 
   border-radius: 4px;
 
-  background: rgba(238, 234, 225, 0.16);
+  background:
+    rgba(238, 234, 225, 0.16);
 }
 
 .cl-line-1 {
@@ -341,20 +486,20 @@
 .cl-line-2 {
   width: 46%;
 
-  background: rgba(238, 234, 225, 0.09);
+  background:
+    rgba(238, 234, 225, 0.09);
 }
 
-/* Divider */
 
 .cl-card-divider {
   height: 1px;
 
-  background: rgba(238, 234, 225, 0.08);
+  background:
+    rgba(238, 234, 225, 0.08);
 
   margin: 1.1rem 0;
 }
 
-/* Card body */
 
 .cl-card-body {
   display: flex;
@@ -364,11 +509,9 @@
   gap: 1rem;
 }
 
-/* Readiness ring */
 
 .cl-ring-svg {
   width: 88px;
-
   height: 88px;
 
   flex-shrink: 0;
@@ -377,7 +520,8 @@
 .cl-ring-track {
   fill: none;
 
-  stroke: rgba(238, 234, 225, 0.1);
+  stroke:
+    rgba(238, 234, 225, 0.10);
 
   stroke-width: 6;
 }
@@ -391,11 +535,11 @@
 
   stroke-linecap: round;
 
-  transform: rotate(-90deg);
+  transform:
+    rotate(-90deg);
 
-  transform-origin: 44px 44px;
-
-  transition: stroke-dashoffset 0.5s ease;
+  transform-origin:
+    44px 44px;
 }
 
 .cl-ring-num {
@@ -411,14 +555,15 @@
 .cl-ring-label {
   fill: var(--muted);
 
-  font-family: "IBM Plex Mono", monospace;
+  font-family:
+    "IBM Plex Mono",
+    monospace;
 
   font-size: 6px;
 
   letter-spacing: 0.1em;
 }
 
-/* Skill tags */
 
 .cl-tags {
   display: flex;
@@ -435,25 +580,30 @@
 
   gap: 0.4rem;
 
-  font-family: "IBM Plex Mono", monospace;
+  font-family:
+    "IBM Plex Mono",
+    monospace;
 
   font-size: 0.7rem;
 
   color: var(--muted);
 
-  background: rgba(238, 234, 225, 0.05);
+  background:
+    rgba(238, 234, 225, 0.05);
 
   border:
-    1px solid rgba(238, 234, 225, 0.08);
+    1px solid
+    rgba(238, 234, 225, 0.08);
 
-  padding: 0.25rem 0.55rem;
+  padding:
+    0.25rem
+    0.55rem;
 
   border-radius: 999px;
 }
 
 .cl-tag-dot {
   width: 5px;
-
   height: 5px;
 
   border-radius: 50%;
@@ -461,7 +611,6 @@
   background: var(--brass);
 }
 
-/* Barcode */
 
 .cl-barcode {
   display: flex;
@@ -485,30 +634,340 @@
   border-radius: 1px;
 }
 
-/* Card animation */
+
+/* ID card animation */
 
 @media (prefers-reduced-motion: no-preference) {
   .cl-card-wrap {
-    animation: cl-sway 7s ease-in-out infinite;
+    animation:
+      cl-sway
+      7s
+      ease-in-out
+      infinite;
   }
 }
 
 @keyframes cl-sway {
   0%,
   100% {
-    transform: rotate(-2.5deg) translateY(0px);
+    transform:
+      rotate(-2.5deg)
+      translateY(0);
   }
 
   50% {
-    transform: rotate(2deg) translateY(-6px);
+    transform:
+      rotate(2deg)
+      translateY(-6px);
   }
 }
 
-/* Mobile */
+
+/* =========================================================
+   CAREER ANALYSIS PAGE
+   ========================================================= */
+
+.cl-analysis {
+  --ink: #12151c;
+  --panel: #191e27;
+  --paper: #eeeae1;
+  --muted: #8b93a4;
+  --brass: #c9a34e;
+  --teal: #49d3c4;
+
+  min-height: 100vh;
+
+  background:
+    radial-gradient(
+      circle at 78% 18%,
+      rgba(73, 211, 196, 0.10),
+      transparent 45%
+    ),
+
+    radial-gradient(
+      circle at 12% 85%,
+      rgba(201, 163, 78, 0.08),
+      transparent 40%
+    ),
+
+    var(--ink);
+
+  color: var(--paper);
+
+  padding:
+    4rem
+    2rem;
+
+  position: relative;
+
+  overflow: hidden;
+}
+
+
+/* Dotted background */
+
+.cl-analysis::before {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  background-image:
+    radial-gradient(
+      rgba(238, 234, 225, 0.06) 1px,
+      transparent 1px
+    );
+
+  background-size: 28px 28px;
+
+  mask-image:
+    radial-gradient(
+      circle at 50% 40%,
+      black 0%,
+      transparent 75%
+    );
+
+  pointer-events: none;
+}
+
+
+.cl-analysis-container {
+  width: 100%;
+
+  max-width: 760px;
+
+  margin: 0 auto;
+
+  position: relative;
+
+  z-index: 1;
+}
+
+
+/* Analysis heading */
+
+.cl-analysis .cl-heading {
+  max-width: 700px;
+}
+
+.cl-analysis .cl-body {
+  max-width: 620px;
+}
+
+
+/* =========================================================
+   ANALYSIS FORM
+   ========================================================= */
+
+.cl-analysis-form {
+  margin-top: 2.5rem;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 0.8rem;
+
+  max-width: 650px;
+}
+
+
+.cl-analysis-form label {
+  margin-top: 1.2rem;
+
+  color: var(--paper);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 0.75rem;
+
+  letter-spacing: 0.12em;
+
+  text-transform: uppercase;
+}
+
+
+.cl-analysis-form input[type="text"],
+.cl-analysis-form textarea {
+  width: 100%;
+
+  border:
+    1px solid
+    rgba(238, 234, 225, 0.12);
+
+  border-radius: 0.7rem;
+
+  background:
+    rgba(238, 234, 225, 0.045);
+
+  color: var(--paper);
+
+  padding:
+    0.95rem
+    1rem;
+
+  font-size: 1rem;
+
+  outline: none;
+
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+
+.cl-analysis-form input[type="text"] {
+  height: 52px;
+}
+
+
+.cl-analysis-form textarea {
+  min-height: 130px;
+
+  resize: vertical;
+
+  line-height: 1.5;
+}
+
+
+.cl-analysis-form input[type="text"]::placeholder,
+.cl-analysis-form textarea::placeholder {
+  color:
+    rgba(139, 147, 164, 0.65);
+}
+
+
+.cl-analysis-form input[type="text"]:focus,
+.cl-analysis-form textarea:focus {
+  border-color: var(--teal);
+
+  background:
+    rgba(73, 211, 196, 0.04);
+
+  box-shadow:
+    0 0 0 3px
+    rgba(73, 211, 196, 0.08);
+}
+
+
+/* =========================================================
+   RESUME UPLOAD
+   ========================================================= */
+
+.cl-upload-box {
+  border:
+    1px dashed
+    rgba(238, 234, 225, 0.20);
+
+  border-radius: 0.8rem;
+
+  padding: 1.5rem;
+
+  background:
+    rgba(238, 234, 225, 0.03);
+
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+
+.cl-upload-box:hover {
+  border-color: var(--teal);
+
+  background:
+    rgba(73, 211, 196, 0.04);
+}
+
+
+.cl-upload-box input[type="file"] {
+  width: 100%;
+
+  color: var(--muted);
+
+  font-family: "Inter", sans-serif;
+
+  font-size: 0.9rem;
+
+  cursor: pointer;
+}
+
+
+/* Browser file button */
+
+.cl-upload-box input[type="file"]::file-selector-button {
+  background: var(--brass);
+
+  color: var(--ink);
+
+  border: none;
+
+  border-radius: 0.5rem;
+
+  padding:
+    0.65rem
+    1rem;
+
+  margin-right: 1rem;
+
+  font-family: "Inter", sans-serif;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+
+.cl-upload-box input[type="file"]::file-selector-button:hover {
+  background: #d9b664;
+
+  transform: translateY(-1px);
+}
+
+
+.cl-file-name {
+  margin-top: 0.8rem;
+
+  margin-bottom: 0;
+
+  color: var(--teal);
+
+  font-size: 0.9rem;
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+}
+
+
+/* =========================================================
+   ANALYSIS PAGE BUTTON
+   ========================================================= */
+
+.cl-analysis-form .cl-cta {
+  align-self: flex-start;
+
+  margin-top: 1.5rem;
+}
+
+
+/* =========================================================
+   RESPONSIVE DESIGN
+   ========================================================= */
 
 @media (max-width: 899px) {
   .cl-root {
-    padding: 3rem 1.5rem;
+    padding:
+      4rem
+      1.5rem;
   }
 
   .cl-grid {
@@ -523,117 +982,43 @@
   .cl-eyebrow {
     justify-content: center;
   }
+
+  .cl-card-wrap {
+    margin-top: 1rem;
+  }
 }
 
-/* Analysis page */
 
-.cl-analysis-container {
-  max-width: 34rem;
-  width: 100%;
+@media (max-width: 600px) {
+  .cl-root {
+    padding:
+      3rem
+      1.2rem;
+  }
 
-  position: relative;
-  z-index: 1;
-}
-
-.cl-analysis-form {
-  margin-top: 2.5rem;
-
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-
-  background: var(--panel);
-
-  border:
-    1px solid rgba(238, 234, 225, 0.1);
-
-  border-radius: 1.1rem;
-
-  padding: 1.75rem;
-
-  box-shadow:
-    0 30px 60px -20px rgba(0, 0, 0, 0.55),
-    0 0 0 1px rgba(0, 0, 0, 0.2);
-}
-
-.cl-field {
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-}
-
-.cl-field label {
-  font-family: "IBM Plex Mono", monospace;
-
-  font-size: 0.7rem;
-
-  letter-spacing: 0.14em;
-
-  text-transform: uppercase;
-
-  color: var(--muted);
-}
-
-.cl-field input,
-.cl-field textarea {
-  font-family: "Inter", sans-serif;
-
-  font-size: 0.95rem;
-
-  color: var(--paper);
-
-  background: rgba(238, 234, 225, 0.04);
-
-  border:
-    1px solid rgba(238, 234, 225, 0.12);
-
-  border-radius: 0.6rem;
-
-  padding: 0.7rem 0.85rem;
-
-  outline: none;
-
-  transition:
-    border-color 0.15s ease,
-    box-shadow 0.15s ease,
-    background 0.15s ease;
-}
-
-.cl-field input::placeholder,
-.cl-field textarea::placeholder {
-  color: rgba(139, 147, 164, 0.7);
-}
-
-.cl-field input:hover,
-.cl-field textarea:hover {
-  border-color: rgba(238, 234, 225, 0.22);
-}
-
-.cl-field input:focus,
-.cl-field textarea:focus {
-  border-color: var(--teal);
-
-  background: rgba(73, 211, 196, 0.05);
-
-  box-shadow: 0 0 0 3px rgba(73, 211, 196, 0.15);
-}
-
-.cl-field textarea {
-  min-height: 110px;
-
-  resize: vertical;
-
-  line-height: 1.5;
-}
-
-.cl-analysis-form .cl-cta {
-  align-self: flex-start;
-
-  margin-top: 0.25rem;
-}
-
-@media (max-width: 899px) {
   .cl-analysis {
-    padding: 3rem 1.5rem;
+    padding:
+      3rem
+      1.2rem;
+  }
+
+  .cl-heading {
+    font-size: 2.6rem;
+  }
+
+  .cl-analysis .cl-heading {
+    font-size: 2.5rem;
+  }
+
+  .cl-card {
+    width: min(88vw, 280px);
+  }
+
+  .cl-analysis-form {
+    margin-top: 2rem;
+  }
+
+  .cl-upload-box {
+    padding: 1.2rem;
   }
 }
