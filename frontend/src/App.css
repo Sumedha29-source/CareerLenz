@@ -1,30 +1,37 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap");
+
+
 /* =========================================================
    GLOBAL
-========================================================= */
+   ========================================================= */
 
 * {
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   margin: 0;
-  min-width: 320px;
   background: #12151c;
+  color: #eeeae1;
+  font-family: "Inter", sans-serif;
 }
 
 button,
 input,
-textarea,
 select {
   font: inherit;
 }
 
 
 /* =========================================================
-   MAIN LANDING PAGE
-========================================================= */
+   VARIABLES
+   ========================================================= */
 
-.cl-root {
+:root {
   --ink: #12151c;
   --panel: #191e27;
   --paper: #eeeae1;
@@ -33,21 +40,28 @@ select {
   --teal: #49d3c4;
   --danger: #ff8585;
 
+  --border: rgba(238, 234, 225, 0.1);
+  --teal-border: rgba(73, 211, 196, 0.25);
+  --brass-border: rgba(201, 163, 78, 0.35);
+}
+
+
+/* =========================================================
+   MAIN ROOT
+   ========================================================= */
+
+.cl-root {
   min-height: 100vh;
 
   background:
-    radial-gradient(circle at 78% 22%, rgba(73, 211, 196, 0.10), transparent 45%),
+    radial-gradient(circle at 78% 22%, rgba(73, 211, 196, 0.1), transparent 45%),
     radial-gradient(circle at 12% 85%, rgba(201, 163, 78, 0.08), transparent 40%),
     var(--ink);
 
   position: relative;
   overflow: hidden;
 
-  font-family: "Inter", sans-serif;
-
   color: var(--paper);
-
-  padding: 4rem 2rem;
 }
 
 .cl-root::before {
@@ -65,33 +79,35 @@ select {
 
 
 /* =========================================================
-   LANDING GRID
-========================================================= */
+   HOME PAGE
+   ========================================================= */
+
+.home-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+}
 
 .cl-grid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 3rem;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 4rem;
   max-width: 72rem;
   width: 100%;
-  margin: 0 auto;
   position: relative;
   z-index: 1;
   align-items: center;
-  min-height: calc(100vh - 8rem);
-}
-
-@media (min-width: 900px) {
-  .cl-grid {
-    grid-template-columns: 1.15fr 0.85fr;
-    gap: 2rem;
-  }
 }
 
 
 /* =========================================================
-   TYPOGRAPHY
-========================================================= */
+   HERO
+   ========================================================= */
+
+.hero-content {
+  max-width: 680px;
+}
 
 .cl-eyebrow {
   font-family: "IBM Plex Mono", monospace;
@@ -99,11 +115,9 @@ select {
   letter-spacing: 0.32em;
   text-transform: uppercase;
   color: var(--brass);
-
   display: inline-flex;
   align-items: center;
   gap: 0.6rem;
-
   margin: 0 0 1.75rem;
 }
 
@@ -116,13 +130,22 @@ select {
 }
 
 .cl-heading {
+  margin: 0;
   font-family: "Space Grotesk", sans-serif;
   font-weight: 700;
-  font-size: clamp(2.6rem, 5.4vw, 4.2rem);
+  font-size: clamp(3rem, 5.4vw, 4.5rem);
   line-height: 1.04;
   letter-spacing: -0.02em;
   color: var(--paper);
-  margin: 0;
+}
+
+/* Headings are given tabIndex={-1} in JSX so focus can be moved to
+   them programmatically on page transitions. They're never part of
+   the normal tab order, so a visible focus ring isn't needed here. */
+.cl-heading:focus,
+.analysis-heading:focus,
+.results-heading:focus {
+  outline: none;
 }
 
 .cl-body {
@@ -136,14 +159,12 @@ select {
 
 /* =========================================================
    BUTTON
-========================================================= */
+   ========================================================= */
 
 .cl-cta {
   margin-top: 2.75rem;
-
   display: inline-flex;
   align-items: center;
-  justify-content: center;
   gap: 0.6rem;
 
   background: var(--brass);
@@ -153,7 +174,7 @@ select {
   font-weight: 600;
   font-size: 1rem;
 
-  padding: 0.85rem 1.6rem;
+  padding: 0.9rem 1.6rem;
   border-radius: 0.7rem;
   border: none;
 
@@ -176,10 +197,10 @@ select {
 }
 
 .cl-cta:disabled {
-  opacity: 0.45;
+  opacity: 0.6;
   cursor: not-allowed;
-  box-shadow: none;
   transform: none;
+  box-shadow: none;
 }
 
 .cl-cta svg {
@@ -193,7 +214,7 @@ select {
 
 /* =========================================================
    ID CARD
-========================================================= */
+   ========================================================= */
 
 .cl-card-wrap {
   display: flex;
@@ -201,6 +222,12 @@ select {
   align-items: center;
   justify-content: center;
   transform-origin: top center;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .cl-card-wrap {
+    animation: cl-sway 7s ease-in-out infinite;
+  }
 }
 
 .cl-lanyard {
@@ -212,7 +239,7 @@ select {
 .cl-card {
   width: min(78vw, 280px);
   background: var(--panel);
-  border: 1px solid rgba(238, 234, 225, 0.10);
+  border: 1px solid rgba(238, 234, 225, 0.1);
   border-radius: 1.1rem;
   padding: 1.5rem 1.35rem 1.25rem;
 
@@ -283,52 +310,6 @@ select {
   gap: 1rem;
 }
 
-
-/* =========================================================
-   RING
-========================================================= */
-
-.cl-ring-svg {
-  width: 88px;
-  height: 88px;
-  flex-shrink: 0;
-}
-
-.cl-ring-track {
-  fill: none;
-  stroke: rgba(238, 234, 225, 0.10);
-  stroke-width: 6;
-}
-
-.cl-ring-progress {
-  fill: none;
-  stroke: var(--teal);
-  stroke-width: 6;
-  stroke-linecap: round;
-  transform: rotate(-90deg);
-  transform-origin: 44px 44px;
-  transition: stroke-dashoffset 0.4s ease;
-}
-
-.cl-ring-num {
-  fill: var(--paper);
-  font-family: "Space Grotesk", sans-serif;
-  font-weight: 700;
-  font-size: 15px;
-}
-
-.cl-ring-label {
-  fill: var(--muted);
-  font-family: "IBM Plex Mono", monospace;
-  font-size: 6px;
-  letter-spacing: 0.1em;
-}
-
-
-/* =========================================================
-   TAGS
-========================================================= */
-
 .cl-tags {
   display: flex;
   flex-direction: column;
@@ -358,11 +339,6 @@ select {
   background: var(--brass);
 }
 
-
-/* =========================================================
-   BARCODE
-========================================================= */
-
 .cl-barcode {
   display: flex;
   align-items: flex-end;
@@ -380,18 +356,665 @@ select {
 
 
 /* =========================================================
-   CARD ANIMATION
-========================================================= */
+   READINESS RING
+   ========================================================= */
 
-@media (prefers-reduced-motion: no-preference) {
-  .cl-card-wrap {
-    animation: cl-sway 7s ease-in-out infinite;
-  }
+.readiness-ring {
+  width: 105px;
+  height: 105px;
+  position: relative;
+  flex-shrink: 0;
 }
+
+.readiness-ring-svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.readiness-ring-track {
+  fill: none;
+  stroke: rgba(238, 234, 225, 0.1);
+  stroke-width: 7;
+}
+
+.readiness-ring-progress {
+  fill: none;
+  stroke: var(--teal);
+  stroke-width: 7;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.8s ease;
+}
+
+.readiness-ring-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.readiness-ring-text strong {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1.15rem;
+  color: var(--paper);
+}
+
+.readiness-ring-text span {
+  margin-top: 2px;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.42rem;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+}
+
+
+/* =========================================================
+   ANALYSIS PAGE
+   ========================================================= */
+
+.analysis-page {
+  min-height: 100vh;
+  padding: 2.5rem 2rem 5rem;
+}
+
+.analysis-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.back-button {
+  background: transparent;
+  border: none;
+  color: var(--paper);
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 2rem;
+  transition: color 0.2s ease;
+}
+
+.back-button:hover {
+  color: var(--teal);
+}
+
+.back-button:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 3px;
+}
+
+.analysis-heading,
+.results-heading {
+  margin: 0;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: clamp(3rem, 7vw, 5rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: var(--paper);
+}
+
+.analysis-description,
+.results-description {
+  max-width: 760px;
+  margin: 2rem 0 3rem;
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+.form-section,
+.upload-section {
+  margin-bottom: 2rem;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 0.7rem;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.25em;
+  color: var(--brass);
+}
+
+.role-select {
+  width: 100%;
+  padding: 1rem 1.1rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(238, 234, 225, 0.12);
+  background: var(--panel);
+  color: var(--paper);
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s ease, opacity 0.2s ease;
+}
+
+.role-select:focus-visible {
+  border-color: rgba(73, 211, 196, 0.5);
+  outline: 2px solid rgba(73, 211, 196, 0.35);
+  outline-offset: 1px;
+}
+
+.role-select:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.upload-box {
+  min-height: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  padding: 1.5rem;
+
+  border: 1px dashed rgba(73, 211, 196, 0.35);
+  border-radius: 1rem;
+  background: rgba(73, 211, 196, 0.025);
+  color: var(--muted);
+  cursor: pointer;
+
+  transition: border-color 0.2s ease, background 0.2s ease, opacity 0.2s ease;
+}
+
+.upload-box:hover {
+  border-color: rgba(73, 211, 196, 0.7);
+  background: rgba(73, 211, 196, 0.05);
+}
+
+.upload-box.dragging {
+  border-color: var(--teal);
+  border-style: solid;
+  background: rgba(73, 211, 196, 0.09);
+}
+
+.upload-box.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.upload-box:has(input:focus-visible) {
+  outline: 2px solid var(--teal);
+  outline-offset: 2px;
+}
+
+.upload-box input {
+  /* visually hidden but still keyboard/screen-reader accessible */
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.upload-icon {
+  color: var(--teal);
+  font-size: 1.5rem;
+}
+
+.analyze-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-top: 1rem;
+}
+
+.analyze-button {
+  margin-top: 0;
+}
+
+.cancel-link {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.2s ease;
+}
+
+.cancel-link:hover {
+  color: var(--paper);
+}
+
+.cancel-link:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 3px;
+}
+
+.error-message {
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid rgba(255, 90, 90, 0.3);
+  border-radius: 0.75rem;
+  background: rgba(255, 90, 90, 0.06);
+  color: #ff9b9b;
+}
+
+.notice-message {
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(201, 163, 78, 0.3);
+  border-radius: 0.75rem;
+  background: rgba(201, 163, 78, 0.06);
+  color: var(--paper);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+
+/* =========================================================
+   RESULTS PAGE
+   ========================================================= */
+
+.results-page {
+  min-height: 100vh;
+  padding: 2.5rem 2rem 6rem;
+}
+
+.results-container {
+  max-width: 1120px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.results-heading {
+  margin-top: 0.5rem;
+}
+
+.result-card {
+  margin-top: 1.5rem;
+  padding: 2rem;
+  border: 1px solid rgba(238, 234, 225, 0.1);
+  border-radius: 1.1rem;
+  background: rgba(25, 30, 39, 0.78);
+  backdrop-filter: blur(8px);
+}
+
+.result-label {
+  margin-bottom: 1rem;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.25em;
+  color: #8fa8cf;
+}
+
+.result-big-text {
+  margin: 0;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 2rem;
+  font-weight: 500;
+  color: var(--paper);
+}
+
+.result-description {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+
+/* =========================================================
+   READINESS RESULT
+   ========================================================= */
+
+.readiness-card {
+  padding: 2rem;
+}
+
+.readiness-content {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.readiness-percentage {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 2.5rem;
+  color: var(--paper);
+}
+
+.readiness-message {
+  margin: 0.4rem 0 0;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.readiness-message strong {
+  color: var(--paper);
+}
+
+
+/* =========================================================
+   SKILLS
+   ========================================================= */
+
+.skill-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+}
+
+.skill-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.55rem 0.8rem;
+  border-radius: 999px;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.72rem;
+}
+
+.skill-matched {
+  color: var(--teal);
+  background: rgba(73, 211, 196, 0.07);
+  border: 1px solid rgba(73, 211, 196, 0.28);
+}
+
+.skill-gap {
+  color: var(--brass);
+  background: rgba(201, 163, 78, 0.07);
+  border: 1px solid rgba(201, 163, 78, 0.28);
+}
+
+.skill-required {
+  color: var(--muted);
+  background: rgba(238, 234, 225, 0.04);
+  border: 1px solid rgba(238, 234, 225, 0.1);
+}
+
+.empty-text {
+  color: var(--muted);
+}
+
+.success-text {
+  color: var(--teal);
+}
+
+
+/* =========================================================
+   RESUME
+   ========================================================= */
+
+.resume-result {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.resume-icon {
+  font-size: 1.5rem;
+}
+
+.resume-name {
+  color: var(--paper);
+  font-size: 1rem;
+}
+
+.resume-success {
+  margin-top: 0.35rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+
+/* =========================================================
+   PERSONALIZED ROADMAP
+   ========================================================= */
+
+.roadmap-card {
+  border: 1px solid rgba(73, 211, 196, 0.25);
+}
+
+.roadmap-heading {
+  margin: 0.5rem 0 0.75rem;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 2rem;
+  color: var(--paper);
+}
+
+.roadmap-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.roadmap-item {
+  display: flex;
+  gap: 1.25rem;
+  padding: 1.4rem;
+
+  border: 1px solid rgba(238, 234, 225, 0.08);
+  border-radius: 1rem;
+  background: rgba(238, 234, 225, 0.025);
+
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.roadmap-item:hover {
+  transform: translateY(-2px);
+  border-color: rgba(73, 211, 196, 0.35);
+  background: rgba(73, 211, 196, 0.035);
+}
+
+.roadmap-number {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+
+  background: rgba(201, 163, 78, 0.12);
+  border: 1px solid rgba(201, 163, 78, 0.35);
+  color: var(--brass);
+
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.75rem;
+}
+
+.roadmap-content {
+  flex: 1;
+}
+
+.roadmap-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.roadmap-top h3 {
+  margin: 0;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1.25rem;
+  color: var(--paper);
+}
+
+.roadmap-time {
+  flex-shrink: 0;
+  padding: 0.3rem 0.65rem;
+  border-radius: 999px;
+  background: rgba(73, 211, 196, 0.08);
+  border: 1px solid rgba(73, 211, 196, 0.2);
+  color: var(--teal);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.7rem;
+}
+
+.roadmap-content > p {
+  margin: 0.6rem 0 1rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.roadmap-topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.roadmap-topic {
+  padding: 0.3rem 0.6rem;
+  border-radius: 999px;
+  background: rgba(238, 234, 225, 0.05);
+  border: 1px solid rgba(238, 234, 225, 0.08);
+  color: var(--muted);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.68rem;
+}
+
+.roadmap-practice {
+  margin-top: 1rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid rgba(238, 234, 225, 0.07);
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.roadmap-practice strong {
+  color: var(--teal);
+}
+
+.empty-roadmap {
+  padding: 2rem 0;
+  text-align: center;
+}
+
+.empty-roadmap-icon {
+  width: 50px;
+  height: 50px;
+  margin: 0 auto 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(73, 211, 196, 0.1);
+  color: var(--teal);
+  font-size: 1.5rem;
+}
+
+.empty-roadmap h3 {
+  margin: 0;
+  color: var(--paper);
+  font-family: "Space Grotesk", sans-serif;
+}
+
+.empty-roadmap p {
+  color: var(--muted);
+}
+
+
+/* =========================================================
+   RECOMMENDED PROJECT
+   ========================================================= */
+
+.project-card {
+  border: 1px solid rgba(201, 163, 78, 0.25);
+}
+
+.project-content {
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+}
+
+.project-icon {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.8rem;
+  background: rgba(201, 163, 78, 0.12);
+  border: 1px solid rgba(201, 163, 78, 0.25);
+  color: var(--brass);
+  font-size: 1.3rem;
+}
+
+.project-heading {
+  margin: 0;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1.7rem;
+  color: var(--paper);
+}
+
+.project-description {
+  margin: 0.6rem 0 1rem;
+  max-width: 700px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.project-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.project-skill {
+  padding: 0.35rem 0.65rem;
+  border-radius: 999px;
+  background: rgba(201, 163, 78, 0.08);
+  border: 1px solid rgba(201, 163, 78, 0.2);
+  color: var(--brass);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.7rem;
+}
+
+
+/* =========================================================
+   NEXT STEP
+   ========================================================= */
+
+.next-step-card {
+  margin-top: 1.5rem;
+  padding: 2rem;
+  border: 1px solid rgba(73, 211, 196, 0.3);
+  border-radius: 1.1rem;
+  background: linear-gradient(135deg, rgba(73, 211, 196, 0.05), rgba(201, 163, 78, 0.04));
+}
+
+.next-step-card h2 {
+  margin: 0.5rem 0 0.75rem;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1.8rem;
+  color: var(--paper);
+}
+
+.next-step-card p {
+  max-width: 800px;
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+
+/* =========================================================
+   ANIMATION
+   ========================================================= */
 
 @keyframes cl-sway {
   0%, 100% {
-    transform: rotate(-2.5deg) translateY(0px);
+    transform: rotate(-2.5deg) translateY(0);
   }
   50% {
     transform: rotate(2deg) translateY(-6px);
@@ -400,528 +1023,74 @@ select {
 
 
 /* =========================================================
-   ANALYSIS PAGE
-========================================================= */
-
-.cl-analysis {
-  --ink: #12151c;
-  --panel: #191e27;
-  --paper: #eeeae1;
-  --muted: #8b93a4;
-  --brass: #c9a34e;
-  --teal: #49d3c4;
-  --danger: #ff8585;
-
-  min-height: 100vh;
-
-  background:
-    radial-gradient(circle at 78% 22%, rgba(73, 211, 196, 0.10), transparent 45%),
-    radial-gradient(circle at 12% 85%, rgba(201, 163, 78, 0.08), transparent 40%),
-    var(--ink);
-
-  color: var(--paper);
-  font-family: "Inter", sans-serif;
-  padding: 4rem 2rem;
-}
-
-.cl-analysis-container {
-  width: 100%;
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-
-/* =========================================================
-   BACK BUTTON
-========================================================= */
-
-.cl-back-button {
-  border: none;
-  background: transparent;
-  color: var(--muted);
-  cursor: pointer;
-  padding: 0;
-  margin-bottom: 2rem;
-  font-size: 0.9rem;
-  transition: color 0.2s ease;
-}
-
-.cl-back-button:hover {
-  color: var(--teal);
-}
-
-.cl-back-button:focus-visible {
-  outline: 2px solid var(--teal);
-  outline-offset: 3px;
-}
-
-
-/* =========================================================
-   ANALYSIS FORM
-========================================================= */
-
-.cl-analysis-form {
-  margin-top: 2.5rem;
-  max-width: 720px;
-}
-
-.cl-analysis-form label {
-  display: block;
-  margin-top: 1.5rem;
-  margin-bottom: 0.55rem;
-
-  font-family: "IBM Plex Mono", monospace;
-  font-size: 0.72rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
-.cl-analysis-form input[type="text"],
-.cl-analysis-form textarea,
-.cl-analysis-form select,
-.cl-analysis-form input[type="number"] {
-  width: 100%;
-
-  border: 1px solid rgba(238, 234, 225, 0.12);
-  border-radius: 0.7rem;
-  background: rgba(238, 234, 225, 0.045);
-  color: var(--paper);
-
-  padding: 0.9rem 1rem;
-  outline: none;
-
-  transition: border 0.2s ease, background 0.2s ease;
-}
-
-.cl-analysis-form input:focus-visible,
-.cl-analysis-form textarea:focus-visible,
-.cl-analysis-form select:focus-visible {
-  border-color: var(--teal);
-  background: rgba(238, 234, 225, 0.07);
-  outline: 2px solid rgba(73, 211, 196, 0.35);
-  outline-offset: 1px;
-}
-
-.cl-analysis-form input[aria-invalid="true"],
-.cl-analysis-form select[aria-invalid="true"] {
-  border-color: rgba(255, 133, 133, 0.55);
-}
-
-.cl-analysis-form textarea {
-  min-height: 120px;
-  resize: vertical;
-  line-height: 1.5;
-}
-
-.cl-analysis-form input::placeholder,
-.cl-analysis-form textarea::placeholder {
-  color: #687080;
-}
-
-.cl-field-hint {
-  margin: 0.5rem 0 0;
-  font-size: 0.85rem;
-  color: var(--muted);
-}
-
-.cl-field-error {
-  margin: 0.5rem 0 0;
-  font-size: 0.85rem;
-  color: var(--danger);
-}
-
-
-/* =========================================================
-   UPLOAD
-========================================================= */
-
-.cl-upload-box {
-  padding: 1.2rem;
-  border: 1px dashed rgba(238, 234, 225, 0.20);
-  border-radius: 0.8rem;
-  background: rgba(238, 234, 225, 0.035);
-}
-
-.cl-upload-box input[type="file"] {
-  width: 100%;
-  color: var(--muted);
-  cursor: pointer;
-}
-
-.cl-upload-box input[type="file"]::file-selector-button {
-  margin-right: 1rem;
-  border: none;
-  border-radius: 0.5rem;
-  padding: 0.65rem 1rem;
-  background: var(--brass);
-  color: var(--ink);
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.cl-file-name {
-  margin: 0.8rem 0 0;
-  color: var(--teal);
-  font-size: 0.9rem;
-}
-
-
-/* =========================================================
-   RESOURCES
-========================================================= */
-
-.cl-resources-section {
-  margin-top: 2.5rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid rgba(238, 234, 225, 0.08);
-}
-
-.cl-resources-section h2 {
-  margin: 0 0 0.5rem;
-  font-family: "Space Grotesk", sans-serif;
-  color: var(--paper);
-}
-
-.cl-resource-description {
-  margin: 0 0 1.2rem;
-  color: var(--muted);
-  font-size: 0.92rem;
-  line-height: 1.5;
-}
-
-.cl-resource-form {
-  display: grid;
-  grid-template-columns: 0.8fr 1.5fr 0.7fr;
-  gap: 0.7rem;
-  align-items: center;
-}
-
-.cl-add-resource {
-  grid-column: 1 / -1;
-  justify-self: start;
-  margin-top: 0.3rem;
-
-  border: 1px solid rgba(73, 211, 196, 0.35);
-  background: rgba(73, 211, 196, 0.08);
-  color: var(--teal);
-
-  padding: 0.65rem 1rem;
-  border-radius: 0.6rem;
-  cursor: pointer;
-  font-weight: 600;
-
-  transition: background 0.2s ease, transform 0.2s ease;
-}
-
-.cl-add-resource:hover {
-  background: rgba(73, 211, 196, 0.15);
-  transform: translateY(-1px);
-}
-
-.cl-add-resource:focus-visible {
-  outline: 2px solid var(--teal);
-  outline-offset: 2px;
-}
-
-
-/* =========================================================
-   RESOURCE CARDS
-========================================================= */
-
-.cl-resource-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-  margin-top: 1.3rem;
-}
-
-.cl-resource-card {
-  padding: 1rem 1.1rem;
-  background: var(--panel);
-  border: 1px solid rgba(238, 234, 225, 0.08);
-  border-radius: 0.8rem;
-  transition: border 0.2s ease, transform 0.2s ease;
-}
-
-.cl-resource-card:hover {
-  border-color: rgba(73, 211, 196, 0.25);
-  transform: translateY(-1px);
-}
-
-.cl-resource-card-top {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 1rem;
-}
-
-.cl-resource-type {
-  display: inline-block;
-  font-family: "IBM Plex Mono", monospace;
-  font-size: 0.65rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--brass);
-  margin-bottom: 0.3rem;
-}
-
-.cl-resource-card h3 {
-  margin: 0;
-  color: var(--paper);
-  font-family: "Space Grotesk", sans-serif;
-  font-size: 1rem;
-  font-weight: 500;
-}
-
-.cl-delete-resource {
-  width: 28px;
-  height: 28px;
-  border: none;
-  border-radius: 50%;
-  background: rgba(238, 234, 225, 0.06);
-  color: var(--muted);
-  cursor: pointer;
-  font-size: 1.2rem;
-  line-height: 1;
-  transition: background 0.2s ease, color 0.2s ease;
-}
-
-.cl-delete-resource:hover {
-  background: rgba(255, 80, 80, 0.15);
-  color: var(--danger);
-}
-
-.cl-delete-resource:focus-visible {
-  outline: 2px solid var(--danger);
-  outline-offset: 2px;
-}
-
-
-/* =========================================================
-   PROGRESS
-========================================================= */
-
-.cl-progress-info {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 0.9rem;
-  margin-bottom: 0.4rem;
-
-  font-family: "IBM Plex Mono", monospace;
-  font-size: 0.68rem;
-  color: var(--muted);
-}
-
-.cl-progress-bar {
-  width: 100%;
-  height: 6px;
-  overflow: hidden;
-  border-radius: 999px;
-  background: rgba(238, 234, 225, 0.08);
-}
-
-.cl-progress-fill {
-  height: 100%;
-  border-radius: inherit;
-  background: linear-gradient(90deg, var(--teal), #7be3d8);
-  transition: width 0.3s ease;
-}
-
-
-/* =========================================================
-   ANALYZE BUTTON
-========================================================= */
-
-.cl-analyze-button {
-  margin-top: 2rem;
-}
-
-
-/* =========================================================
-   RESULT SCORE
-========================================================= */
-
-.cl-result-score {
-  margin-top: 2rem;
-  padding: 1.5rem;
-  border-radius: 1rem;
-  background: var(--panel);
-  border: 1px solid rgba(238, 234, 225, 0.10);
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-}
-
-.cl-result-score h2 {
-  margin: 0.2rem 0;
-  font-family: "Space Grotesk", sans-serif;
-  font-size: 2rem;
-  color: var(--paper);
-}
-
-
-/* =========================================================
-   RESULT CARDS
-========================================================= */
-
-.cl-result-card {
-  margin-top: 1.2rem;
-  padding: 1.3rem 1.5rem;
-  border: 1px solid rgba(238, 234, 225, 0.10);
-  border-radius: 0.9rem;
-  background: rgba(238, 234, 225, 0.04);
-}
-
-.cl-result-label {
-  margin: 0 0 0.5rem;
-  font-family: "IBM Plex Mono", monospace;
-  font-size: 0.7rem;
-  letter-spacing: 0.14em;
-  color: var(--muted);
-}
-
-.cl-result-card h2 {
-  margin: 0;
-  color: var(--paper);
-  font-family: "Space Grotesk", sans-serif;
-  font-size: 1.5rem;
-}
-
-.cl-result-text {
-  margin: 0.5rem 0 0;
-  color: var(--muted);
-  line-height: 1.5;
-}
-
-
-/* =========================================================
-   SKILL LIST
-========================================================= */
-
-.cl-skill-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-  margin-top: 0.8rem;
-}
-
-.cl-skill {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.45rem 0.7rem;
-  border-radius: 999px;
-  font-family: "IBM Plex Mono", monospace;
-  font-size: 0.72rem;
-  text-transform: capitalize;
-}
-
-.cl-skill.matched {
-  color: var(--teal);
-  background: rgba(73, 211, 196, 0.08);
-  border: 1px solid rgba(73, 211, 196, 0.25);
-}
-
-.cl-skill.missing {
-  color: var(--brass);
-  background: rgba(201, 163, 78, 0.08);
-  border: 1px solid rgba(201, 163, 78, 0.25);
-}
-
-.cl-skill.required {
-  color: var(--muted);
-  background: rgba(238, 234, 225, 0.05);
-  border: 1px solid rgba(238, 234, 225, 0.10);
-}
-
-
-/* =========================================================
-   RESULT RESOURCES
-========================================================= */
-
-.cl-result-resources {
-  display: flex;
-  flex-direction: column;
-  gap: 0.7rem;
-  margin-top: 0.8rem;
-}
-
-.cl-result-resource {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 0.8rem;
-  border-radius: 0.6rem;
-  background: rgba(238, 234, 225, 0.035);
-}
-
-.cl-result-resource p {
-  margin: 0.1rem 0 0;
-  color: var(--paper);
-}
-
-.cl-result-resource strong {
-  color: var(--teal);
-  font-family: "IBM Plex Mono", monospace;
-}
-
-
-/* =========================================================
-   NEXT STEP
-========================================================= */
-
-.cl-next-step {
-  margin-bottom: 3rem;
-  border-color: rgba(73, 211, 196, 0.18);
-  background: rgba(73, 211, 196, 0.04);
-}
-
-
-/* =========================================================
    RESPONSIVE
-========================================================= */
+   ========================================================= */
 
-@media (max-width: 700px) {
-  .cl-root,
-  .cl-analysis {
-    padding: 2rem 1.2rem;
-  }
-
+@media (max-width: 900px) {
   .cl-grid {
-    min-height: auto;
-    padding-top: 2rem;
-  }
-
-  .cl-heading {
-    font-size: 2.7rem;
-  }
-
-  .cl-resource-form {
     grid-template-columns: 1fr;
+    gap: 3rem;
+    text-align: center;
   }
 
-  .cl-add-resource {
-    width: 100%;
-    justify-self: stretch;
-  }
-
-  .cl-result-score {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-}
-
-@media (max-width: 450px) {
-  .cl-heading {
-    font-size: 2.35rem;
+  .hero-content {
+    max-width: 700px;
+    margin: 0 auto;
   }
 
   .cl-body {
-    font-size: 0.98rem;
+    margin-left: auto;
+    margin-right: auto;
   }
 
-  .cl-card {
-    width: min(90vw, 280px);
+  .cl-card-wrap {
+    margin-top: 1rem;
+  }
+}
+
+@media (max-width: 650px) {
+  .home-page,
+  .analysis-page,
+  .results-page {
+    padding: 2rem 1rem 4rem;
+  }
+
+  .analysis-heading,
+  .results-heading {
+    font-size: 3rem;
+  }
+
+  .result-card {
+    padding: 1.25rem;
+  }
+
+  .readiness-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .roadmap-item {
+    gap: 0.8rem;
+    padding: 1rem;
+  }
+
+  .roadmap-top {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .roadmap-number {
+    width: 36px;
+    height: 36px;
+  }
+
+  .project-content {
+    flex-direction: column;
+  }
+
+  .analyze-actions {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
   }
 }
