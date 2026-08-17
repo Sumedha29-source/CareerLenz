@@ -1503,6 +1503,619 @@ def build_career_insights(
     }
 
 
+
+# ==========================================
+# RESUME QUALITY ANALYSIS
+# ==========================================
+
+SECTION_KEYWORDS = {
+    "projects": [
+        "project",
+        "projects",
+        "personal projects",
+        "academic projects",
+    ],
+    "experience": [
+        "experience",
+        "work experience",
+        "internship",
+        "internships",
+        "employment",
+        "professional experience",
+    ],
+    "education": [
+        "education",
+        "academic background",
+        "academics",
+    ],
+    "achievements": [
+        "achievement",
+        "achievements",
+        "awards",
+        "honors",
+        "accomplishments",
+    ],
+    "certifications": [
+        "certification",
+        "certifications",
+        "certificate",
+        "certificates",
+    ],
+}
+
+IMPACT_PATTERNS = [
+    re.compile(r"\b\d+(?:\.\d+)?\s*%\b"),
+    re.compile(r"\b\d+(?:\.\d+)?\s*[xX]\b"),
+    re.compile(r"\b\d+\+\s*(?:users?|projects?|clients?|requests?|records?|students?|customers?|downloads?|views?|tasks?|models?|features?)\b", re.IGNORECASE),
+    re.compile(r"[₹$€£]\s?\d[\d,]*(?:\.\d+)?"),
+    re.compile(r"\b(?:reduced|increased|improved|boosted|grew|saved|cut|decreased|optimized|accelerated)\b.{0,45}\b\d+(?:\.\d+)?\s*%\b", re.IGNORECASE),
+]
+
+ACTION_VERBS = [
+    "built",
+    "developed",
+    "created",
+    "implemented",
+    "designed",
+    "deployed",
+    "optimized",
+    "trained",
+    "integrated",
+    "automated",
+    "engineered",
+    "analyzed",
+    "improved",
+    "managed",
+    "led",
+    "delivered",
+]
+
+CONTACT_PATTERNS = {
+    "email": re.compile(
+        r"\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b",
+        re.IGNORECASE,
+    ),
+    "phone": re.compile(
+        r"(?<!\d)(?:\+?\d{1,3}[\s\-]?)?(?:\(?\d{2,5}\)?[\s\-]?)?\d{5,10}(?!\d)"
+    ),
+    "linkedin": re.compile(
+        r"(?:linkedin\.com|linkedin\b)",
+        re.IGNORECASE,
+    ),
+    "github": re.compile(
+        r"(?:github\.com|github\b)",
+        re.IGNORECASE,
+    ),
+}
+
+
+def _normalize_resume_text(text):
+    return re.sub(
+        r"\s+",
+        " ",
+        text.lower()
+    ).strip()
+
+
+def _contains_any_keyword(
+    normalized_text,
+    keywords
+):
+    return any(
+        re.search(
+            r"(?<![a-z0-9])"
+            + re.escape(keyword.lower())
+            + r"(?![a-z0-9])",
+            normalized_text
+        )
+        for keyword in keywords
+    )
+
+
+def detect_resume_sections(text):
+    normalized = _normalize_resume_text(text)
+
+    found = {
+        section: _contains_any_keyword(
+            normalized,
+            keywords
+        )
+        for section, keywords
+        in SECTION_KEYWORDS.items()
+    }
+
+    found["skills"] = _contains_any_keyword(
+        normalized,
+        [
+            "skills",
+            "technical skills",
+            "technologies",
+            "tech stack",
+        ]
+    )
+
+    found["summary"] = _contains_any_keyword(
+        normalized,
+        [
+            "summary",
+            "profile",
+            "objective",
+            "career objective",
+        ]
+    )
+
+    return found
+
+
+def detect_contact_details(text):
+    return {
+        key: bool(pattern.search(text))
+        for key, pattern
+        in CONTACT_PATTERNS.items()
+    }
+
+
+def count_impact_signals(text):
+    matches = []
+
+    for pattern in IMPACT_PATTERNS:
+        matches.extend(
+            match.group(0)
+            for match in pattern.finditer(text)
+        )
+
+    unique_matches = []
+
+    for item in matches:
+        cleaned = item.strip()
+
+        if cleaned not in unique_matches:
+            unique_matches.append(cleaned)
+
+    return unique_matches
+
+
+def count_action_verbs(text):
+    normalized = _normalize_resume_text(text)
+
+    count = 0
+
+    for verb in ACTION_VERBS:
+        count += len(
+            re.findall(
+                r"\b"
+                + re.escape(verb)
+                + r"\b",
+                normalized
+            )
+        )
+
+    return count
+
+
+def score_skills_quality(
+    detected_skills,
+    required_skills
+):
+    if not required_skills:
+        return 0
+
+    detected = {
+        skill.lower()
+        for skill in detected_skills
+    }
+
+    matched_count = sum(
+        1
+        for skill in required_skills
+        if skill.lower() in detected
+    )
+
+    role_coverage = (
+        matched_count /
+        len(required_skills)
+    )
+
+    breadth_bonus = min(
+        len(detected_skills) / 12,
+        1
+    )
+
+    score = round(
+        (
+            role_coverage * 0.8
+            + breadth_bonus * 0.2
+        )
+        * 100
+    )
+
+    return max(
+        0,
+        min(100, score)
+    )
+
+
+def score_projects_quality(
+    text,
+    sections
+):
+    normalized = _normalize_resume_text(text)
+
+    score = 0
+
+    if sections.get("projects"):
+        score += 50
+
+    project_terms = [
+        "project",
+        "built",
+        "developed",
+        "created",
+        "github",
+        "deployed",
+        "prototype",
+    ]
+
+    evidence_count = sum(
+        len(
+            re.findall(
+                r"\b"
+                + re.escape(term)
+                + r"\b",
+                normalized
+            )
+        )
+        for term in project_terms
+    )
+
+    score += min(
+        evidence_count * 5,
+        35
+    )
+
+    if (
+        "github.com" in normalized
+        or "demo" in normalized
+        or "deployed" in normalized
+    ):
+        score += 15
+
+    return min(
+        100,
+        score
+    )
+
+
+def score_experience_quality(
+    text,
+    sections
+):
+    normalized = _normalize_resume_text(text)
+
+    score = 0
+
+    if sections.get("experience"):
+        score += 55
+
+    experience_terms = [
+        "intern",
+        "internship",
+        "experience",
+        "freelance",
+        "volunteer",
+        "worked",
+        "company",
+        "organization",
+        "team",
+    ]
+
+    evidence_count = sum(
+        len(
+            re.findall(
+                r"\b"
+                + re.escape(term)
+                + r"\b",
+                normalized
+            )
+        )
+        for term in experience_terms
+    )
+
+    score += min(
+        evidence_count * 5,
+        35
+    )
+
+    if re.search(
+        r"\b(?:20\d{2}|19\d{2})\s*[-–]\s*(?:20\d{2}|present|current)\b",
+        normalized,
+        re.IGNORECASE,
+    ):
+        score += 10
+
+    return min(
+        100,
+        score
+    )
+
+
+def score_impact_quality(text):
+    impact_signals = count_impact_signals(text)
+    action_verb_count = count_action_verbs(text)
+
+    score = min(
+        len(impact_signals) * 18,
+        72
+    )
+
+    score += min(
+        action_verb_count * 3,
+        28
+    )
+
+    return min(
+        100,
+        score
+    )
+
+
+def score_completeness(
+    sections,
+    contact_details,
+    detected_skills
+):
+    score = 0
+
+    if sections.get("education"):
+        score += 18
+
+    if sections.get("projects"):
+        score += 18
+
+    if sections.get("experience"):
+        score += 18
+
+    if sections.get("skills") or detected_skills:
+        score += 18
+
+    if contact_details.get("email"):
+        score += 10
+
+    if contact_details.get("phone"):
+        score += 6
+
+    if (
+        contact_details.get("linkedin")
+        or contact_details.get("github")
+    ):
+        score += 6
+
+    if (
+        sections.get("summary")
+        or sections.get("achievements")
+        or sections.get("certifications")
+    ):
+        score += 6
+
+    return min(
+        100,
+        score
+    )
+
+
+def build_resume_feedback(
+    skills_score,
+    projects_score,
+    experience_score,
+    impact_score,
+    completeness_score,
+    sections,
+    impact_signals,
+    detected_skills,
+    missing_skills
+):
+    feedback = []
+
+    if skills_score < 60:
+        if missing_skills:
+            top_missing = ", ".join(
+                missing_skills[:3]
+            )
+
+            feedback.append(
+                "Strengthen role-specific evidence by "
+                f"adding projects or experience using {top_missing}."
+            )
+        else:
+            feedback.append(
+                "Make your technical skills more explicit in a dedicated skills section."
+            )
+
+    if projects_score < 65:
+        feedback.append(
+            "Strengthen your Projects section with 2-3 role-relevant projects and clearly state the stack, problem and outcome."
+        )
+
+    if experience_score < 55:
+        feedback.append(
+            "Your resume shows limited work or internship evidence. Add internships, freelance work, leadership, volunteering or substantial team projects where relevant."
+        )
+
+    if impact_score < 50:
+        feedback.append(
+            "Add measurable outcomes to bullets. Replace generic statements such as 'built an application' with impact-focused results using users, speed, accuracy, percentages or scale where truthful."
+        )
+
+    if completeness_score < 75:
+        missing_sections = [
+            name.title()
+            for name in [
+                "education",
+                "skills",
+                "projects",
+                "experience",
+            ]
+            if not sections.get(name)
+        ]
+
+        if missing_sections:
+            feedback.append(
+                "Improve resume completeness by making these sections easier to identify: "
+                + ", ".join(missing_sections)
+                + "."
+            )
+
+    if not impact_signals:
+        feedback.append(
+            "No clear quantified achievements were detected. Add numbers only where you can support them, such as model accuracy, users served, requests handled or time saved."
+        )
+
+    if len(detected_skills) < 4:
+        feedback.append(
+            "Your technical footprint appears narrow. Make sure your relevant tools, languages and frameworks are explicitly listed where they are actually used."
+        )
+
+    if not feedback:
+        feedback.append(
+            "Your resume has a solid structure. Focus next on stronger project depth, deployment evidence and more quantified impact."
+        )
+
+    return feedback[:5]
+
+
+def build_resume_quality_analysis(
+    text,
+    detected_skills,
+    required_skills,
+    missing_skills
+):
+    sections = detect_resume_sections(
+        text
+    )
+
+    contact_details = (
+        detect_contact_details(
+            text
+        )
+    )
+
+    impact_signals = (
+        count_impact_signals(
+            text
+        )
+    )
+
+    action_verb_count = (
+        count_action_verbs(
+            text
+        )
+    )
+
+    skills_score = (
+        score_skills_quality(
+            detected_skills,
+            required_skills
+        )
+    )
+
+    projects_score = (
+        score_projects_quality(
+            text,
+            sections
+        )
+    )
+
+    experience_score = (
+        score_experience_quality(
+            text,
+            sections
+        )
+    )
+
+    impact_score = (
+        score_impact_quality(
+            text
+        )
+    )
+
+    completeness_score = (
+        score_completeness(
+            sections,
+            contact_details,
+            detected_skills
+        )
+    )
+
+    overall_score = round(
+        skills_score * 0.30
+        + projects_score * 0.20
+        + experience_score * 0.20
+        + impact_score * 0.15
+        + completeness_score * 0.15
+    )
+
+    if overall_score >= 85:
+        quality_label = "Excellent"
+    elif overall_score >= 70:
+        quality_label = "Strong"
+    elif overall_score >= 55:
+        quality_label = "Developing"
+    else:
+        quality_label = "Needs Improvement"
+
+    feedback = (
+        build_resume_feedback(
+            skills_score,
+            projects_score,
+            experience_score,
+            impact_score,
+            completeness_score,
+            sections,
+            impact_signals,
+            detected_skills,
+            missing_skills
+        )
+    )
+
+    return {
+        "overall_score":
+            overall_score,
+
+        "quality_label":
+            quality_label,
+
+        "skills_score":
+            skills_score,
+
+        "projects_score":
+            projects_score,
+
+        "experience_score":
+            experience_score,
+
+        "impact_score":
+            impact_score,
+
+        "completeness_score":
+            completeness_score,
+
+        "sections_detected":
+            sections,
+
+        "contact_details_detected":
+            contact_details,
+
+        "impact_signals":
+            impact_signals[:10],
+
+        "action_verb_count":
+            action_verb_count,
+
+        "feedback":
+            feedback,
+    }
+
+
 # ==========================================
 # HELPERS
 # ==========================================
@@ -1736,6 +2349,19 @@ def analyze_resume():
     )
 
     # ======================================
+    # RESUME QUALITY
+    # ======================================
+
+    resume_quality = (
+        build_resume_quality_analysis(
+            text,
+            detected_skills,
+            required_skills,
+            missing_skills
+        )
+    )
+
+    # ======================================
     # FINAL RESPONSE
     # ======================================
 
@@ -1812,6 +2438,26 @@ def analyze_resume():
         "estimated_impact":
             career_insights[
                 "estimated_impact"
+            ],
+
+        # RESUME QUALITY
+
+        "resume_quality":
+            resume_quality,
+
+        "resume_quality_score":
+            resume_quality[
+                "overall_score"
+            ],
+
+        "resume_quality_label":
+            resume_quality[
+                "quality_label"
+            ],
+
+        "resume_feedback":
+            resume_quality[
+                "feedback"
             ],
     }
 

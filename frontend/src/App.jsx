@@ -711,6 +711,16 @@ function CareerAnalysis({
           data.recommended_action || "",
         estimatedImpact:
           data.estimated_impact || null,
+
+        // Resume Quality Analysis
+        resumeQuality:
+          data.resume_quality || null,
+        resumeQualityScore:
+          data.resume_quality_score ?? null,
+        resumeQualityLabel:
+          data.resume_quality_label || "",
+        resumeFeedback:
+          data.resume_feedback || [],
       });
     } catch (error) {
       if (error.name === "AbortError") {
@@ -1758,6 +1768,193 @@ function Results({ data, onBack }) {
             </div>
           </div>
         </section>
+
+        {/* RESUME QUALITY */}
+
+        {data.resumeQuality && (
+          <section className="cl-resume-quality-card">
+            <div className="cl-resume-quality-header">
+              <div>
+                <p className="cl-result-label">
+                  RESUME QUALITY
+                </p>
+
+                <h2>
+                  How strong is your resume?
+                </h2>
+              </div>
+
+              <div className="cl-resume-quality-score">
+                <strong>
+                  {data.resumeQuality.overall_score}
+                </strong>
+                <span>/100</span>
+              </div>
+            </div>
+
+            <div className="cl-resume-quality-label-row">
+              <span className="cl-quality-badge">
+                {data.resumeQuality.quality_label}
+              </span>
+
+              <p>
+                CareerLenz evaluates how clearly your
+                resume communicates skills, projects,
+                experience, measurable impact and
+                overall completeness.
+              </p>
+            </div>
+
+            <div className="cl-quality-metrics">
+              {[
+                {
+                  label: "Skills Coverage",
+                  value: data.resumeQuality.skills_score,
+                },
+                {
+                  label: "Projects",
+                  value: data.resumeQuality.projects_score,
+                },
+                {
+                  label: "Experience",
+                  value: data.resumeQuality.experience_score,
+                },
+                {
+                  label: "Measurable Impact",
+                  value: data.resumeQuality.impact_score,
+                },
+                {
+                  label: "Completeness",
+                  value: data.resumeQuality.completeness_score,
+                },
+              ].map((metric) => (
+                <div
+                  className="cl-quality-metric"
+                  key={metric.label}
+                >
+                  <div className="cl-quality-metric-top">
+                    <span>{metric.label}</span>
+                    <strong>{metric.value}%</strong>
+                  </div>
+
+                  <div className="cl-quality-progress">
+                    <div
+                      className="cl-quality-progress-fill"
+                      style={{
+                        width: `${Math.max(
+                          0,
+                          Math.min(100, Number(metric.value) || 0)
+                        )}%`,
+                      }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="cl-quality-details-grid">
+              <div className="cl-quality-detail">
+                <p className="cl-result-label">
+                  SECTIONS DETECTED
+                </p>
+
+                <div className="cl-quality-tags">
+                  {Object.entries(
+                    data.resumeQuality.sections_detected || {}
+                  ).map(([section, detected]) => (
+                    <span
+                      key={section}
+                      className={`cl-quality-tag ${
+                        detected ? "present" : "missing"
+                      }`}
+                    >
+                      {detected ? "✓" : "×"}{" "}
+                      {section.replaceAll("_", " ")}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="cl-quality-detail">
+                <p className="cl-result-label">
+                  PROFILE SIGNALS
+                </p>
+
+                <div className="cl-quality-tags">
+                  {Object.entries(
+                    data.resumeQuality.contact_details_detected || {}
+                  ).map(([signal, detected]) => (
+                    <span
+                      key={signal}
+                      className={`cl-quality-tag ${
+                        detected ? "present" : "missing"
+                      }`}
+                    >
+                      {detected ? "✓" : "×"}{" "}
+                      {signal.replaceAll("_", " ")}
+                    </span>
+                  ))}
+                </div>
+
+                <p className="cl-quality-small-text">
+                  Action-oriented verbs detected:{" "}
+                  <strong>
+                    {data.resumeQuality.action_verb_count ?? 0}
+                  </strong>
+                </p>
+              </div>
+            </div>
+
+            {(data.resumeFeedback?.length > 0 ||
+              data.resumeQuality.feedback?.length > 0) && (
+              <div className="cl-resume-feedback">
+                <p className="cl-result-label">
+                  TOP RESUME IMPROVEMENTS
+                </p>
+
+                <div className="cl-feedback-list">
+                  {(
+                    data.resumeFeedback?.length
+                      ? data.resumeFeedback
+                      : data.resumeQuality.feedback || []
+                  ).map((feedback, index) => (
+                    <div
+                      className="cl-feedback-item"
+                      key={`${feedback}-${index}`}
+                    >
+                      <span className="cl-feedback-number">
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+
+                      <p>{feedback}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {data.resumeQuality.impact_signals?.length > 0 && (
+              <div className="cl-impact-signals">
+                <p className="cl-result-label">
+                  QUANTIFIED IMPACT FOUND
+                </p>
+
+                <div className="cl-quality-tags">
+                  {data.resumeQuality.impact_signals.map(
+                    (signal, index) => (
+                      <span
+                        className="cl-quality-tag present"
+                        key={`${signal}-${index}`}
+                      >
+                        {signal}
+                      </span>
+                    )
+                  )}
+                </div>
+              </div>
+            )}
+          </section>
+        )}
 
         {/* DETECTED SKILLS */}
 
