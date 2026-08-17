@@ -2809,6 +2809,537 @@ button {
   }
 }
 
+
+/* =========================================================
+   LEARNING RESOURCE LINKS
+========================================================= */
+
+.cl-learning-resources {
+  margin: 1.5rem 0;
+  padding: 1rem;
+
+  border:
+    1px solid
+    rgba(73, 211, 196, 0.16);
+
+  border-radius: 0.9rem;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(73, 211, 196, 0.045),
+      rgba(238, 234, 225, 0.018)
+    );
+}
+
+.cl-learning-resources-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.cl-learning-resources-heading h3 {
+  margin: 0;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1.05rem;
+  color: var(--paper);
+}
+
+.cl-resource-count {
+  flex-shrink: 0;
+  padding: 0.32rem 0.55rem;
+  border-radius: 999px;
+
+  border:
+    1px solid
+    rgba(73, 211, 196, 0.18);
+
+  background:
+    rgba(73, 211, 196, 0.06);
+
+  color: var(--teal);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.62rem;
+}
+
+.cl-learning-resources-copy {
+  margin: 0.75rem 0 1rem;
+  color: var(--muted);
+  font-size: 0.8rem;
+  line-height: 1.55;
+}
+
+.cl-learning-resource-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.cl-learning-resource-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+
+  width: 100%;
+  padding: 0.9rem;
+
+  border:
+    1px solid
+    rgba(238, 234, 225, 0.08);
+
+  border-radius: 0.75rem;
+
+  background:
+    rgba(238, 234, 225, 0.025);
+
+  color: inherit;
+  text-decoration: none;
+
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.cl-learning-resource-link:hover {
+  transform: translateY(-1px);
+
+  border-color:
+    rgba(73, 211, 196, 0.28);
+
+  background:
+    rgba(73, 211, 196, 0.055);
+}
+
+.cl-learning-resource-link:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 3px;
+}
+
+.cl-learning-resource-main {
+  min-width: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+}
+
+.cl-learning-resource-number {
+  flex-shrink: 0;
+  padding-top: 0.12rem;
+  color: var(--brass);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.68rem;
+}
+
+.cl-learning-resource-link h4 {
+  margin: 0;
+  color: var(--paper);
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.9rem;
+  line-height: 1.35;
+}
+
+.cl-learning-resource-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.35rem;
+  color: var(--muted);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.62rem;
+}
+
+.cl-learning-resource-arrow {
+  flex-shrink: 0;
+  color: var(--teal);
+  font-size: 1rem;
+  transition: transform 0.2s ease;
+}
+
+.cl-learning-resource-link:hover
+.cl-learning-resource-arrow {
+  transform: translate(2px, -2px);
+}
+
+@media (max-width: 600px) {
+  .cl-learning-resources-heading {
+    flex-direction: column;
+  }
+
+  .cl-learning-resource-link {
+    align-items: flex-start;
+  }
+}
+
+
+/* =========================================================
+   30-DAY ACTION PLAN
+========================================================= */
+
+.cl-action-plan-card {
+  margin-top: 1.25rem;
+  padding: 1.7rem;
+
+  border:
+    1px solid
+    rgba(201, 163, 78, 0.24);
+
+  border-radius: 1.1rem;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(201, 163, 78, 0.055),
+      rgba(73, 211, 196, 0.025),
+      rgba(25, 30, 39, 0.94)
+    );
+}
+
+.cl-action-plan-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 1.5rem;
+}
+
+.cl-action-plan-header h2 {
+  margin: 0.2rem 0 0;
+
+  font-family:
+    "Space Grotesk",
+    sans-serif;
+
+  font-size: 1.65rem;
+
+  color: var(--paper);
+}
+
+.cl-action-plan-intro {
+  max-width: 760px;
+
+  margin: 0.75rem 0 0;
+
+  color: var(--muted);
+
+  line-height: 1.65;
+}
+
+.cl-action-plan-duration {
+  min-width: 92px;
+
+  padding: 0.9rem 1rem;
+
+  text-align: center;
+
+  border:
+    1px solid
+    rgba(201, 163, 78, 0.22);
+
+  border-radius: 0.85rem;
+
+  background:
+    rgba(201, 163, 78, 0.055);
+}
+
+.cl-action-plan-duration strong {
+  display: block;
+
+  font-family:
+    "Space Grotesk",
+    sans-serif;
+
+  font-size: 2rem;
+
+  line-height: 1;
+
+  color: var(--brass);
+}
+
+.cl-action-plan-duration span {
+  display: block;
+
+  margin-top: 0.4rem;
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 0.62rem;
+
+  letter-spacing: 0.14em;
+
+  color: var(--muted);
+}
+
+.cl-action-plan-timeline {
+  position: relative;
+
+  margin-top: 1.5rem;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 0.85rem;
+}
+
+.cl-action-plan-timeline::before {
+  content: "";
+
+  position: absolute;
+
+  left: 21px;
+  top: 22px;
+  bottom: 22px;
+
+  width: 1px;
+
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(201, 163, 78, 0.45),
+      rgba(73, 211, 196, 0.25)
+    );
+}
+
+.cl-action-week {
+  position: relative;
+
+  display: grid;
+
+  grid-template-columns:
+    44px
+    minmax(0, 1fr);
+
+  gap: 1rem;
+}
+
+.cl-action-week-marker {
+  position: relative;
+  z-index: 1;
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+
+  padding-top: 1rem;
+}
+
+.cl-action-week-marker span {
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  border:
+    1px solid
+    rgba(201, 163, 78, 0.3);
+
+  background: var(--panel);
+
+  color: var(--brass);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 0.7rem;
+
+  box-shadow:
+    0 0 0 5px
+    rgba(18, 21, 28, 0.9);
+}
+
+.cl-action-week-content {
+  padding: 1rem 1.05rem;
+
+  border:
+    1px solid
+    rgba(238, 234, 225, 0.075);
+
+  border-radius: 0.9rem;
+
+  background:
+    rgba(238, 234, 225, 0.025);
+}
+
+.cl-action-week-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 1rem;
+}
+
+.cl-action-week-label {
+  margin: 0 0 0.25rem;
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 0.62rem;
+
+  letter-spacing: 0.14em;
+
+  color: var(--teal);
+}
+
+.cl-action-week-content h3 {
+  margin: 0;
+
+  font-family:
+    "Space Grotesk",
+    sans-serif;
+
+  font-size: 1rem;
+
+  color: var(--paper);
+}
+
+.cl-action-week-skills {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+
+  gap: 0.4rem;
+}
+
+.cl-action-week-skills span {
+  padding: 0.28rem 0.5rem;
+
+  border-radius: 999px;
+
+  border:
+    1px solid
+    rgba(73, 211, 196, 0.16);
+
+  background:
+    rgba(73, 211, 196, 0.05);
+
+  color: var(--teal);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 0.6rem;
+
+  text-transform: capitalize;
+}
+
+.cl-action-task-list {
+  margin-top: 0.9rem;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 0.55rem;
+}
+
+.cl-action-task {
+  display: grid;
+
+  grid-template-columns:
+    24px
+    minmax(0, 1fr);
+
+  gap: 0.6rem;
+
+  align-items: flex-start;
+}
+
+.cl-action-task-check {
+  width: 22px;
+  height: 22px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background:
+    rgba(73, 211, 196, 0.075);
+
+  color: var(--teal);
+
+  font-size: 0.7rem;
+}
+
+.cl-action-task p {
+  margin: 0;
+
+  color: var(--muted);
+
+  font-size: 0.82rem;
+
+  line-height: 1.55;
+}
+
+.cl-action-plan-note {
+  margin-top: 1rem;
+
+  display: flex;
+  align-items: flex-start;
+
+  gap: 0.75rem;
+
+  padding: 0.85rem 1rem;
+
+  border-left:
+    3px solid
+    var(--teal);
+
+  background:
+    rgba(73, 211, 196, 0.035);
+}
+
+.cl-action-plan-note span {
+  flex-shrink: 0;
+
+  color: var(--teal);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 0.62rem;
+
+  letter-spacing: 0.14em;
+}
+
+.cl-action-plan-note p {
+  margin: 0;
+
+  color: var(--muted);
+
+  font-size: 0.8rem;
+
+  line-height: 1.55;
+}
+
+@media (max-width: 700px) {
+  .cl-action-plan-header,
+  .cl-action-week-top {
+    flex-direction: column;
+  }
+
+  .cl-action-week-skills {
+    justify-content: flex-start;
+  }
+
+  .cl-action-plan-duration {
+    min-width: 0;
+  }
+}
+
 /* =========================================================
    ANIMATION
 ========================================================= */

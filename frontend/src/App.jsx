@@ -280,6 +280,7 @@ function getSkillGapInfo(skill, roadmap) {
       : fallback.topics,
     time: roadmapItem?.time || fallback.time,
     practice: roadmapItem?.practice || fallback.practice,
+    resources: roadmapItem?.resources || [],
   };
 }
 
@@ -693,6 +694,8 @@ function CareerAnalysis({
         missingSkills,
         requiredSkills,
         roadmap: data.roadmap || [],
+        learningResources:
+          data.learning_resources || {},
         recommendedProject:
           data.recommended_project || null,
 
@@ -721,6 +724,10 @@ function CareerAnalysis({
           data.resume_quality_label || "",
         resumeFeedback:
           data.resume_feedback || [],
+
+        // 30-Day Action Plan
+        actionPlan30Days:
+          data.action_plan_30_days || null,
       });
     } catch (error) {
       if (error.name === "AbortError") {
@@ -1299,6 +1306,66 @@ function LearningPanel({
             }
           )}
         </div>
+
+        {info.resources?.length > 0 && (
+          <div className="cl-learning-resources">
+            <div className="cl-learning-resources-heading">
+              <div>
+                <p className="cl-result-label">
+                  RECOMMENDED RESOURCES
+                </p>
+
+                <h3>
+                  Learn from trusted sources
+                </h3>
+              </div>
+
+              <span className="cl-resource-count">
+                {info.resources.length} resources
+              </span>
+            </div>
+
+            <p className="cl-learning-resources-copy">
+              Open any resource in a new tab and use it
+              alongside the learning path above.
+            </p>
+
+            <div className="cl-learning-resource-list">
+              {info.resources.map((resource, index) => (
+                <a
+                  className="cl-learning-resource-link"
+                  key={`${resource.url}-${index}`}
+                  href={resource.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <div className="cl-learning-resource-main">
+                    <span className="cl-learning-resource-number">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+
+                    <div>
+                      <h4>{resource.title}</h4>
+
+                      <div className="cl-learning-resource-meta">
+                        <span>{resource.provider}</span>
+                        <span>•</span>
+                        <span>{resource.type}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <span
+                    className="cl-learning-resource-arrow"
+                    aria-hidden="true"
+                  >
+                    ↗
+                  </span>
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
 
         <div
           ref={practiceRef}
@@ -2001,6 +2068,106 @@ function Results({ data, onBack }) {
             )}
           </div>
         </section>
+
+        {/* 30-DAY ACTION PLAN */}
+
+        {data.actionPlan30Days?.weeks?.length > 0 && (
+          <section className="cl-action-plan-card">
+            <div className="cl-action-plan-header">
+              <div>
+                <p className="cl-result-label">
+                  30-DAY ACTION PLAN
+                </p>
+
+                <h2>
+                  Turn your analysis into a month of progress.
+                </h2>
+
+                <p className="cl-action-plan-intro">
+                  A focused four-week plan built from your
+                  current skill gaps, learning resources,
+                  recommended project, and resume feedback.
+                </p>
+              </div>
+
+              <div className="cl-action-plan-duration">
+                <strong>
+                  {data.actionPlan30Days.duration_days || 30}
+                </strong>
+                <span>DAYS</span>
+              </div>
+            </div>
+
+            <div className="cl-action-plan-timeline">
+              {data.actionPlan30Days.weeks.map(
+                (week, index) => (
+                  <article
+                    className="cl-action-week"
+                    key={week.week || index}
+                  >
+                    <div className="cl-action-week-marker">
+                      <span>
+                        {String(
+                          week.week || index + 1
+                        ).padStart(2, "0")}
+                      </span>
+                    </div>
+
+                    <div className="cl-action-week-content">
+                      <div className="cl-action-week-top">
+                        <div>
+                          <p className="cl-action-week-label">
+                            WEEK {week.week || index + 1}
+                          </p>
+
+                          <h3>{week.title}</h3>
+                        </div>
+
+                        {week.focus_skills?.length > 0 && (
+                          <div className="cl-action-week-skills">
+                            {week.focus_skills
+                              .slice(0, 4)
+                              .map((skill) => (
+                                <span key={skill}>
+                                  {skill}
+                                </span>
+                              ))}
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="cl-action-task-list">
+                        {(week.tasks || []).map(
+                          (task, taskIndex) => (
+                            <div
+                              className="cl-action-task"
+                              key={`${task}-${taskIndex}`}
+                            >
+                              <span className="cl-action-task-check">
+                                ✓
+                              </span>
+
+                              <p>{task}</p>
+                            </div>
+                          )
+                        )}
+                      </div>
+                    </div>
+                  </article>
+                )
+              )}
+            </div>
+
+            <div className="cl-action-plan-note">
+              <span>TIP</span>
+              <p>
+                Treat this as a flexible execution plan.
+                If one skill takes longer, carry it into the
+                next week instead of rushing through it.
+              </p>
+            </div>
+          </section>
+        )}
 
         {/* ACTIONABLE GAPS */}
 

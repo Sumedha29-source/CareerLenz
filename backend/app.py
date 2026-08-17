@@ -816,6 +816,346 @@ GENERIC_ROADMAP_TEMPLATE = {
 }
 
 
+
+# ==========================================
+# LEARNING RESOURCES
+# ==========================================
+#
+# Free/reputable references that CareerLenz
+# attaches to missing skills.
+# ==========================================
+
+LEARNING_RESOURCES = {
+    "html": [
+        {
+            "title": "Structuring Content with HTML",
+            "provider": "MDN Web Docs",
+            "type": "Free Learning Module",
+            "url": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Structuring_content",
+        },
+        {
+            "title": "MDN Web Development Core",
+            "provider": "MDN Web Docs",
+            "type": "Practice & Reference",
+            "url": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Core",
+        },
+    ],
+
+    "css": [
+        {
+            "title": "CSS Styling Basics",
+            "provider": "MDN Web Docs",
+            "type": "Free Learning Module",
+            "url": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Styling_basics",
+        },
+        {
+            "title": "Getting Started with CSS",
+            "provider": "MDN Web Docs",
+            "type": "Guided Tutorial",
+            "url": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Styling_basics/Getting_started",
+        },
+    ],
+
+    "javascript": [
+        {
+            "title": "Dynamic Scripting with JavaScript",
+            "provider": "MDN Web Docs",
+            "type": "Free Learning Module",
+            "url": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Scripting",
+        },
+        {
+            "title": "JavaScript Guide",
+            "provider": "MDN Web Docs",
+            "type": "Reference",
+            "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide",
+        },
+    ],
+
+    "react": [
+        {
+            "title": "React Quick Start",
+            "provider": "React",
+            "type": "Official Tutorial",
+            "url": "https://react.dev/learn",
+        },
+        {
+            "title": "Thinking in React",
+            "provider": "React",
+            "type": "Practice Guide",
+            "url": "https://react.dev/learn/thinking-in-react",
+        },
+    ],
+
+    "rest api": [
+        {
+            "title": "HTTP Overview",
+            "provider": "MDN Web Docs",
+            "type": "Official Reference",
+            "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP",
+        },
+        {
+            "title": "Using the Fetch API",
+            "provider": "MDN Web Docs",
+            "type": "Hands-on Guide",
+            "url": "https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch",
+        },
+    ],
+
+    "python": [
+        {
+            "title": "The Python Tutorial",
+            "provider": "Python",
+            "type": "Official Tutorial",
+            "url": "https://docs.python.org/3/tutorial/",
+        },
+        {
+            "title": "Python Standard Library",
+            "provider": "Python",
+            "type": "Reference",
+            "url": "https://docs.python.org/3/library/",
+        },
+    ],
+
+    "machine learning": [
+        {
+            "title": "Machine Learning Crash Course",
+            "provider": "Google for Developers",
+            "type": "Free Course",
+            "url": "https://developers.google.com/machine-learning/crash-course",
+        },
+        {
+            "title": "Rules of Machine Learning",
+            "provider": "Google for Developers",
+            "type": "Reference",
+            "url": "https://developers.google.com/machine-learning/guides/rules-of-ml",
+        },
+    ],
+
+    "deep learning": [
+        {
+            "title": "TensorFlow Tutorials",
+            "provider": "TensorFlow",
+            "type": "Official Tutorials",
+            "url": "https://www.tensorflow.org/tutorials",
+        },
+        {
+            "title": "PyTorch Learn the Basics",
+            "provider": "PyTorch",
+            "type": "Official Tutorial",
+            "url": "https://docs.pytorch.org/tutorials/beginner/basics/intro.html",
+        },
+    ],
+
+    "pytorch": [
+        {
+            "title": "Learn the Basics",
+            "provider": "PyTorch",
+            "type": "Official Tutorial",
+            "url": "https://docs.pytorch.org/tutorials/beginner/basics/intro.html",
+        },
+        {
+            "title": "PyTorch Tutorials",
+            "provider": "PyTorch",
+            "type": "Practice Library",
+            "url": "https://docs.pytorch.org/tutorials/",
+        },
+    ],
+
+    "tensorflow": [
+        {
+            "title": "TensorFlow Tutorials",
+            "provider": "TensorFlow",
+            "type": "Official Tutorials",
+            "url": "https://www.tensorflow.org/tutorials",
+        },
+        {
+            "title": "TensorFlow Quickstart for Beginners",
+            "provider": "TensorFlow",
+            "type": "Guided Tutorial",
+            "url": "https://www.tensorflow.org/tutorials/quickstart/beginner",
+        },
+    ],
+
+    "scikit-learn": [
+        {
+            "title": "Getting Started with scikit-learn",
+            "provider": "scikit-learn",
+            "type": "Official Guide",
+            "url": "https://scikit-learn.org/stable/getting_started.html",
+        },
+        {
+            "title": "scikit-learn User Guide",
+            "provider": "scikit-learn",
+            "type": "Reference",
+            "url": "https://scikit-learn.org/stable/user_guide.html",
+        },
+    ],
+
+    "sql": [
+        {
+            "title": "PostgreSQL SQL Tutorial",
+            "provider": "PostgreSQL",
+            "type": "Official Tutorial",
+            "url": "https://www.postgresql.org/docs/current/tutorial-sql.html",
+        },
+        {
+            "title": "PostgreSQL Tutorial",
+            "provider": "PostgreSQL",
+            "type": "Official Learning Guide",
+            "url": "https://www.postgresql.org/docs/current/tutorial.html",
+        },
+    ],
+
+    "mongodb": [
+        {
+            "title": "MongoDB Getting Started",
+            "provider": "MongoDB",
+            "type": "Official Tutorial",
+            "url": "https://www.mongodb.com/docs/manual/tutorial/getting-started/",
+        },
+        {
+            "title": "MongoDB CRUD Operations",
+            "provider": "MongoDB",
+            "type": "Practice Reference",
+            "url": "https://www.mongodb.com/docs/manual/crud/",
+        },
+    ],
+
+    "node.js": [
+        {
+            "title": "Introduction to Node.js",
+            "provider": "Node.js",
+            "type": "Official Tutorial",
+            "url": "https://nodejs.org/en/learn/getting-started/introduction-to-nodejs",
+        },
+        {
+            "title": "Node.js Learn",
+            "provider": "Node.js",
+            "type": "Learning Path",
+            "url": "https://nodejs.org/en/learn",
+        },
+    ],
+
+    "git": [
+        {
+            "title": "Pro Git Book",
+            "provider": "Git",
+            "type": "Free Official Book",
+            "url": "https://git-scm.com/book/en/v2",
+        },
+        {
+            "title": "Git Reference",
+            "provider": "Git",
+            "type": "Official Reference",
+            "url": "https://git-scm.com/docs",
+        },
+    ],
+
+    "docker": [
+        {
+            "title": "Docker Get Started",
+            "provider": "Docker",
+            "type": "Official Tutorial",
+            "url": "https://docs.docker.com/get-started/",
+        },
+        {
+            "title": "Docker Workshop",
+            "provider": "Docker",
+            "type": "Hands-on Tutorial",
+            "url": "https://docs.docker.com/get-started/workshop/",
+        },
+    ],
+
+    "aws": [
+        {
+            "title": "AWS Getting Started",
+            "provider": "AWS",
+            "type": "Official Learning Hub",
+            "url": "https://aws.amazon.com/getting-started/",
+        },
+        {
+            "title": "AWS Skill Builder",
+            "provider": "AWS",
+            "type": "Training Platform",
+            "url": "https://skillbuilder.aws/",
+        },
+    ],
+
+    "statistics": [
+        {
+            "title": "Statistics & Probability Prerequisites",
+            "provider": "Google for Developers",
+            "type": "ML Prerequisite",
+            "url": "https://developers.google.com/machine-learning/crash-course/prereqs-and-prework",
+        },
+    ],
+
+    "pandas": [
+        {
+            "title": "Getting Started Tutorials",
+            "provider": "pandas",
+            "type": "Official Tutorials",
+            "url": "https://pandas.pydata.org/docs/getting_started/intro_tutorials/index.html",
+        },
+        {
+            "title": "pandas User Guide",
+            "provider": "pandas",
+            "type": "Reference",
+            "url": "https://pandas.pydata.org/docs/user_guide/index.html",
+        },
+    ],
+
+    "numpy": [
+        {
+            "title": "NumPy Quickstart",
+            "provider": "NumPy",
+            "type": "Official Tutorial",
+            "url": "https://numpy.org/doc/stable/user/quickstart.html",
+        },
+        {
+            "title": "NumPy Learn",
+            "provider": "NumPy",
+            "type": "Learning Resources",
+            "url": "https://numpy.org/learn/",
+        },
+    ],
+
+    "figma": [
+        {
+            "title": "Figma Learn",
+            "provider": "Figma",
+            "type": "Official Learning Hub",
+            "url": "https://help.figma.com/hc/en-us/categories/360002051613-Get-started",
+        },
+    ],
+
+    "communication": [
+        {
+            "title": "Technical Writing Courses",
+            "provider": "Google for Developers",
+            "type": "Free Course",
+            "url": "https://developers.google.com/tech-writing",
+        },
+    ],
+
+    "problem solving": [
+        {
+            "title": "Python Data Structures",
+            "provider": "Python",
+            "type": "Reference Foundation",
+            "url": "https://docs.python.org/3/tutorial/datastructures.html",
+        },
+    ],
+}
+
+
+def get_learning_resources(skill):
+    return LEARNING_RESOURCES.get(
+        skill.lower(),
+        []
+    )
+
+
 # ==========================================
 # PROJECT RECOMMENDATIONS
 # ==========================================
@@ -1094,6 +1434,11 @@ def build_roadmap(
 
             "practice":
                 item["practice"],
+
+            "resources":
+                get_learning_resources(
+                    skill
+                ),
         })
 
     return roadmap
@@ -1502,6 +1847,244 @@ def build_career_insights(
             estimated_impact,
     }
 
+
+
+
+# ==========================================
+# 30-DAY ACTION PLAN
+# ==========================================
+
+def _chunk_list(items, size):
+    return [
+        items[index:index + size]
+        for index in range(0, len(items), size)
+    ]
+
+
+def _resource_titles(resources, limit=2):
+    return [
+        resource.get("title")
+        for resource in resources[:limit]
+        if resource.get("title")
+    ]
+
+
+def build_30_day_action_plan(
+    target_role,
+    missing_skills,
+    roadmap,
+    recommended_project,
+    resume_feedback
+):
+    roadmap_by_skill = {
+        (item.get("skill") or "").lower(): item
+        for item in roadmap
+    }
+
+    prioritized = [
+        skill
+        for skill in missing_skills
+        if skill
+    ]
+
+    skill_groups = _chunk_list(
+        prioritized[:4],
+        2
+    )
+
+    while len(skill_groups) < 2:
+        skill_groups.append([])
+
+    week_1_skills = skill_groups[0]
+    week_2_skills = skill_groups[1]
+
+    def learning_tasks(skills):
+        tasks = []
+
+        for skill in skills:
+            item = roadmap_by_skill.get(
+                skill.lower(),
+                {}
+            )
+
+            topics = (
+                item.get("topics")
+                or []
+            )
+
+            resources = (
+                item.get("resources")
+                or []
+            )
+
+            resource_titles = (
+                _resource_titles(
+                    resources
+                )
+            )
+
+            if resource_titles:
+                tasks.append(
+                    f"Study {skill} using "
+                    + " and ".join(
+                        resource_titles
+                    )
+                    + "."
+                )
+            else:
+                tasks.append(
+                    f"Learn the fundamentals of {skill}."
+                )
+
+            if topics:
+                tasks.append(
+                    f"Practice: "
+                    + ", ".join(
+                        topics[:3]
+                    )
+                    + "."
+                )
+
+            practice = (
+                item.get("practice")
+            )
+
+            if practice:
+                tasks.append(
+                    f"Mini project: {practice}"
+                )
+
+        return tasks[:6]
+
+    week_1_tasks = learning_tasks(
+        week_1_skills
+    )
+
+    week_2_tasks = learning_tasks(
+        week_2_skills
+    )
+
+    if not week_1_tasks:
+        week_1_tasks = [
+            "Review your strongest role-aligned skills.",
+            "Improve one existing project so it shows stronger technical depth.",
+            "Document what you learned in your GitHub README.",
+        ]
+
+    if not week_2_tasks:
+        week_2_tasks = [
+            "Strengthen an existing project with one production-level feature.",
+            "Add testing, error handling or deployment evidence where relevant.",
+            "Update your project documentation and screenshots.",
+        ]
+
+    project_title = (
+        recommended_project.get(
+            "title"
+        )
+        or "role-relevant portfolio project"
+    )
+
+    project_description = (
+        recommended_project.get(
+            "description"
+        )
+        or (
+            "Build a project that proves "
+            "your missing skills."
+        )
+    )
+
+    project_skills = (
+        recommended_project.get(
+            "skills"
+        )
+        or []
+    )
+
+    week_3_tasks = [
+        f"Build the recommended project: {project_title}.",
+        project_description,
+    ]
+
+    if project_skills:
+        week_3_tasks.append(
+            "Use these skills in the build: "
+            + ", ".join(
+                project_skills[:6]
+            )
+            + "."
+        )
+
+    week_3_tasks.extend([
+        "Commit progress regularly to GitHub.",
+        "Write a clear README with setup steps, features and screenshots.",
+        "Test the main user flow before deployment.",
+    ])
+
+    week_4_tasks = [
+        "Deploy your strongest project or prepare a reliable live demo.",
+        "Update GitHub with a polished README and final screenshots.",
+        f"Tailor your resume toward {target_role}.",
+        "Add measurable outcomes only where you can support them truthfully.",
+        "Practice a 60-90 second explanation of your project and career gap strategy.",
+    ]
+
+    if resume_feedback:
+        week_4_tasks.insert(
+            3,
+            resume_feedback[0]
+        )
+
+    return {
+        "title":
+            "30-Day Career Action Plan",
+
+        "target_role":
+            target_role,
+
+        "duration_days":
+            30,
+
+        "weeks": [
+            {
+                "week": 1,
+                "title":
+                    "Close your highest-priority gaps",
+                "focus_skills":
+                    week_1_skills,
+                "tasks":
+                    week_1_tasks,
+            },
+            {
+                "week": 2,
+                "title":
+                    "Strengthen the next skill layer",
+                "focus_skills":
+                    week_2_skills,
+                "tasks":
+                    week_2_tasks,
+            },
+            {
+                "week": 3,
+                "title":
+                    "Build proof through a project",
+                "focus_skills":
+                    project_skills,
+                "tasks":
+                    week_3_tasks[:6],
+            },
+            {
+                "week": 4,
+                "title":
+                    "Package, deploy and present",
+                "focus_skills":
+                    [],
+                "tasks":
+                    week_4_tasks[:6],
+            },
+        ],
+    }
 
 
 # ==========================================
@@ -2362,6 +2945,23 @@ def analyze_resume():
     )
 
     # ======================================
+    # 30-DAY ACTION PLAN
+    # ======================================
+
+    action_plan_30_days = (
+        build_30_day_action_plan(
+            target_role,
+            missing_skills,
+            roadmap,
+            recommended_project,
+            resume_quality.get(
+                "feedback",
+                []
+            )
+        )
+    )
+
+    # ======================================
     # FINAL RESPONSE
     # ======================================
 
@@ -2396,6 +2996,14 @@ def analyze_resume():
 
         "roadmap":
             roadmap,
+
+        "learning_resources":
+            {
+                skill: get_learning_resources(
+                    skill
+                )
+                for skill in missing_skills
+            },
 
         "recommended_project":
             recommended_project,
@@ -2459,6 +3067,11 @@ def analyze_resume():
             resume_quality[
                 "feedback"
             ],
+
+        # 30-DAY ACTION PLAN
+
+        "action_plan_30_days":
+            action_plan_30_days,
     }
 
     # Only expose full resume text
