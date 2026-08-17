@@ -1,89 +1,432 @@
 import { useEffect, useRef, useState } from "react";
 import "./App.css";
 
-/* =========================================================
-   CONFIG
-   ========================================================= */
-
-// Reads VITE_API_BASE_URL from a .env file if present (e.g.
-// VITE_API_BASE_URL=https://api.careerlenz.com), falling back to
-// localhost for dev. Create a .env file at the project root with
-// that line to point at a deployed backend without touching code.
 const API_BASE_URL =
   (import.meta.env && import.meta.env.VITE_API_BASE_URL) ||
   "http://127.0.0.1:5000";
 
-const MAX_FILE_SIZE_BYTES = 8 * 1024 * 1024; // keep in sync with backend limit
+const MAX_FILE_SIZE_BYTES = 8 * 1024 * 1024;
 const REQUEST_TIMEOUT_MS = 30000;
 
-const ROLE_OPTIONS = [
-  "Frontend Developer",
-  "Backend Developer",
-  "Full Stack Developer",
-  "Machine Learning Engineer",
-  "Data Scientist",
-];
+/* =========================================================
+   ROLE → REQUIRED SKILLS
+========================================================= */
+
+const ROLE_SKILLS = {
+  "Frontend Developer": [
+    "html",
+    "css",
+    "javascript",
+    "react",
+    "git",
+    "rest api",
+  ],
+
+  "Backend Developer": [
+    "python",
+    "node.js",
+    "express",
+    "sql",
+    "mongodb",
+    "git",
+    "rest api",
+  ],
+
+  "Full Stack Developer": [
+    "html",
+    "css",
+    "javascript",
+    "react",
+    "node.js",
+    "express",
+    "sql",
+    "git",
+    "rest api",
+  ],
+
+  "Data Scientist": [
+    "python",
+    "sql",
+    "statistics",
+    "machine learning",
+    "pandas",
+    "numpy",
+    "data visualization",
+  ],
+
+  "Machine Learning Engineer": [
+    "python",
+    "machine learning",
+    "deep learning",
+    "pytorch",
+    "tensorflow",
+    "sql",
+    "git",
+  ],
+};
+
+/* =========================================================
+   SKILL INTELLIGENCE
+========================================================= */
+
+const SKILL_INTELLIGENCE = {
+  html: {
+    description: "Build structured and accessible web pages.",
+    topics: ["Semantic HTML", "Forms", "Accessibility"],
+    difficulty: "Beginner",
+    time: "3 days",
+    practice: "Build a responsive portfolio page.",
+  },
+
+  css: {
+    description: "Create responsive and visually polished interfaces.",
+    topics: ["Flexbox", "Grid", "Responsive Design"],
+    difficulty: "Beginner",
+    time: "5 days",
+    practice: "Build a responsive landing page.",
+  },
+
+  javascript: {
+    description: "Add logic and interactivity to modern web applications.",
+    topics: ["ES6+", "DOM", "Async JavaScript", "Fetch API"],
+    difficulty: "Intermediate",
+    time: "7 days",
+    practice: "Build a weather dashboard using a public API.",
+  },
+
+  react: {
+    description: "Build component-based modern web applications.",
+    topics: ["Components", "Props", "State", "Hooks"],
+    difficulty: "Intermediate",
+    time: "7 days",
+    practice: "Build a job application tracking dashboard.",
+  },
+
+  "rest api": {
+    description:
+      "Learn how frontend applications communicate with backend services.",
+    topics: ["HTTP", "GET / POST", "JSON", "Authentication", "Error Handling"],
+    difficulty: "Intermediate",
+    time: "5 days",
+    practice: "Build a REST API for a job application tracker.",
+  },
+
+  sql: {
+    description: "Store, query and manipulate structured application data.",
+    topics: ["SELECT", "JOINs", "Aggregations", "Indexes"],
+    difficulty: "Intermediate",
+    time: "6 days",
+    practice: "Build a database for a job application tracker.",
+  },
+
+  git: {
+    description: "Manage code history and collaborate professionally.",
+    topics: ["Commits", "Branches", "Merge", "Pull Requests"],
+    difficulty: "Beginner",
+    time: "2 days",
+    practice: "Collaborate on a project using Git branches.",
+  },
+
+  docker: {
+    description:
+      "Package applications and their dependencies into containers.",
+    topics: ["Images", "Containers", "Dockerfile", "Docker Compose"],
+    difficulty: "Intermediate",
+    time: "5 days",
+    practice: "Containerize your CareerLenz backend.",
+  },
+
+  testing: {
+    description: "Make applications reliable through automated testing.",
+    topics: ["Unit Tests", "Integration Tests", "Mocks"],
+    difficulty: "Intermediate",
+    time: "5 days",
+    practice: "Write automated tests for a REST API.",
+  },
+
+  python: {
+    description:
+      "Use Python for application development, automation and data work.",
+    topics: ["Functions", "OOP", "Modules", "Error Handling"],
+    difficulty: "Beginner",
+    time: "7 days",
+    practice: "Build a command-line productivity application.",
+  },
+
+  mongodb: {
+    description: "Work with flexible document-based databases.",
+    topics: ["Documents", "Collections", "Queries", "Indexes"],
+    difficulty: "Intermediate",
+    time: "5 days",
+    practice: "Build a MongoDB-backed task manager.",
+  },
+
+  express: {
+    description: "Build backend APIs and web servers with Express.",
+    topics: ["Routes", "Middleware", "Controllers", "Error Handling"],
+    difficulty: "Intermediate",
+    time: "5 days",
+    practice: "Build a CRUD API using Express.",
+  },
+
+  "node.js": {
+    description: "Build server-side JavaScript applications.",
+    topics: ["Node Runtime", "Modules", "NPM", "HTTP Servers"],
+    difficulty: "Intermediate",
+    time: "6 days",
+    practice: "Build a Node.js REST API.",
+  },
+
+  statistics: {
+    description:
+      "Use statistical methods to understand and analyze data.",
+    topics: ["Mean", "Variance", "Probability", "Distributions"],
+    difficulty: "Intermediate",
+    time: "7 days",
+    practice:
+      "Analyze a real-world dataset and create a statistical report.",
+  },
+
+  "machine learning": {
+    description: "Build models that learn patterns from data.",
+    topics: [
+      "Regression",
+      "Classification",
+      "Feature Engineering",
+      "Model Evaluation",
+    ],
+    difficulty: "Intermediate",
+    time: "14 days",
+    practice:
+      "Build an end-to-end machine learning prediction system.",
+  },
+
+  "deep learning": {
+    description: "Build neural-network based machine learning systems.",
+    topics: [
+      "Neural Networks",
+      "Backpropagation",
+      "CNNs",
+      "Model Training",
+    ],
+    difficulty: "Advanced",
+    time: "14 days",
+    practice: "Build an image classification model.",
+  },
+
+  pytorch: {
+    description: "Build and train deep learning models using PyTorch.",
+    topics: ["Tensors", "Datasets", "Neural Networks", "Training Loops"],
+    difficulty: "Advanced",
+    time: "10 days",
+    practice: "Train a PyTorch image classifier.",
+  },
+
+  tensorflow: {
+    description:
+      "Build machine learning and deep learning models using TensorFlow.",
+    topics: ["Tensors", "Keras", "Training", "Evaluation"],
+    difficulty: "Advanced",
+    time: "10 days",
+    practice: "Build an image classification model.",
+  },
+
+  pandas: {
+    description: "Clean, transform and analyze structured datasets.",
+    topics: ["DataFrames", "Filtering", "Grouping", "Data Cleaning"],
+    difficulty: "Beginner",
+    time: "4 days",
+    practice: "Perform exploratory data analysis on a public dataset.",
+  },
+
+  numpy: {
+    description: "Perform efficient numerical computation with Python.",
+    topics: ["Arrays", "Indexing", "Vectorization", "Linear Algebra"],
+    difficulty: "Beginner",
+    time: "4 days",
+    practice: "Build numerical data analysis utilities.",
+  },
+
+  "data visualization": {
+    description:
+      "Communicate insights through effective visualizations.",
+    topics: ["Charts", "Matplotlib", "Seaborn", "Dashboards"],
+    difficulty: "Beginner",
+    time: "4 days",
+    practice: "Create an interactive data visualization dashboard.",
+  },
+};
+
+function getSkillGapInfo(skill, roadmap) {
+  const normalized = skill.toLowerCase();
+
+  const roadmapItem = (roadmap || []).find(
+    (item) => (item.skill || "").toLowerCase() === normalized
+  );
+
+  const fallback = SKILL_INTELLIGENCE[normalized] || {
+    description: `Build your ${skill} skills for your target role.`,
+    topics: ["Fundamentals", "Practical Usage", "Projects"],
+    difficulty: "Intermediate",
+    time: "5 days",
+    practice: `Build a small project using ${skill}.`,
+  };
+
+  return {
+    difficulty: fallback.difficulty,
+    description: roadmapItem?.description || fallback.description,
+    topics: roadmapItem?.topics?.length
+      ? roadmapItem.topics
+      : fallback.topics,
+    time: roadmapItem?.time || fallback.time,
+    practice: roadmapItem?.practice || fallback.practice,
+  };
+}
+
+function parseManualSkills(raw) {
+  return new Set(
+    raw
+      .split(",")
+      .map((s) => s.trim().toLowerCase())
+      .filter(Boolean)
+  );
+}
 
 function validateResumeFile(file) {
-  if (!file) return "Please choose a file.";
+  if (!file) return "Please upload your resume.";
+
   if (!file.name.toLowerCase().endsWith(".pdf")) {
     return "Only PDF files are supported.";
   }
+
   if (file.size > MAX_FILE_SIZE_BYTES) {
     return "That file is larger than 8MB. Please upload a smaller PDF.";
   }
+
   return null;
 }
 
 /* =========================================================
    READINESS RING
-   ========================================================= */
+========================================================= */
 
 function ReadinessRing({ value = 0 }) {
-  const radius = 42;
-  const circumference = 2 * Math.PI * radius;
-  const clamped = Math.max(0, Math.min(100, value));
-  const offset = circumference - (clamped / 100) * circumference;
+  const r = 34;
+  const c = 2 * Math.PI * r;
+
+  const clamped = Math.max(
+    0,
+    Math.min(100, Number(value) || 0)
+  );
+
+  const offset = c - (clamped / 100) * c;
 
   return (
-    <div
-      className="readiness-ring"
+    <svg
+      className="cl-ring-svg"
+      viewBox="0 0 88 88"
       role="img"
-      aria-label={`Career readiness: ${clamped}% match`}
+      aria-label={`Career readiness: ${clamped}%`}
     >
-      <svg className="readiness-ring-svg" viewBox="0 0 100 100" aria-hidden="true">
-        <circle className="readiness-ring-track" cx="50" cy="50" r={radius} />
-        <circle
-          className="readiness-ring-progress"
-          cx="50"
-          cy="50"
-          r={radius}
-          strokeDasharray={circumference}
-          strokeDashoffset={offset}
-        />
-      </svg>
+      <circle
+        className="cl-ring-track"
+        cx="44"
+        cy="44"
+        r={r}
+      />
 
-      <div className="readiness-ring-text" aria-hidden="true">
-        <strong>{clamped}%</strong>
-        <span>MATCH</span>
+      <circle
+        className="cl-ring-progress"
+        cx="44"
+        cy="44"
+        r={r}
+        strokeDasharray={c}
+        strokeDashoffset={offset}
+      />
+
+      <text
+        className="cl-ring-num"
+        x="44"
+        y="43"
+        textAnchor="middle"
+      >
+        {clamped}%
+      </text>
+
+      <text
+        className="cl-ring-label"
+        x="44"
+        y="55"
+        textAnchor="middle"
+      >
+        MATCH
+      </text>
+    </svg>
+  );
+}
+
+/* =========================================================
+   ID CARD
+========================================================= */
+
+function IDCard() {
+  const skills = ["SQL", "Figma", "Leadership"];
+
+  return (
+    <div className="cl-card-wrap">
+      <div className="cl-lanyard" />
+
+      <div className="cl-card">
+        <div className="cl-card-hole" />
+
+        <div className="cl-card-head">
+          <div className="cl-avatar" />
+
+          <div className="cl-lines">
+            <span className="cl-line cl-line-1" />
+            <span className="cl-line cl-line-2" />
+          </div>
+        </div>
+
+        <div className="cl-card-divider" />
+
+        <div className="cl-card-body">
+          <ReadinessRing value={82} />
+
+          <div className="cl-tags">
+            {skills.map((skill) => (
+              <span key={skill} className="cl-tag">
+                <span className="cl-tag-dot" />
+                {skill}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <div className="cl-barcode">
+          {Array.from({ length: 28 }).map((_, index) => (
+            <span
+              key={index}
+              className="cl-bar"
+              style={{
+                width: `${index % 5 === 0 ? 3 : 1}px`,
+                opacity: index % 3 === 0 ? 0.55 : 0.28,
+              }}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
 }
 
 /* =========================================================
-   HOME PAGE
-   ========================================================= */
+   LANDING PAGE
+========================================================= */
 
-function HomePage({ onAnalyze }) {
-  const headingRef = useRef(null);
-
-  useEffect(() => {
-    headingRef.current?.focus();
-  }, []);
-
+function LandingPage({ onStart }) {
   return (
-    <main className="cl-root home-page">
+    <main className="cl-root">
       <div className="cl-grid">
         <div className="hero-content">
           <p className="cl-eyebrow">
@@ -91,20 +434,27 @@ function HomePage({ onAnalyze }) {
             CareerLenz
           </p>
 
-          <h1 className="cl-heading" tabIndex={-1} ref={headingRef}>
+          <h1 className="cl-heading">
             Find the gap.
             <br />
             Close the gap.
           </h1>
 
           <p className="cl-body">
-            Understand your career readiness, discover your skill gaps, and
-            build a personalized roadmap to reach your target role.
+            Understand your career readiness, discover your skill gaps,
+            and build a personalized roadmap to reach your target role.
           </p>
 
-          <button className="cl-cta" onClick={onAnalyze}>
+          <button className="cl-cta" onClick={onStart}>
             Analyze My Career
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+              aria-hidden="true"
+            >
               <path
                 d="M3 8H13M13 8L9 4M13 8L9 12"
                 stroke="currentColor"
@@ -116,49 +466,7 @@ function HomePage({ onAnalyze }) {
           </button>
         </div>
 
-        <div className="cl-card-wrap">
-          <div className="cl-lanyard" />
-          <div className="cl-card">
-            <div className="cl-card-hole" />
-            <div className="cl-card-head">
-              <div className="cl-avatar" />
-              <div className="cl-lines">
-                <span className="cl-line cl-line-1" />
-                <span className="cl-line cl-line-2" />
-              </div>
-            </div>
-            <div className="cl-card-divider" />
-            <div className="cl-card-body">
-              <ReadinessRing value={82} />
-              <div className="cl-tags">
-                <span className="cl-tag">
-                  <span className="cl-tag-dot" />
-                  SQL
-                </span>
-                <span className="cl-tag">
-                  <span className="cl-tag-dot" />
-                  Figma
-                </span>
-                <span className="cl-tag">
-                  <span className="cl-tag-dot" />
-                  Leadership
-                </span>
-              </div>
-            </div>
-            <div className="cl-barcode">
-              {Array.from({ length: 28 }).map((_, i) => (
-                <span
-                  key={i}
-                  className="cl-bar"
-                  style={{
-                    width: (i % 5 === 0 ? 3 : 1) + "px",
-                    opacity: i % 3 === 0 ? 0.55 : 0.28,
-                  }}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
+        <IDCard />
       </div>
     </main>
   );
@@ -166,62 +474,280 @@ function HomePage({ onAnalyze }) {
 
 /* =========================================================
    CAREER ANALYSIS PAGE
-   ========================================================= */
+========================================================= */
 
 function CareerAnalysis({
-  targetRole,
-  setTargetRole,
-  resumeFile,
-  setResumeFile,
+  form,
+  setForm,
   onAnalyze,
   onBack,
-  onCancel,
-  loading,
-  error,
-  setError,
 }) {
-  const [isDragging, setIsDragging] = useState(false);
-  const headingRef = useRef(null);
+  const { role, skills, resume, resources } = form;
+
+  const [resourceType, setResourceType] = useState("Course");
+  const [resourceName, setResourceName] = useState("");
+  const [resourceProgress, setResourceProgress] = useState(0);
+  const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
+
+  const abortControllerRef = useRef(null);
 
   useEffect(() => {
-    headingRef.current?.focus();
+    return () => abortControllerRef.current?.abort();
   }, []);
 
-  const applyFile = (file) => {
-    const validationError = validateResumeFile(file);
-    if (validationError) {
-      setError(validationError);
+  const clampProgress = (value) => {
+    const num = Number(value);
+
+    if (Number.isNaN(num)) {
+      return 0;
+    }
+
+    return Math.max(0, Math.min(100, Math.round(num)));
+  };
+
+  const addResource = () => {
+    if (!resourceName.trim()) {
+      setErrors((previous) => ({
+        ...previous,
+        resource: "Enter a resource name first.",
+      }));
       return;
     }
-    setError("");
-    setResumeFile(file);
+
+    const newResource = {
+      id: Date.now(),
+      type: resourceType,
+      name: resourceName.trim(),
+      progress: clampProgress(resourceProgress),
+    };
+
+    setForm((previous) => ({
+      ...previous,
+      resources: [...previous.resources, newResource],
+    }));
+
+    setResourceName("");
+    setResourceProgress(0);
+
+    setErrors((previous) => ({
+      ...previous,
+      resource: null,
+    }));
+  };
+
+  const deleteResource = (id) => {
+    setForm((previous) => ({
+      ...previous,
+      resources: previous.resources.filter(
+        (resource) => resource.id !== id
+      ),
+    }));
   };
 
   const handleFileChange = (event) => {
-    const file = event.target.files?.[0];
-    if (file) applyFile(file);
+    const file = event.target.files?.[0] || null;
+
+    const validationError = file
+      ? validateResumeFile(file)
+      : null;
+
+    setForm((previous) => ({
+      ...previous,
+      resume: file,
+    }));
+
+    setErrors((previous) => ({
+      ...previous,
+      resume: validationError,
+    }));
   };
 
-  const handleDragOver = (event) => {
-    if (loading) return;
-    event.preventDefault();
-    setIsDragging(true);
+  const cancelAnalysis = () => {
+    abortControllerRef.current?.abort();
+    setLoading(false);
   };
 
-  const handleDragLeave = () => setIsDragging(false);
+  const handleBack = () => {
+    if (loading) {
+      cancelAnalysis();
+    }
 
-  const handleDrop = (event) => {
-    event.preventDefault();
-    setIsDragging(false);
-    if (loading) return;
-    const file = event.dataTransfer.files?.[0];
-    if (file) applyFile(file);
+    onBack();
   };
+
+  const handleAnalyze = async () => {
+    const nextErrors = {};
+
+    if (!role) {
+      nextErrors.role = "Select your target role.";
+    }
+
+    const resumeError = validateResumeFile(resume);
+
+    if (resumeError) {
+      nextErrors.resume = resumeError;
+    }
+
+    if (Object.keys(nextErrors).length > 0) {
+      setErrors(nextErrors);
+      return;
+    }
+
+    setLoading(true);
+    setErrors({});
+
+    const controller = new AbortController();
+
+    abortControllerRef.current = controller;
+
+    const timeoutId = setTimeout(
+      () => controller.abort(),
+      REQUEST_TIMEOUT_MS
+    );
+
+    try {
+      const formData = new FormData();
+
+      formData.append("resume", resume);
+      formData.append("targetRole", role);
+
+      const response = await fetch(
+        `${API_BASE_URL}/analyze`,
+        {
+          method: "POST",
+          body: formData,
+          signal: controller.signal,
+        }
+      );
+
+      let data;
+
+      try {
+        data = await response.json();
+      } catch {
+        throw new Error(
+          "The server sent back an unexpected response. Please try again."
+        );
+      }
+
+      if (!response.ok) {
+        throw new Error(
+          data.error || "Resume analysis failed."
+        );
+      }
+
+      const requiredSkills =
+        data.required_skills || [];
+
+      const backendMatched = new Set(
+        (data.matched_skills || []).map((skill) =>
+          skill.toLowerCase()
+        )
+      );
+
+      const manualSkills = parseManualSkills(skills);
+
+      const selfReportedMatches =
+        requiredSkills.filter(
+          (skill) =>
+            !backendMatched.has(skill.toLowerCase()) &&
+            manualSkills.has(skill.toLowerCase())
+        );
+
+      const matchedSkills = [
+        ...(data.matched_skills || []),
+        ...selfReportedMatches,
+      ];
+
+      const missingSkills =
+        requiredSkills.filter(
+          (skill) =>
+            !matchedSkills.some(
+              (matched) =>
+                matched.toLowerCase() ===
+                skill.toLowerCase()
+            )
+        );
+
+      const readiness = requiredSkills.length
+        ? Math.round(
+            (matchedSkills.length /
+              requiredSkills.length) *
+              100
+          )
+        : data.readiness_score ?? 0;
+
+      onAnalyze({
+        role: data.target_role || role,
+        roleRecognized:
+          data.role_recognized !== false,
+        resume,
+        resources,
+        readiness,
+        detectedSkills:
+          data.detected_skills || [],
+        matchedSkills,
+        selfReportedSkills:
+          selfReportedMatches,
+        missingSkills,
+        requiredSkills,
+        roadmap: data.roadmap || [],
+        recommendedProject:
+          data.recommended_project || null,
+
+        // CareerLenz Intelligence
+        careerSummary:
+          data.career_summary || "",
+        highestPriorityGap:
+          data.highest_priority_gap || null,
+        strengthSummary:
+          data.strength_summary || "",
+        improvementAdvice:
+          data.improvement_advice || "",
+        whyPriorityGapMatters:
+          data.why_priority_gap_matters || "",
+        recommendedAction:
+          data.recommended_action || "",
+        estimatedImpact:
+          data.estimated_impact || null,
+      });
+    } catch (error) {
+      if (error.name === "AbortError") {
+        setErrors({
+          general:
+            "That took too long, or was cancelled. Please check the backend is running and try again.",
+        });
+      } else {
+        console.error(
+          "CareerLenz analysis error:",
+          error
+        );
+
+        setErrors({
+          general:
+            error.message ||
+            "Could not connect to the CareerLenz backend.",
+        });
+      }
+    } finally {
+      clearTimeout(timeoutId);
+      setLoading(false);
+    }
+  };
+
+  const isReady = Boolean(
+    role && resume && !loading
+  );
 
   return (
-    <main className="cl-root analysis-page">
-      <div className="analysis-container">
-        <button className="back-button" onClick={onBack}>
+    <main className="cl-analysis">
+      <div className="cl-analysis-container">
+        <button
+          type="button"
+          className="cl-back-button"
+          onClick={handleBack}
+        >
           ← Back
         </button>
 
@@ -230,87 +756,257 @@ function CareerAnalysis({
           Career Analysis
         </p>
 
-        <h1 className="analysis-heading" tabIndex={-1} ref={headingRef}>
-          Let's understand
+        <h1 className="cl-heading">
+          Tell us about
           <br />
-          where you stand.
+          your career.
         </h1>
 
-        <p className="analysis-description">
-          Tell CareerLenz your target role and upload your resume. We'll
-          analyze your current skills and identify the gaps.
+        <p className="cl-body">
+          Choose your target role and upload your resume.
+          CareerLenz will detect your skills automatically.
         </p>
 
-        {/* TARGET ROLE */}
-        <div className="form-section">
-          <label className="form-label" htmlFor="target-role">
-            TARGET ROLE
+        <div className="cl-analysis-form">
+          <label htmlFor="cl-role">
+            Target Role
           </label>
 
           <select
-            id="target-role"
-            className="role-select"
-            value={targetRole}
-            onChange={(e) => setTargetRole(e.target.value)}
-            disabled={loading}
+            id="cl-role"
+            value={role}
+            aria-invalid={Boolean(errors.role)}
+            onChange={(event) =>
+              setForm((previous) => ({
+                ...previous,
+                role: event.target.value,
+              }))
+            }
           >
-            {ROLE_OPTIONS.map((role) => (
-              <option key={role} value={role}>
-                {role}
-              </option>
-            ))}
-          </select>
-        </div>
+            <option value="">
+              Select your target role
+            </option>
 
-        {/* RESUME */}
-        <div className="upload-section">
-          <label className="form-label" htmlFor="resume-upload">
-            UPLOAD YOUR RESUME
+            {Object.keys(ROLE_SKILLS).map(
+              (roleName) => (
+                <option
+                  key={roleName}
+                  value={roleName}
+                >
+                  {roleName}
+                </option>
+              )
+            )}
+          </select>
+
+          {errors.role && (
+            <p className="cl-field-error">
+              {errors.role}
+            </p>
+          )}
+
+          <label htmlFor="cl-skills">
+            Current Skills
           </label>
 
-          <label
-            className={`upload-box${isDragging ? " dragging" : ""}${
-              loading ? " disabled" : ""
-            }`}
-            htmlFor="resume-upload"
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
-          >
+          <textarea
+            id="cl-skills"
+            value={skills}
+            onChange={(event) =>
+              setForm((previous) => ({
+                ...previous,
+                skills: event.target.value,
+              }))
+            }
+            placeholder="Optional: Python, React, SQL..."
+          />
+
+          <p className="cl-field-hint">
+            Optional. CareerLenz primarily detects skills
+            from your resume. Skills entered here that match
+            a required skill are marked as self-reported.
+          </p>
+
+          <label htmlFor="cl-resume">
+            Upload Resume
+          </label>
+
+          <div className="cl-upload-box">
             <input
-              id="resume-upload"
+              id="cl-resume"
               type="file"
               accept=".pdf,application/pdf"
+              aria-invalid={Boolean(errors.resume)}
               onChange={handleFileChange}
-              disabled={loading}
             />
 
-            <span className="upload-icon" aria-hidden="true">
+            <div className="cl-upload-icon">
               ↑
-            </span>
+            </div>
 
-            <span>
-              {resumeFile ? resumeFile.name : "Choose or drop your PDF resume"}
-            </span>
-          </label>
-        </div>
+            <div>
+              <strong>
+                {resume
+                  ? resume.name
+                  : "Choose your PDF resume"}
+              </strong>
 
-        {error && (
-          <div className="error-message" role="alert">
-            {error}
+              <span>
+                {resume
+                  ? "Resume ready for analysis"
+                  : "PDF only • Maximum 8MB"}
+              </span>
+            </div>
           </div>
-        )}
 
-        <div className="analyze-actions">
+          {errors.resume && (
+            <p className="cl-field-error">
+              {errors.resume}
+            </p>
+          )}
+
+          <div className="cl-resources-section">
+            <h2>Learning Resources</h2>
+
+            <p className="cl-resource-description">
+              Add courses, videos, projects, or books
+              you're currently working on.
+            </p>
+
+            <div className="cl-resource-form">
+              <select
+                aria-label="Resource type"
+                value={resourceType}
+                onChange={(event) =>
+                  setResourceType(event.target.value)
+                }
+              >
+                <option>Course</option>
+                <option>Video</option>
+                <option>Project</option>
+                <option>Book</option>
+              </select>
+
+              <input
+                type="text"
+                aria-label="Resource name"
+                placeholder="Resource name"
+                value={resourceName}
+                onChange={(event) =>
+                  setResourceName(event.target.value)
+                }
+              />
+
+              <input
+                type="number"
+                aria-label="Progress percent"
+                min="0"
+                max="100"
+                placeholder="Progress %"
+                value={resourceProgress}
+                onChange={(event) =>
+                  setResourceProgress(
+                    event.target.value
+                  )
+                }
+                onBlur={(event) =>
+                  setResourceProgress(
+                    clampProgress(event.target.value)
+                  )
+                }
+              />
+
+              <button
+                type="button"
+                className="cl-add-resource"
+                onClick={addResource}
+              >
+                + Add Resource
+              </button>
+            </div>
+
+            {errors.resource && (
+              <p className="cl-field-error">
+                {errors.resource}
+              </p>
+            )}
+
+            {resources.length > 0 && (
+              <div className="cl-resource-list">
+                {resources.map((resource) => (
+                  <div
+                    className="cl-resource-card"
+                    key={resource.id}
+                  >
+                    <div className="cl-resource-card-top">
+                      <div>
+                        <span className="cl-resource-type">
+                          {resource.type}
+                        </span>
+
+                        <h3>{resource.name}</h3>
+                      </div>
+
+                      <button
+                        type="button"
+                        className="cl-delete-resource"
+                        aria-label={`Remove ${resource.name}`}
+                        onClick={() =>
+                          deleteResource(resource.id)
+                        }
+                      >
+                        ×
+                      </button>
+                    </div>
+
+                    <div className="cl-progress-info">
+                      <span>Progress</span>
+                      <span>
+                        {resource.progress}%
+                      </span>
+                    </div>
+
+                    <div className="cl-progress-bar">
+                      <div
+                        className="cl-progress-fill"
+                        style={{
+                          width: `${resource.progress}%`,
+                        }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {errors.general && (
+            <div
+              className="cl-analysis-error"
+              role="alert"
+            >
+              {errors.general}
+            </div>
+          )}
+
           <button
-            className="cl-cta analyze-button"
-            onClick={onAnalyze}
-            disabled={loading}
+            type="button"
+            className="cl-cta cl-analyze-button"
+            onClick={handleAnalyze}
+            disabled={!isReady}
           >
-            {loading ? "Analyzing..." : "Analyze My Resume"}
+            {loading
+              ? "Analyzing Resume..."
+              : "Analyze My Resume"}
 
             {!loading && (
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                aria-hidden="true"
+              >
                 <path
                   d="M3 8H13M13 8L9 4M13 8L9 12"
                   stroke="currentColor"
@@ -323,8 +1019,12 @@ function CareerAnalysis({
           </button>
 
           {loading && (
-            <button type="button" className="cancel-link" onClick={onCancel}>
-              Cancel
+            <button
+              type="button"
+              className="cl-cancel-button"
+              onClick={cancelAnalysis}
+            >
+              Cancel analysis
             </button>
           )}
         </div>
@@ -334,46 +1034,421 @@ function CareerAnalysis({
 }
 
 /* =========================================================
-   RESULT CARD
-   ========================================================= */
+   SKILL GAP CARD
+========================================================= */
 
-function ResultCard({ label, children, className = "" }) {
+function SkillGapCard({
+  skill,
+  info,
+  onLearn,
+  onPractice,
+}) {
   return (
-    <section className={`result-card ${className}`}>
-      <div className="result-label">{label}</div>
-      {children}
-    </section>
+    <div className="cl-gap-card">
+      <div className="cl-gap-card-header">
+        <div>
+          <p className="cl-result-label">
+            SKILL GAP
+          </p>
+
+          <h3>{skill}</h3>
+        </div>
+
+        <span className="cl-gap-badge">
+          {info.difficulty}
+        </span>
+      </div>
+
+      <p className="cl-gap-description">
+        {info.description}
+      </p>
+
+      <div className="cl-gap-topics">
+        {info.topics.map((topic) => (
+          <span key={topic}>{topic}</span>
+        ))}
+      </div>
+
+      <div className="cl-gap-footer">
+        <span>⏱ {info.time}</span>
+
+        <div className="cl-gap-actions">
+          <button
+            type="button"
+            onClick={(event) =>
+              onLearn(
+                skill,
+                info,
+                event.currentTarget
+              )
+            }
+          >
+            Learn
+          </button>
+
+          <button
+            type="button"
+            onClick={(event) =>
+              onPractice(
+                skill,
+                info,
+                event.currentTarget
+              )
+            }
+          >
+            Practice
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* =========================================================
+   LEARNING PANEL
+========================================================= */
+
+function LearningPanel({
+  skill,
+  info,
+  focusSection,
+  completed,
+  onToggleTopic,
+  onClose,
+}) {
+  const closeButtonRef = useRef(null);
+  const practiceRef = useRef(null);
+
+  const [highlightPractice, setHighlightPractice] =
+    useState(false);
+
+  useEffect(() => {
+    closeButtonRef.current?.focus();
+
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    };
+
+    document.addEventListener(
+      "keydown",
+      handleKeyDown
+    );
+
+    const previousOverflow =
+      document.body.style.overflow;
+
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.removeEventListener(
+        "keydown",
+        handleKeyDown
+      );
+
+      document.body.style.overflow =
+        previousOverflow;
+    };
+  }, [onClose]);
+
+  useEffect(() => {
+    if (
+      focusSection === "practice" &&
+      practiceRef.current
+    ) {
+      practiceRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+
+      setHighlightPractice(true);
+
+      const timer = setTimeout(
+        () => setHighlightPractice(false),
+        1600
+      );
+
+      return () => clearTimeout(timer);
+    }
+  }, [focusSection]);
+
+  const progress =
+    info.topics.length === 0
+      ? 0
+      : Math.round(
+          (completed.length /
+            info.topics.length) *
+            100
+        );
+
+  return (
+    <div
+      className="cl-learning-overlay"
+      onClick={onClose}
+    >
+      <div
+        className="cl-learning-panel"
+        role="dialog"
+        aria-modal="true"
+        aria-label={`Learning path for ${skill}`}
+        onClick={(event) =>
+          event.stopPropagation()
+        }
+      >
+        <button
+          ref={closeButtonRef}
+          type="button"
+          className="cl-learning-close"
+          onClick={onClose}
+          aria-label="Close learning panel"
+        >
+          ×
+        </button>
+
+        <p className="cl-result-label">
+          LEARNING PATH
+        </p>
+
+        <h2>{skill}</h2>
+
+        <p className="cl-learning-description">
+          {info.description}
+        </p>
+
+        <div className="cl-learning-meta">
+          <span>{info.difficulty}</span>
+          <span>⏱ {info.time}</span>
+        </div>
+
+        <div className="cl-learning-progress">
+          <div className="cl-learning-progress-header">
+            <span>Your progress</span>
+            <strong>{progress}%</strong>
+          </div>
+
+          <div
+            className="cl-progress-bar"
+            role="progressbar"
+            aria-valuenow={progress}
+            aria-valuemin={0}
+            aria-valuemax={100}
+          >
+            <div
+              className="cl-progress-fill"
+              style={{
+                width: `${progress}%`,
+              }}
+            />
+          </div>
+        </div>
+
+        <p className="cl-result-label">
+          WHAT TO LEARN
+        </p>
+
+        <div className="cl-learning-topics">
+          {info.topics.map(
+            (topic, index) => {
+              const isCompleted =
+                completed.includes(topic);
+
+              return (
+                <button
+                  key={topic}
+                  type="button"
+                  className={`cl-learning-topic ${
+                    isCompleted
+                      ? "completed"
+                      : ""
+                  }`}
+                  aria-pressed={isCompleted}
+                  onClick={() =>
+                    onToggleTopic(topic)
+                  }
+                >
+                  <span className="cl-topic-number">
+                    {String(index + 1).padStart(
+                      2,
+                      "0"
+                    )}
+                  </span>
+
+                  <span className="cl-topic-name">
+                    {topic}
+                  </span>
+
+                  <span
+                    className="cl-topic-check"
+                    aria-hidden="true"
+                  >
+                    {isCompleted ? "✓" : "○"}
+                  </span>
+                </button>
+              );
+            }
+          )}
+        </div>
+
+        <div
+          ref={practiceRef}
+          className={`cl-learning-practice ${
+            highlightPractice
+              ? "cl-highlight"
+              : ""
+          }`}
+        >
+          <p className="cl-result-label">
+            PRACTICE PROJECT
+          </p>
+
+          <h3>{info.practice}</h3>
+
+          <p>
+            Build this project to turn your new
+            knowledge into practical experience.
+          </p>
+        </div>
+      </div>
+    </div>
   );
 }
 
 /* =========================================================
    RESULTS PAGE
-   ========================================================= */
+========================================================= */
 
-function ResultsPage({ result, onBack }) {
-  const headingRef = useRef(null);
+function Results({ data, onBack }) {
+  const [activeSkill, setActiveSkill] =
+    useState(null);
 
-  useEffect(() => {
-    headingRef.current?.focus();
-  }, []);
+  const [
+    completedBySkill,
+    setCompletedBySkill,
+  ] = useState({});
 
-  if (!result) {
-    return null;
-  }
+  const returnFocusRef = useRef(null);
 
-  const readiness = result.readiness_score || 0;
-  const matchedSkills = result.matched_skills || [];
-  const missingSkills = result.missing_skills || [];
-  const requiredSkills = result.required_skills || [];
-  const roadmap = result.roadmap || [];
-  const project = result.recommended_project;
-  const roleRecognized = result.role_recognized !== false;
+  const matchedSkills =
+    data.matchedSkills || [];
+
+  const missingSkills =
+    data.missingSkills || [];
+
+  const requiredSkills =
+    data.requiredSkills || [];
+
+  const detectedSkills =
+    data.detectedSkills || [];
+
+  const resources =
+    data.resources || [];
+
+  const roadmap =
+    data.roadmap || [];
+
+  const matchedCount =
+    matchedSkills.length;
+
+  const missingCount =
+    missingSkills.length;
+
+  const requiredCount =
+    requiredSkills.length;
+
+  const selfReported = new Set(
+    (data.selfReportedSkills || []).map(
+      (skill) => skill.toLowerCase()
+    )
+  );
+
+  const requiredSet = new Set(
+    requiredSkills.map((skill) =>
+      skill.toLowerCase()
+    )
+  );
+
+  const readiness = Math.max(
+    0,
+    Math.min(
+      100,
+      Number(data.readiness) || 0
+    )
+  );
+
+  const openSkillPanel = (
+    skill,
+    info,
+    focusSection,
+    triggerEl
+  ) => {
+    returnFocusRef.current =
+      triggerEl || null;
+
+    setActiveSkill({
+      skill,
+      info,
+      focusSection,
+    });
+  };
+
+  const closeSkillPanel = () => {
+    setActiveSkill(null);
+    returnFocusRef.current?.focus();
+  };
+
+  const toggleTopic = (
+    skill,
+    topic
+  ) => {
+    const key = skill.toLowerCase();
+
+    setCompletedBySkill(
+      (previous) => {
+        const current =
+          previous[key] || [];
+
+        const next = current.includes(
+          topic
+        )
+          ? current.filter(
+              (item) => item !== topic
+            )
+          : [...current, topic];
+
+        return {
+          ...previous,
+          [key]: next,
+        };
+      }
+    );
+  };
+
+  const getReadinessMessage = () => {
+    if (readiness >= 85) {
+      return "Excellent match. You're already very close to the target role.";
+    }
+
+    if (readiness >= 70) {
+      return "Strong foundation. Focus on your remaining skill gaps to become more competitive.";
+    }
+
+    if (readiness >= 50) {
+      return "You're making progress. A focused learning plan can significantly improve your readiness.";
+    }
+
+    return "You have room to grow. Start with the highest-priority skill gaps below.";
+  };
 
   return (
-    <main className="cl-root results-page">
-      <div className="results-container">
-        <button className="back-button" onClick={onBack}>
-          ← Back
+    <main className="cl-analysis">
+      <div className="cl-analysis-container">
+        <button
+          type="button"
+          className="cl-back-button"
+          onClick={onBack}
+        >
+          ← Edit Analysis
         </button>
 
         <p className="cl-eyebrow">
@@ -381,181 +1456,625 @@ function ResultsPage({ result, onBack }) {
           Career Analysis
         </p>
 
-        <h1 className="results-heading" tabIndex={-1} ref={headingRef}>
+        <h1 className="cl-heading">
           Your career
           <br />
           readiness.
         </h1>
 
-        <p className="results-description">
-          Here's what CareerLenz found based on your target role and current
-          skills.
+        <p className="cl-body">
+          Here's what CareerLenz found based on
+          your target role and uploaded resume.
         </p>
 
-        {!roleRecognized && (
-          <div className="notice-message" role="status">
-            We didn't recognize "{result.target_role}" as one of our tracked
-            roles, so this analysis uses a general baseline skill set instead
-            of a role-specific one.
+        {data.roleRecognized === false && (
+          <div
+            className="cl-notice-message"
+            role="status"
+          >
+            We didn't recognize "
+            {data.role}" as one of our tracked
+            roles, so this analysis uses a
+            general baseline skill set.
           </div>
         )}
 
-        {/* READINESS */}
-        <ResultCard label="CAREER READINESS" className="readiness-card">
-          <div className="readiness-content">
+        {/* READINESS HERO */}
+
+        <section className="cl-readiness-hero">
+          <div className="cl-readiness-ring-large">
             <ReadinessRing value={readiness} />
-            <div>
-              <div className="readiness-percentage">{readiness}%</div>
-              <p className="readiness-message">
-                You currently match <strong>{matchedSkills.length}</strong>{" "}
-                out of <strong>{requiredSkills.length}</strong> required
-                skills.
+          </div>
+
+          <div className="cl-readiness-copy">
+            <p className="cl-result-label">
+              CAREER READINESS
+            </p>
+
+            <h2>{readiness}%</h2>
+
+            <p>
+              You currently match{" "}
+              <strong>
+                {matchedCount}
+              </strong>{" "}
+              out of{" "}
+              <strong>
+                {requiredCount}
+              </strong>{" "}
+              required skills.
+            </p>
+
+            <div className="cl-readiness-message">
+              {getReadinessMessage()}
+            </div>
+          </div>
+
+          <div className="cl-target-mini">
+            <span>TARGET ROLE</span>
+            <strong>{data.role}</strong>
+          </div>
+        </section>
+
+        {/* CAREERLENZ INTELLIGENCE */}
+
+        {data.careerSummary && (
+          <section className="cl-intelligence-card">
+            <div className="cl-intelligence-heading">
+              <div>
+                <p className="cl-result-label">
+                  CAREERLENZ INTELLIGENCE
+                </p>
+
+                <h2>
+                  Your personalized career insight
+                </h2>
+              </div>
+
+              <span className="cl-intelligence-badge">
+                ✦ INSIGHT
+              </span>
+            </div>
+
+            <p className="cl-intelligence-summary">
+              {data.careerSummary}
+            </p>
+
+            <div className="cl-intelligence-grid">
+              <div className="cl-intelligence-item">
+                <span className="cl-intelligence-icon">
+                  ✓
+                </span>
+
+                <div>
+                  <p className="cl-result-label">
+                    YOUR STRENGTH
+                  </p>
+
+                  <p>
+                    {data.strengthSummary}
+                  </p>
+                </div>
+              </div>
+
+              <div className="cl-intelligence-item priority">
+                <span className="cl-intelligence-icon">
+                  !
+                </span>
+
+                <div>
+                  <p className="cl-result-label">
+                    HIGHEST PRIORITY GAP
+                  </p>
+
+                  <h3>
+                    {data.highestPriorityGap ||
+                      "No major gap"}
+                  </h3>
+
+                  <p>
+                    {data.whyPriorityGapMatters}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="cl-intelligence-action">
+              <p className="cl-result-label">
+                RECOMMENDED ACTION
+              </p>
+
+              <h3>
+                What should you do next?
+              </h3>
+
+              <p>
+                {data.recommendedAction}
               </p>
             </div>
-          </div>
-        </ResultCard>
 
-        {/* TARGET ROLE */}
-        <ResultCard label="TARGET ROLE">
-          <h2 className="result-big-text">{result.target_role}</h2>
-        </ResultCard>
+            {data.estimatedImpact && (
+              <div className="cl-impact-section">
+                <div>
+                  <p className="cl-result-label">
+                    POTENTIAL IMPACT
+                  </p>
 
-        {/* CURRENT SKILLS */}
-        <ResultCard label="YOUR CURRENT SKILLS">
-          <div className="skill-tags">
-            {matchedSkills.length > 0 ? (
-              matchedSkills.map((skill) => (
-                <span key={skill} className="skill-tag skill-matched">
-                  ✓ {skill}
-                </span>
-              ))
-            ) : (
-              <span className="empty-text">No matching skills detected yet.</span>
-            )}
-          </div>
-        </ResultCard>
+                  <p className="cl-impact-message">
+                    {data.estimatedImpact.message}
+                  </p>
+                </div>
 
-        {/* SKILL GAPS */}
-        <ResultCard label="SKILL GAPS">
-          <div className="skill-tags">
-            {missingSkills.length > 0 ? (
-              missingSkills.map((skill) => (
-                <span key={skill} className="skill-tag skill-gap">
-                  + {skill}
-                </span>
-              ))
-            ) : (
-              <span className="success-text">🎉 No skill gaps detected!</span>
-            )}
-          </div>
-        </ResultCard>
+                <div className="cl-impact-score">
+                  <div>
+                    <span>NOW</span>
 
-        {/* REQUIRED SKILLS */}
-        <ResultCard label="REQUIRED SKILLS">
-          <div className="skill-tags">
-            {requiredSkills.map((skill) => (
-              <span key={skill} className="skill-tag skill-required">
-                {skill}
-              </span>
-            ))}
-          </div>
-        </ResultCard>
-
-        {/* RESUME */}
-        <ResultCard label="RESUME">
-          <div className="resume-result">
-            <span className="resume-icon" aria-hidden="true">
-              📄
-            </span>
-            <div>
-              <div className="resume-name">{result.filename}</div>
-              <div className="resume-success">Resume uploaded successfully.</div>
-            </div>
-          </div>
-        </ResultCard>
-
-        {/* PERSONALIZED ROADMAP */}
-        <ResultCard label="PERSONALIZED ROADMAP" className="roadmap-card">
-          <h2 className="roadmap-heading">Close your skill gaps.</h2>
-          <p className="result-description">
-            Here's a step-by-step learning path based on the skills you
-            currently need for your target role.
-          </p>
-
-          {roadmap.length > 0 ? (
-            <div className="roadmap-list">
-              {roadmap.map((item) => (
-                <div className="roadmap-item" key={item.step}>
-                  <div className="roadmap-number">
-                    {String(item.step).padStart(2, "0")}
+                    <strong>
+                      {
+                        data.estimatedImpact
+                          .current_readiness
+                      }%
+                    </strong>
                   </div>
 
-                  <div className="roadmap-content">
-                    <div className="roadmap-top">
-                      <h3>{item.title}</h3>
-                      <span className="roadmap-time">{item.time}</span>
-                    </div>
+                  <span className="cl-impact-arrow">
+                    →
+                  </span>
 
-                    <p>{item.description}</p>
+                  <div>
+                    <span>PROJECTED</span>
 
-                    <div className="roadmap-topics">
-                      {item.topics?.map((topic) => (
-                        <span key={topic} className="roadmap-topic">
-                          {topic}
-                        </span>
-                      ))}
-                    </div>
-
-                    <div className="roadmap-practice">
-                      <strong>Practice:</strong> {item.practice}
-                    </div>
+                    <strong>
+                      {
+                        data.estimatedImpact
+                          .projected_readiness
+                      }%
+                    </strong>
                   </div>
                 </div>
-              ))}
-            </div>
-          ) : (
-            <div className="empty-roadmap">
-              <div className="empty-roadmap-icon" aria-hidden="true">
-                ✓
               </div>
-              <h3>You're looking good!</h3>
-              <p>We couldn't find any missing skills that currently have a roadmap.</p>
-            </div>
-          )}
-        </ResultCard>
+            )}
 
-        {/* RECOMMENDED PROJECT */}
-        {project && (
-          <ResultCard label="RECOMMENDED PROJECT" className="project-card">
-            <div className="project-content">
-              <div className="project-icon" aria-hidden="true">
-                ✦
-              </div>
-              <div>
-                <h2 className="project-heading">{project.title}</h2>
-                <p className="project-description">{project.description}</p>
-
-                <div className="project-skills">
-                  {project.skills?.map((skill) => (
-                    <span key={skill} className="project-skill">
-                      {skill}
-                    </span>
-                  ))}
-                </div>
-              </div>
+            <div className="cl-intelligence-advice">
+              <strong>
+                CareerLenz advice:
+              </strong>{" "}
+              {data.improvementAdvice}
             </div>
-          </ResultCard>
+          </section>
         )}
 
-        {/* NEXT STEP */}
-        <section className="next-step-card">
-          <div className="result-label">NEXT STEP</div>
-          <h2>Turn your gaps into strengths.</h2>
-          <p>
-            Follow your personalized roadmap, build the recommended project,
-            and strengthen your portfolio for your target role.
-          </p>
+        {/* DASHBOARD */}
+
+        <section className="cl-skill-dashboard">
+          <div className="cl-dashboard-header">
+            <div>
+              <p className="cl-result-label">
+                SKILL GAP DASHBOARD
+              </p>
+
+              <h2>
+                Your career snapshot
+              </h2>
+            </div>
+
+            <div className="cl-dashboard-score">
+              {readiness}%
+            </div>
+          </div>
+
+          <div className="cl-dashboard-bar">
+            <div
+              className="cl-dashboard-bar-fill"
+              style={{
+                width: `${readiness}%`,
+              }}
+            />
+          </div>
+
+          <div className="cl-dashboard-stats">
+            <div className="cl-dashboard-stat">
+              <span>Matched</span>
+              <strong>{matchedCount}</strong>
+              <small>skills</small>
+            </div>
+
+            <div className="cl-dashboard-stat">
+              <span>Skill Gaps</span>
+              <strong>{missingCount}</strong>
+              <small>to improve</small>
+            </div>
+
+            <div className="cl-dashboard-stat">
+              <span>Required</span>
+              <strong>{requiredCount}</strong>
+              <small>total skills</small>
+            </div>
+          </div>
+
+          <div className="cl-dashboard-columns">
+            <div>
+              <p className="cl-result-label">
+                YOUR STRENGTHS
+              </p>
+
+              <div className="cl-skill-list">
+                {matchedSkills.length > 0 ? (
+                  matchedSkills.map(
+                    (skill) => (
+                      <span
+                        className={`cl-skill matched ${
+                          selfReported.has(
+                            skill.toLowerCase()
+                          )
+                            ? "self-reported"
+                            : ""
+                        }`}
+                        key={skill}
+                      >
+                        ✓ {skill}
+
+                        {selfReported.has(
+                          skill.toLowerCase()
+                        ) &&
+                          " (self-reported)"}
+                      </span>
+                    )
+                  )
+                ) : (
+                  <p className="cl-result-text">
+                    No matching skills detected
+                    yet.
+                  </p>
+                )}
+              </div>
+            </div>
+
+            <div>
+              <p className="cl-result-label">
+                FOCUS AREAS
+              </p>
+
+              <div className="cl-skill-list">
+                {missingSkills.length >
+                0 ? (
+                  missingSkills.map(
+                    (skill) => (
+                      <span
+                        className="cl-skill missing"
+                        key={skill}
+                      >
+                        + {skill}
+                      </span>
+                    )
+                  )
+                ) : (
+                  <p className="cl-result-text">
+                    🎉 No major skill gaps
+                    detected.
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
         </section>
+
+        {/* DETECTED SKILLS */}
+
+        <section className="cl-result-card">
+          <p className="cl-result-label">
+            RESUME SKILLS DETECTED
+          </p>
+
+          <p className="cl-result-text">
+            These are the skills CareerLenz
+            detected directly from your resume.
+          </p>
+
+          <div className="cl-skill-list">
+            {detectedSkills.length > 0 ? (
+              detectedSkills.map(
+                (skill) => {
+                  const isRequired =
+                    requiredSet.has(
+                      skill.toLowerCase()
+                    );
+
+                  return (
+                    <span
+                      className={
+                        isRequired
+                          ? "cl-skill matched"
+                          : "cl-skill detected"
+                      }
+                      key={skill}
+                    >
+                      {isRequired
+                        ? "✓ "
+                        : ""}
+                      {skill}
+                    </span>
+                  );
+                }
+              )
+            ) : (
+              <p className="cl-result-text">
+                No skills were detected.
+              </p>
+            )}
+          </div>
+        </section>
+
+        {/* ACTIONABLE GAPS */}
+
+        <section className="cl-result-card">
+          <div className="cl-section-heading-row">
+            <div>
+              <p className="cl-result-label">
+                ACTIONABLE SKILL GAPS
+              </p>
+
+              <h2>
+                Turn gaps into progress.
+              </h2>
+            </div>
+
+            <span className="cl-section-count">
+              {missingCount} gaps
+            </span>
+          </div>
+
+          <p className="cl-result-text">
+            Every missing skill has a learning
+            path and a practical project.
+          </p>
+
+          {missingSkills.length > 0 ? (
+            <div className="cl-gap-grid">
+              {missingSkills.map(
+                (skill) => {
+                  const info =
+                    getSkillGapInfo(
+                      skill,
+                      roadmap
+                    );
+
+                  return (
+                    <SkillGapCard
+                      key={skill}
+                      skill={skill}
+                      info={info}
+                      onLearn={(
+                        selectedSkill,
+                        selectedInfo,
+                        triggerEl
+                      ) =>
+                        openSkillPanel(
+                          selectedSkill,
+                          selectedInfo,
+                          "topics",
+                          triggerEl
+                        )
+                      }
+                      onPractice={(
+                        selectedSkill,
+                        selectedInfo,
+                        triggerEl
+                      ) =>
+                        openSkillPanel(
+                          selectedSkill,
+                          selectedInfo,
+                          "practice",
+                          triggerEl
+                        )
+                      }
+                    />
+                  );
+                }
+              )}
+            </div>
+          ) : (
+            <div className="cl-success-box">
+              🎉 You currently have all the
+              required skills for this role!
+            </div>
+          )}
+        </section>
+
+        {/* REQUIRED SKILLS */}
+
+        <section className="cl-result-card">
+          <p className="cl-result-label">
+            ROLE REQUIREMENTS
+          </p>
+
+          <h2>
+            Skills required for {data.role}
+          </h2>
+
+          <div className="cl-skill-list">
+            {requiredSkills.map(
+              (skill) => {
+                const matched =
+                  matchedSkills.some(
+                    (item) =>
+                      item.toLowerCase() ===
+                      skill.toLowerCase()
+                  );
+
+                return (
+                  <span
+                    className={`cl-skill ${
+                      matched
+                        ? "matched"
+                        : "required"
+                    }`}
+                    key={skill}
+                  >
+                    {matched ? "✓ " : ""}
+                    {skill}
+                  </span>
+                );
+              }
+            )}
+          </div>
+        </section>
+
+        {/* LEARNING RESOURCES */}
+
+        {resources.length > 0 && (
+          <section className="cl-result-card">
+            <p className="cl-result-label">
+              YOUR LEARNING RESOURCES
+            </p>
+
+            <h2>
+              What you're already working on
+            </h2>
+
+            <div className="cl-result-resources">
+              {resources.map(
+                (resource) => (
+                  <div
+                    className="cl-result-resource"
+                    key={resource.id}
+                  >
+                    <div>
+                      <span className="cl-resource-type">
+                        {resource.type}
+                      </span>
+
+                      <p>
+                        {resource.name}
+                      </p>
+                    </div>
+
+                    <strong>
+                      {resource.progress}%
+                    </strong>
+                  </div>
+                )
+              )}
+            </div>
+          </section>
+        )}
+
+        {/* RECOMMENDED PROJECT */}
+
+        {data.recommendedProject && (
+          <section className="cl-result-card cl-project-card">
+            <div className="cl-project-icon">
+              🚀
+            </div>
+
+            <div>
+              <p className="cl-result-label">
+                RECOMMENDED PROJECT
+              </p>
+
+              <h2>
+                {data.recommendedProject.title}
+              </h2>
+
+              <p className="cl-result-text">
+                {
+                  data.recommendedProject
+                    .description
+                }
+              </p>
+
+              {data.recommendedProject
+                .skills?.length > 0 && (
+                <div className="cl-skill-list">
+                  {data.recommendedProject.skills.map(
+                    (skill) => (
+                      <span
+                        className="cl-skill required"
+                        key={skill}
+                      >
+                        {skill}
+                      </span>
+                    )
+                  )}
+                </div>
+              )}
+            </div>
+          </section>
+        )}
+
+        {/* RESUME */}
+
+        <section className="cl-result-card cl-resume-card">
+          <div className="cl-resume-icon">
+            📄
+          </div>
+
+          <div>
+            <p className="cl-result-label">
+              ANALYZED RESUME
+            </p>
+
+            <h3>
+              {data.resume?.name ||
+                "Resume.pdf"}
+            </h3>
+
+            <p className="cl-result-text">
+              Resume analyzed successfully.
+            </p>
+          </div>
+        </section>
+
+        {/* NEXT STEP */}
+
+        <section className="cl-next-step">
+          <div className="cl-next-step-number">
+            NEXT
+          </div>
+
+          <div>
+            <p className="cl-result-label">
+              YOUR NEXT MOVE
+            </p>
+
+            <h2>
+              Close your skill gaps.
+            </h2>
+
+            <p>
+              CareerLenz identified the skills
+              that can have the biggest impact on
+              your journey toward{" "}
+              <strong>{data.role}</strong>.
+              Start with one gap, build one
+              project, and keep improving.
+            </p>
+          </div>
+        </section>
+
+        {/* LEARNING MODAL */}
+
+        {activeSkill && (
+          <LearningPanel
+            skill={activeSkill.skill}
+            info={activeSkill.info}
+            focusSection={
+              activeSkill.focusSection
+            }
+            completed={
+              completedBySkill[
+                activeSkill.skill.toLowerCase()
+              ] || []
+            }
+            onToggleTopic={(topic) =>
+              toggleTopic(
+                activeSkill.skill,
+                topic
+              )
+            }
+            onClose={closeSkillPanel}
+          />
+        )}
       </div>
     </main>
   );
@@ -563,121 +2082,68 @@ function ResultsPage({ result, onBack }) {
 
 /* =========================================================
    MAIN APP
-   ========================================================= */
+========================================================= */
+
+const EMPTY_FORM = {
+  role: "",
+  skills: "",
+  resume: null,
+  resources: [],
+};
 
 function App() {
-  const [page, setPage] = useState("home");
-  const [targetRole, setTargetRole] = useState("Frontend Developer");
-  const [resumeFile, setResumeFile] = useState(null);
-  const [analysisResult, setAnalysisResult] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [page, setPage] =
+    useState("landing");
 
-  const abortControllerRef = useRef(null);
-  // Tracks whether the in-flight request was aborted by the user
-  // (Back / Cancel) rather than by the timeout, so we don't show a
-  // misleading "took too long" error after an intentional cancel.
-  const wasCancelledRef = useRef(false);
+  const [form, setForm] =
+    useState(EMPTY_FORM);
 
-  // Cancel any in-flight request if the component tree ever unmounts.
-  useEffect(() => {
-    return () => abortControllerRef.current?.abort();
-  }, []);
+  const [analysisData, setAnalysisData] =
+    useState(null);
 
-  const cancelAnalysis = () => {
-    wasCancelledRef.current = true;
-    abortControllerRef.current?.abort();
-    setLoading(false);
+  const handleAnalyze = (data) => {
+    setAnalysisData(data);
+    setPage("results");
   };
 
-  const analyzeResume = async () => {
-    setError("");
-    wasCancelledRef.current = false;
-
-    const validationError = validateResumeFile(resumeFile);
-    if (validationError) {
-      setError(validationError);
-      return;
-    }
-
-    setLoading(true);
-
-    const controller = new AbortController();
-    abortControllerRef.current = controller;
-    const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
-
-    const formData = new FormData();
-    formData.append("resume", resumeFile);
-    formData.append("targetRole", targetRole);
-
-    try {
-      const response = await fetch(`${API_BASE_URL}/analyze`, {
-        method: "POST",
-        body: formData,
-        signal: controller.signal,
-      });
-
-      let data;
-      try {
-        data = await response.json();
-      } catch {
-        throw new Error(
-          "The server sent back an unexpected response. Please try again."
-        );
-      }
-
-      if (!response.ok) {
-        throw new Error(
-          data.error || "Something went wrong while analyzing your resume."
-        );
-      }
-
-      setAnalysisResult(data);
-      setPage("results");
-    } catch (err) {
-      if (err.name === "AbortError") {
-        if (!wasCancelledRef.current) {
-          setError(
-            "That took too long. Please check the backend is running and try again."
-          );
-        }
-        // else: user cancelled on purpose, no error needed.
-      } else {
-        setError(err.message || "Unable to connect to CareerLenz backend.");
-      }
-    } finally {
-      clearTimeout(timeoutId);
-      setLoading(false);
-    }
-  };
-
-  const goBackFromAnalysis = () => {
-    if (loading) cancelAnalysis();
-    setPage("home");
-  };
-
-  if (page === "analysis") {
+  if (page === "landing") {
     return (
-      <CareerAnalysis
-        targetRole={targetRole}
-        setTargetRole={setTargetRole}
-        resumeFile={resumeFile}
-        setResumeFile={setResumeFile}
-        onAnalyze={analyzeResume}
-        onBack={goBackFromAnalysis}
-        onCancel={cancelAnalysis}
-        loading={loading}
-        error={error}
-        setError={setError}
+      <LandingPage
+        onStart={() =>
+          setPage("analysis")
+        }
       />
     );
   }
 
-  if (page === "results") {
-    return <ResultsPage result={analysisResult} onBack={() => setPage("analysis")} />;
+  if (page === "analysis") {
+    return (
+      <CareerAnalysis
+        form={form}
+        setForm={setForm}
+        onAnalyze={handleAnalyze}
+        onBack={() =>
+          setPage("landing")
+        }
+      />
+    );
   }
 
-  return <HomePage onAnalyze={() => setPage("analysis")} />;
+  if (
+    page === "results" &&
+    analysisData
+  ) {
+    return (
+      <Results
+        data={analysisData}
+        onBack={() =>
+          setPage("analysis")
+        }
+      />
+    );
+  }
+
+  return null;
 }
 
 export default App;
