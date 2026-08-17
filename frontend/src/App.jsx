@@ -728,6 +728,10 @@ function CareerAnalysis({
         // 30-Day Action Plan
         actionPlan30Days:
           data.action_plan_30_days || null,
+
+        // Resume Bullet Improver
+        bulletImprovements:
+          data.bullet_improvements || [],
       });
     } catch (error) {
       if (error.name === "AbortError") {
@@ -1394,6 +1398,139 @@ function LearningPanel({
 /* =========================================================
    RESULTS PAGE
 ========================================================= */
+
+
+function ResumeBulletImprover({ improvements = [] }) {
+  const [copiedIndex, setCopiedIndex] = useState(null);
+
+  const copySuggestion = async (suggestion, index) => {
+    try {
+      await navigator.clipboard.writeText(suggestion);
+      setCopiedIndex(index);
+
+      window.setTimeout(() => {
+        setCopiedIndex(null);
+      }, 1800);
+    } catch {
+      setCopiedIndex(null);
+    }
+  };
+
+  return (
+    <section className="cl-bullet-improver-card">
+      <div className="cl-bullet-improver-header">
+        <div>
+          <p className="cl-result-label">
+            RESUME BULLET IMPROVER
+          </p>
+
+          <h2>
+            Strengthen how your experience is presented.
+          </h2>
+
+          <p className="cl-bullet-improver-intro">
+            CareerLenz identifies resume lines that could
+            communicate technical depth and impact more clearly.
+            Suggestions use placeholders instead of inventing facts.
+          </p>
+        </div>
+
+        <span className="cl-bullet-count">
+          {improvements.length} suggestions
+        </span>
+      </div>
+
+      <div className="cl-bullet-improvement-list">
+        {improvements.map((item, index) => (
+          <article
+            className="cl-bullet-improvement-item"
+            key={`${item.original}-${index}`}
+          >
+            <div className="cl-bullet-improvement-top">
+              <span className="cl-bullet-number">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+
+              <div className="cl-bullet-impact-status">
+                <span
+                  className={`cl-bullet-impact-dot ${
+                    item.has_measurable_impact
+                      ? "has-impact"
+                      : "needs-impact"
+                  }`}
+                />
+
+                {item.has_measurable_impact
+                  ? "MEASURABLE IMPACT FOUND"
+                  : "IMPACT CAN BE STRONGER"}
+              </div>
+            </div>
+
+            <div className="cl-bullet-before-after">
+              <div className="cl-bullet-block cl-bullet-before">
+                <p className="cl-bullet-block-label">
+                  CURRENT
+                </p>
+
+                <p>{item.original}</p>
+              </div>
+
+              <div className="cl-bullet-arrow" aria-hidden="true">
+                →
+              </div>
+
+              <div className="cl-bullet-block cl-bullet-after">
+                <div className="cl-bullet-after-heading">
+                  <p className="cl-bullet-block-label">
+                    SUGGESTED STRUCTURE
+                  </p>
+
+                  <button
+                    type="button"
+                    className="cl-copy-bullet-button"
+                    onClick={() =>
+                      copySuggestion(
+                        item.suggestion,
+                        index
+                      )
+                    }
+                  >
+                    {copiedIndex === index
+                      ? "Copied ✓"
+                      : "Copy Suggestion"}
+                  </button>
+                </div>
+
+                <p>{item.suggestion}</p>
+              </div>
+            </div>
+
+            <div className="cl-bullet-reason-row">
+              <div>
+                <span>WHY BETTER</span>
+                <p>{item.reason}</p>
+              </div>
+
+              {item.skills_detected?.length > 0 && (
+                <div className="cl-bullet-skill-tags">
+                  {item.skills_detected.map((skill) => (
+                    <span key={skill}>{skill}</span>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div className="cl-bullet-warning">
+              <strong>KEEP IT TRUE</strong>
+              <p>{item.warning}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 
 function Results({ data, onBack }) {
   const [activeSkill, setActiveSkill] =
@@ -2068,6 +2205,14 @@ function Results({ data, onBack }) {
             )}
           </div>
         </section>
+
+        {/* RESUME BULLET IMPROVER */}
+
+        {data.bulletImprovements?.length > 0 && (
+          <ResumeBulletImprover
+            improvements={data.bulletImprovements}
+          />
+        )}
 
         {/* 30-DAY ACTION PLAN */}
 

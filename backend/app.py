@@ -2087,6 +2087,364 @@ def build_30_day_action_plan(
     }
 
 
+
+# ==========================================
+# RESUME BULLET IMPROVER
+# ==========================================
+
+WEAK_BULLET_PREFIXES = [
+    "worked on",
+    "helped",
+    "responsible for",
+    "made",
+    "created",
+    "developed",
+    "built",
+    "implemented",
+    "designed",
+    "worked with",
+    "used",
+]
+
+
+def _clean_resume_line(line):
+    cleaned = re.sub(
+        r"^[\s•●▪◦*-]+",
+        "",
+        line.strip()
+    )
+
+    cleaned = re.sub(
+        r"\s+",
+        " ",
+        cleaned
+    )
+
+    return cleaned.strip()
+
+
+def _looks_like_resume_bullet(line):
+    if not line:
+        return False
+
+    if len(line) < 18 or len(line) > 220:
+        return False
+
+    lowered = line.lower()
+
+    if re.search(
+        r"^[A-Z][A-Z\s&/-]{3,}$",
+        line
+    ):
+        return False
+
+    if lowered.startswith(
+        (
+            "http://",
+            "https://",
+            "www.",
+            "linkedin",
+            "github"
+        )
+    ):
+        return False
+
+    has_action_verb = any(
+        re.search(
+            r"\b"
+            + re.escape(verb)
+            + r"\b",
+            lowered
+        )
+        for verb in ACTION_VERBS
+    )
+
+    has_weak_prefix = any(
+        lowered.startswith(prefix)
+        for prefix in WEAK_BULLET_PREFIXES
+    )
+
+    has_tech = any(
+        pattern.search(line)
+        for pattern
+        in SKILL_PATTERNS.values()
+    )
+
+    return (
+        has_action_verb
+        or has_weak_prefix
+        or has_tech
+    )
+
+
+def _extract_candidate_bullets(text):
+    candidates = []
+
+    for raw_line in text.splitlines():
+
+        line = _clean_resume_line(
+            raw_line
+        )
+
+        if not _looks_like_resume_bullet(
+            line
+        ):
+            continue
+
+        if line not in candidates:
+            candidates.append(
+                line
+            )
+
+    return candidates[:12]
+
+
+def _detect_skills_in_line(line):
+    found = []
+
+    for canonical, pattern in (
+        SKILL_PATTERNS.items()
+    ):
+
+        if pattern.search(line):
+            found.append(
+                canonical
+            )
+
+    return found[:4]
+
+
+def _contains_quantified_impact(line):
+    return bool(
+        count_impact_signals(
+            line
+        )
+    )
+
+
+def _bullet_reason(
+    original,
+    detected_line_skills
+):
+    reasons = []
+
+    lowered = original.lower()
+
+    if any(
+        lowered.startswith(prefix)
+        for prefix in [
+            "worked on",
+            "helped",
+            "responsible for",
+            "worked with",
+            "used",
+        ]
+    ):
+        reasons.append(
+            "Starts with weak or passive wording"
+        )
+
+    if not _contains_quantified_impact(
+        original
+    ):
+        reasons.append(
+            "No measurable outcome is visible"
+        )
+
+    if not detected_line_skills:
+        reasons.append(
+            "Technical contribution is not explicit"
+        )
+
+    if len(original.split()) < 9:
+        reasons.append(
+            "The bullet lacks enough context"
+        )
+
+    if not reasons:
+        reasons.append(
+            "The bullet can communicate impact more clearly"
+        )
+
+    return "; ".join(
+        reasons[:3]
+    ) + "."
+
+
+def _build_truth_preserving_template(
+    original,
+    detected_line_skills,
+    target_role
+):
+    skill_text = (
+        ", ".join(
+            skill.title()
+            for skill in detected_line_skills
+        )
+        if detected_line_skills
+        else "[technology / tools used]"
+    )
+
+    lowered = original.lower()
+
+    if (
+        "machine learning" in lowered
+        or "model" in lowered
+        or "prediction" in lowered
+    ):
+        return (
+            "Built [model/application] using "
+            f"{skill_text} to [solve the problem], "
+            "evaluated with [metric/test method], and "
+            "documented [real result or improvement]."
+        )
+
+    if (
+        "api" in lowered
+        or "backend" in lowered
+        or "flask" in lowered
+        or "node" in lowered
+        or "django" in lowered
+    ):
+        return (
+            "Developed [backend/API feature] using "
+            f"{skill_text} to [support user/business need], "
+            "handling [real scale or workflow] and "
+            "validated through [tests/performance/result]."
+        )
+
+    if (
+        "react" in lowered
+        or "frontend" in lowered
+        or "website" in lowered
+        or "web app" in lowered
+        or "dashboard" in lowered
+    ):
+        return (
+            "Built [frontend feature/application] using "
+            f"{skill_text} to [improve user workflow], "
+            "implementing [key feature] and measuring "
+            "[real usability/performance/result if available]."
+        )
+
+    if (
+        "sql" in lowered
+        or "database" in lowered
+        or "mongodb" in lowered
+    ):
+        return (
+            "Implemented [database/data feature] using "
+            f"{skill_text} to [support application need], "
+            "improving [real query/workflow/result] through "
+            "[schema/query/indexing approach]."
+        )
+
+    return (
+        "Delivered [feature/project contribution] using "
+        f"{skill_text} for the {target_role} path, "
+        "solving [specific problem] and demonstrating "
+        "[real outcome, scale, test result, or user impact]."
+    )
+
+
+def build_resume_bullet_improvements(
+    text,
+    target_role
+):
+    candidates = (
+        _extract_candidate_bullets(
+            text
+        )
+    )
+
+    improvements = []
+
+    for original in candidates:
+
+        line_skills = (
+            _detect_skills_in_line(
+                original
+            )
+        )
+
+        reason = _bullet_reason(
+            original,
+            line_skills
+        )
+
+        suggestion = (
+            _build_truth_preserving_template(
+                original,
+                line_skills,
+                target_role
+            )
+        )
+
+        improvements.append({
+            "original":
+                original,
+
+            "suggestion":
+                suggestion,
+
+            "reason":
+                reason,
+
+            "skills_detected":
+                line_skills,
+
+            "has_measurable_impact":
+                _contains_quantified_impact(
+                    original
+                ),
+
+            "warning":
+                (
+                    "Replace placeholders only with facts "
+                    "you can truthfully support. Do not "
+                    "invent metrics, users, percentages, "
+                    "revenue, accuracy, or outcomes."
+                ),
+        })
+
+        if len(improvements) >= 4:
+            break
+
+    if not improvements:
+        improvements.append({
+            "original":
+                "No strong project or experience bullet was confidently detected.",
+
+            "suggestion":
+                (
+                    "Use this structure: Built [feature/project] "
+                    "using [technology] to [solve problem], "
+                    "then add [real metric/test/result] only "
+                    "if you actually measured it."
+                ),
+
+            "reason":
+                (
+                    "CareerLenz could not confidently isolate "
+                    "a bullet suitable for rewriting."
+                ),
+
+            "skills_detected":
+                [],
+
+            "has_measurable_impact":
+                False,
+
+            "warning":
+                (
+                    "Use the template as a guide and keep "
+                    "every claim factually accurate."
+                ),
+        })
+
+    return improvements
+
+
 # ==========================================
 # RESUME QUALITY ANALYSIS
 # ==========================================
@@ -2962,6 +3320,17 @@ def analyze_resume():
     )
 
     # ======================================
+    # RESUME BULLET IMPROVER
+    # ======================================
+
+    bullet_improvements = (
+        build_resume_bullet_improvements(
+            text,
+            target_role
+        )
+    )
+
+    # ======================================
     # FINAL RESPONSE
     # ======================================
 
@@ -3072,6 +3441,11 @@ def analyze_resume():
 
         "action_plan_30_days":
             action_plan_30_days,
+
+        # RESUME BULLET IMPROVER
+
+        "bullet_improvements":
+            bullet_improvements,
     }
 
     # Only expose full resume text
