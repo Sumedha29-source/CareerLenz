@@ -1466,6 +1466,157 @@ def get_project_recommendation(
     return DEFAULT_PROJECT
 
 
+
+# ==========================================
+# BEST-FIT ROLE COMPARISON
+# ==========================================
+
+def build_role_comparison(
+    detected_skills,
+    selected_role
+):
+    detected_set = {
+        skill.lower()
+        for skill in detected_skills
+    }
+
+    comparisons = []
+
+    for role_key, required_skills in (
+        ROLE_REQUIREMENTS.items()
+    ):
+        matched = [
+            skill
+            for skill in required_skills
+            if skill.lower() in detected_set
+        ]
+
+        missing = [
+            skill
+            for skill in required_skills
+            if skill.lower() not in detected_set
+        ]
+
+        score = round(
+            (
+                len(matched)
+                / len(required_skills)
+            )
+            * 100
+        ) if required_skills else 0
+
+        comparisons.append({
+            "role":
+                role_key.title(),
+
+            "score":
+                score,
+
+            "matched_skills":
+                matched,
+
+            "missing_skills":
+                missing,
+
+            "matched_count":
+                len(matched),
+
+            "required_count":
+                len(required_skills),
+        })
+
+    comparisons.sort(
+        key=lambda item: (
+            item["score"],
+            item["matched_count"]
+        ),
+        reverse=True
+    )
+
+    best_fit = (
+        comparisons[0]
+        if comparisons
+        else None
+    )
+
+    selected_normalized = (
+        selected_role.lower().strip()
+        if selected_role
+        else ""
+    )
+
+    selected_result = next(
+        (
+            item
+            for item in comparisons
+            if item["role"].lower()
+            == selected_normalized
+        ),
+        None
+    )
+
+    if best_fit and selected_result:
+        if (
+            best_fit["role"].lower()
+            == selected_normalized
+        ):
+            insight = (
+                f"Your resume currently aligns most strongly "
+                f"with {best_fit['role']} at "
+                f"{best_fit['score']}% tracked skill coverage."
+            )
+        else:
+            gap_text = (
+                ", ".join(
+                    selected_result[
+                        "missing_skills"
+                    ][:3]
+                )
+                or "deeper role-specific evidence"
+            )
+
+            insight = (
+                f"Your strongest current resume match is "
+                f"{best_fit['role']} at "
+                f"{best_fit['score']}%, while your selected "
+                f"target {selected_result['role']} is at "
+                f"{selected_result['score']}%. "
+                f"To strengthen your selected path, focus first "
+                f"on {gap_text}."
+            )
+    elif best_fit:
+        insight = (
+            f"Your strongest current resume match is "
+            f"{best_fit['role']} at "
+            f"{best_fit['score']}% tracked skill coverage."
+        )
+    else:
+        insight = (
+            "CareerLenz could not calculate a role comparison."
+        )
+
+    return {
+        "best_fit_role":
+            best_fit,
+
+        "selected_role_result":
+            selected_result,
+
+        "rankings":
+            comparisons,
+
+        "insight":
+            insight,
+
+        "method":
+            (
+                "Scores are based on resume-detected skills "
+                "matched against CareerLenz's tracked role "
+                "requirements."
+            ),
+    }
+
+
 # ==========================================
 # CAREER INSIGHT ENGINE
 # ==========================================
@@ -3331,6 +3482,17 @@ def analyze_resume():
     )
 
     # ======================================
+    # BEST-FIT ROLE COMPARISON
+    # ======================================
+
+    role_comparison = (
+        build_role_comparison(
+            detected_skills,
+            target_role
+        )
+    )
+
+    # ======================================
     # FINAL RESPONSE
     # ======================================
 
@@ -3446,6 +3608,11 @@ def analyze_resume():
 
         "bullet_improvements":
             bullet_improvements,
+
+        # BEST-FIT ROLE COMPARISON
+
+        "role_comparison":
+            role_comparison,
     }
 
     # Only expose full resume text

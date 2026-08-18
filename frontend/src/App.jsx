@@ -733,6 +733,10 @@ function CareerAnalysis({
         // Resume Bullet Improver
         bulletImprovements:
           data.bullet_improvements || [],
+
+        // Best-Fit Role Comparison
+        roleComparison:
+          data.role_comparison || null,
       });
     } catch (error) {
       if (error.name === "AbortError") {
@@ -1771,6 +1775,86 @@ function downloadCareerReport(data) {
     );
   }
 
+  if (
+    data.roleComparison?.rankings?.length
+  ) {
+    addSectionTitle(
+      "Career Path Comparison"
+    );
+
+    data.roleComparison.rankings.forEach(
+      (item, index) => {
+        const flags = [];
+
+        if (index === 0) {
+          flags.push("BEST MATCH");
+        }
+
+        if (
+          item.role?.toLowerCase() ===
+          data.role?.toLowerCase()
+        ) {
+          flags.push("YOUR TARGET");
+        }
+
+        addParagraph(
+          `${index + 1}. ${item.role} - ${
+            item.score
+          }%${
+            flags.length
+              ? ` (${flags.join(", ")})`
+              : ""
+          }`,
+          {
+            bold: true,
+            gap: 4,
+          }
+        );
+
+        addParagraph(
+          `Matched ${
+            item.matched_count
+          } of ${
+            item.required_count
+          } tracked skills.`,
+          {
+            size: 9,
+            gap: 4,
+          }
+        );
+
+        if (
+          item.missing_skills?.length
+        ) {
+          addParagraph(
+            `Next gaps: ${
+              item.missing_skills
+                .slice(0, 4)
+                .join(", ")
+            }`,
+            {
+              size: 9,
+              gap: 7,
+            }
+          );
+        }
+      }
+    );
+
+    if (
+      data.roleComparison.insight
+    ) {
+      addParagraph(
+        data.roleComparison.insight,
+        {
+          size: 9.5,
+          bold: true,
+          gap: 12,
+        }
+      );
+    }
+  }
+
   addSectionTitle(
     "Skill Snapshot"
   );
@@ -2240,6 +2324,132 @@ function Results({ data, onBack }) {
           Here's what CareerLenz found based on
           your target role and uploaded resume.
         </p>
+
+        {data.roleComparison?.rankings?.length > 0 && (
+          <section className="cl-role-comparison-card">
+            <div className="cl-role-comparison-header">
+              <div>
+                <p className="cl-result-label">
+                  CAREER PATH INTELLIGENCE
+                </p>
+
+                <h2>
+                  Your best-fit roles based on this resume.
+                </h2>
+
+                <p>
+                  CareerLenz compares your resume-detected skills
+                  against every supported role and ranks your
+                  current alignment.
+                </p>
+              </div>
+
+              {data.roleComparison.best_fit_role && (
+                <div className="cl-best-fit-summary">
+                  <span>BEST MATCH</span>
+                  <strong>
+                    {data.roleComparison.best_fit_role.role}
+                  </strong>
+                  <em>
+                    {data.roleComparison.best_fit_role.score}%
+                  </em>
+                </div>
+              )}
+            </div>
+
+            <div className="cl-role-ranking-list">
+              {data.roleComparison.rankings.map((item, index) => {
+                const isBest = index === 0;
+
+                const isTarget =
+                  item.role?.toLowerCase() ===
+                  data.role?.toLowerCase();
+
+                return (
+                  <article
+                    className={`cl-role-ranking-row ${
+                      isBest ? "is-best" : ""
+                    } ${
+                      isTarget ? "is-target" : ""
+                    }`}
+                    key={item.role}
+                  >
+                    <div className="cl-role-rank-number">
+                      {String(index + 1).padStart(2, "0")}
+                    </div>
+
+                    <div className="cl-role-rank-main">
+                      <div className="cl-role-rank-top">
+                        <div>
+                          <h3>{item.role}</h3>
+
+                          <div className="cl-role-rank-badges">
+                            {isBest && (
+                              <span className="cl-role-best-badge">
+                                ★ BEST MATCH
+                              </span>
+                            )}
+
+                            {isTarget && (
+                              <span className="cl-role-target-badge">
+                                YOUR TARGET
+                              </span>
+                            )}
+                          </div>
+                        </div>
+
+                        <strong>
+                          {item.score}%
+                        </strong>
+                      </div>
+
+                      <div className="cl-role-score-track">
+                        <div
+                          className="cl-role-score-fill"
+                          style={{
+                            width: `${Math.max(
+                              0,
+                              Math.min(100, item.score || 0)
+                            )}%`,
+                          }}
+                        />
+                      </div>
+
+                      <div className="cl-role-rank-meta">
+                        <span>
+                          {item.matched_count} / {item.required_count}{" "}
+                          tracked skills matched
+                        </span>
+
+                        {item.missing_skills?.length > 0 && (
+                          <span>
+                            Next gaps:{" "}
+                            {item.missing_skills
+                              .slice(0, 3)
+                              .join(", ")}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+
+            {data.roleComparison.insight && (
+              <div className="cl-role-comparison-insight">
+                <span>CAREERLENZ INSIGHT</span>
+                <p>{data.roleComparison.insight}</p>
+              </div>
+            )}
+
+            {data.roleComparison.method && (
+              <p className="cl-role-comparison-method">
+                {data.roleComparison.method}
+              </p>
+            )}
+          </section>
+        )}
 
         <section className="cl-report-download-card">
           <div className="cl-report-download-copy">
