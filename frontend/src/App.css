@@ -4144,3 +4144,613 @@ button {
     font-size: 1.6rem;
   }
 }
+
+/* =========================================================
+   VISUAL POLISH OVERRIDES — FUNCTIONALITY UNCHANGED
+   Added as final overrides so existing logic/markup remains intact.
+========================================================= */
+
+:root {
+  --violet: #8b5cf6;
+  --violet-soft: rgba(139, 92, 246, 0.14);
+  --violet-border: rgba(139, 92, 246, 0.28);
+
+  --blue: #60a5fa;
+  --blue-soft: rgba(96, 165, 250, 0.13);
+  --blue-border: rgba(96, 165, 250, 0.28);
+
+  --emerald: #34d399;
+  --emerald-soft: rgba(52, 211, 153, 0.13);
+  --emerald-border: rgba(52, 211, 153, 0.26);
+
+  --orange: #f59e0b;
+  --orange-soft: rgba(245, 158, 11, 0.13);
+  --orange-border: rgba(245, 158, 11, 0.28);
+
+  --rose: #fb7185;
+  --rose-soft: rgba(251, 113, 133, 0.11);
+  --rose-border: rgba(251, 113, 133, 0.24);
+
+  --cyan: #22d3ee;
+  --cyan-soft: rgba(34, 211, 238, 0.11);
+  --cyan-border: rgba(34, 211, 238, 0.24);
+}
+
+/* Subtler page ambience with broader visual depth */
+.cl-analysis {
+  background:
+    radial-gradient(
+      circle at 86% 8%,
+      rgba(139, 92, 246, 0.08),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 14% 34%,
+      rgba(34, 211, 238, 0.055),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 72% 72%,
+      rgba(245, 158, 11, 0.045),
+      transparent 32%
+    ),
+    #10141b;
+}
+
+/* Give major cards more dimensional separation */
+.cl-readiness-hero,
+.cl-intelligence-card,
+.cl-skill-dashboard,
+.cl-resume-quality-card,
+.cl-bullet-improver-card,
+.cl-action-plan-card,
+.cl-role-comparison-card,
+.cl-report-download-card,
+.cl-result-card,
+.cl-project-card {
+  box-shadow:
+    0 18px 50px -38px rgba(0, 0, 0, 0.82),
+    inset 0 1px 0 rgba(255, 255, 255, 0.02);
+}
+
+/* =========================================================
+   CAREER PATH INTELLIGENCE — VIOLET
+========================================================= */
+
+.cl-role-comparison-card {
+  border-color: var(--violet-border);
+
+  background:
+    radial-gradient(
+      circle at 92% 8%,
+      rgba(139, 92, 246, 0.14),
+      transparent 31%
+    ),
+    linear-gradient(
+      145deg,
+      rgba(28, 23, 44, 0.96),
+      rgba(21, 25, 35, 0.95)
+    );
+}
+
+.cl-role-comparison-card .cl-result-label {
+  color: #b9a3ff;
+}
+
+.cl-best-fit-summary {
+  border-color: rgba(139, 92, 246, 0.32);
+  background: rgba(139, 92, 246, 0.08);
+}
+
+.cl-best-fit-summary span {
+  color: #c4b5fd;
+}
+
+.cl-best-fit-summary em,
+.cl-role-rank-top > strong {
+  color: #a78bfa;
+}
+
+.cl-role-ranking-row.is-best {
+  border-color: rgba(139, 92, 246, 0.34);
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(139, 92, 246, 0.08),
+      rgba(139, 92, 246, 0.025)
+    );
+}
+
+.cl-role-best-badge {
+  border-color: rgba(139, 92, 246, 0.3);
+  background: rgba(139, 92, 246, 0.09);
+  color: #c4b5fd;
+}
+
+.cl-role-score-fill {
+  background:
+    linear-gradient(
+      90deg,
+      #8b5cf6,
+      #60a5fa,
+      #49d3c4
+    );
+}
+
+.cl-role-comparison-insight {
+  border-left-color: var(--violet);
+  background: rgba(139, 92, 246, 0.055);
+}
+
+.cl-role-comparison-insight span {
+  color: #c4b5fd;
+}
+
+/* =========================================================
+   CAREER READINESS — CYAN / BLUE
+========================================================= */
+
+.cl-readiness-hero {
+  border-color: var(--cyan-border);
+
+  background:
+    radial-gradient(
+      circle at 10% 50%,
+      rgba(34, 211, 238, 0.13),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 88% 10%,
+      rgba(96, 165, 250, 0.08),
+      transparent 28%
+    ),
+    linear-gradient(
+      145deg,
+      rgba(18, 29, 37, 0.96),
+      rgba(22, 27, 36, 0.94)
+    );
+}
+
+.cl-readiness-hero .cl-result-label,
+.cl-readiness-copy h2 {
+  color: #67e8f9;
+}
+
+.cl-readiness-message {
+  border-left-color: var(--cyan);
+  background: rgba(34, 211, 238, 0.045);
+}
+
+.cl-target-mini {
+  border-color: rgba(96, 165, 250, 0.23);
+  background: rgba(96, 165, 250, 0.05);
+}
+
+.cl-target-mini span {
+  color: #93c5fd;
+}
+
+/* =========================================================
+   CAREERLENZ INTELLIGENCE — EMERALD
+========================================================= */
+
+.cl-intelligence-card {
+  border-color: var(--emerald-border);
+
+  background:
+    radial-gradient(
+      circle at 88% 15%,
+      rgba(52, 211, 153, 0.12),
+      transparent 32%
+    ),
+    linear-gradient(
+      145deg,
+      rgba(17, 35, 32, 0.96),
+      rgba(23, 29, 36, 0.95)
+    );
+}
+
+.cl-intelligence-card .cl-result-label {
+  color: #86efac;
+}
+
+.cl-intelligence-badge {
+  border-color: rgba(52, 211, 153, 0.3);
+  background: rgba(52, 211, 153, 0.08);
+  color: #6ee7b7;
+}
+
+.cl-strength-box {
+  border-color: rgba(52, 211, 153, 0.24);
+  background: rgba(52, 211, 153, 0.045);
+}
+
+.cl-priority-box {
+  border-color: rgba(245, 158, 11, 0.26);
+  background: rgba(245, 158, 11, 0.055);
+}
+
+/* =========================================================
+   SKILL DASHBOARD — BLUE
+========================================================= */
+
+.cl-skill-dashboard {
+  border-color: var(--blue-border);
+
+  background:
+    radial-gradient(
+      circle at 85% 12%,
+      rgba(96, 165, 250, 0.12),
+      transparent 34%
+    ),
+    linear-gradient(
+      145deg,
+      rgba(19, 29, 45, 0.96),
+      rgba(23, 29, 38, 0.95)
+    );
+}
+
+.cl-skill-dashboard .cl-result-label {
+  color: #93c5fd;
+}
+
+/* =========================================================
+   RESUME QUALITY — AMBER
+========================================================= */
+
+.cl-resume-quality-card {
+  border-color: var(--orange-border);
+
+  background:
+    radial-gradient(
+      circle at 90% 5%,
+      rgba(245, 158, 11, 0.14),
+      transparent 32%
+    ),
+    linear-gradient(
+      145deg,
+      rgba(37, 29, 18, 0.96),
+      rgba(24, 29, 36, 0.95)
+    );
+}
+
+.cl-resume-quality-card .cl-result-label,
+.cl-resume-score-big {
+  color: #fbbf24;
+}
+
+/* Score meter cards get slightly differentiated internal glow */
+.cl-quality-metric:nth-child(1) {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(96, 165, 250, 0.055),
+      rgba(238, 234, 225, 0.025)
+    );
+}
+
+.cl-quality-metric:nth-child(2) {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(52, 211, 153, 0.055),
+      rgba(238, 234, 225, 0.025)
+    );
+}
+
+.cl-quality-metric:nth-child(3) {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(139, 92, 246, 0.055),
+      rgba(238, 234, 225, 0.025)
+    );
+}
+
+.cl-quality-metric:nth-child(4) {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(245, 158, 11, 0.055),
+      rgba(238, 234, 225, 0.025)
+    );
+}
+
+/* =========================================================
+   RESUME BULLET IMPROVER — PURPLE / ROSE
+========================================================= */
+
+.cl-bullet-improver-card {
+  border-color: rgba(168, 85, 247, 0.28);
+
+  background:
+    radial-gradient(
+      circle at 87% 10%,
+      rgba(168, 85, 247, 0.13),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 8% 82%,
+      rgba(251, 113, 133, 0.055),
+      transparent 26%
+    ),
+    linear-gradient(
+      145deg,
+      rgba(31, 23, 43, 0.96),
+      rgba(22, 27, 36, 0.95)
+    );
+}
+
+.cl-bullet-improver-card .cl-result-label {
+  color: #d8b4fe;
+}
+
+.cl-bullet-before {
+  border-color: rgba(251, 113, 133, 0.22);
+  background: rgba(251, 113, 133, 0.045);
+}
+
+.cl-bullet-after {
+  border-color: rgba(52, 211, 153, 0.22);
+  background: rgba(52, 211, 153, 0.045);
+}
+
+.cl-copy-bullet-button {
+  border-color: rgba(139, 92, 246, 0.28);
+  background: rgba(139, 92, 246, 0.08);
+  color: #c4b5fd;
+}
+
+.cl-copy-bullet-button:hover {
+  border-color: rgba(139, 92, 246, 0.45);
+  background: rgba(139, 92, 246, 0.14);
+}
+
+/* =========================================================
+   30-DAY PLAN — GREEN / TEAL
+========================================================= */
+
+.cl-action-plan-card {
+  border-color: var(--emerald-border);
+
+  background:
+    radial-gradient(
+      circle at 90% 8%,
+      rgba(52, 211, 153, 0.13),
+      transparent 31%
+    ),
+    linear-gradient(
+      145deg,
+      rgba(18, 36, 31, 0.96),
+      rgba(24, 29, 36, 0.95)
+    );
+}
+
+.cl-action-plan-card .cl-result-label {
+  color: #86efac;
+}
+
+.cl-action-plan-duration {
+  border-color: rgba(52, 211, 153, 0.26);
+  background: rgba(52, 211, 153, 0.06);
+}
+
+.cl-action-plan-duration strong {
+  color: #6ee7b7;
+}
+
+.cl-action-week-marker span {
+  border-color: rgba(52, 211, 153, 0.3);
+  color: #6ee7b7;
+}
+
+.cl-action-week-label {
+  color: #6ee7b7;
+}
+
+.cl-action-week-skills span {
+  border-color: rgba(52, 211, 153, 0.2);
+  background: rgba(52, 211, 153, 0.06);
+  color: #6ee7b7;
+}
+
+/* =========================================================
+   ACTIONABLE SKILL GAPS — GOLD / ORANGE
+========================================================= */
+
+.cl-gap-section {
+  border-color: rgba(245, 158, 11, 0.22);
+
+  background:
+    radial-gradient(
+      circle at 88% 8%,
+      rgba(245, 158, 11, 0.085),
+      transparent 28%
+    ),
+    rgba(25, 30, 39, 0.84);
+}
+
+.cl-gap-card {
+  background:
+    linear-gradient(
+      145deg,
+      rgba(245, 158, 11, 0.028),
+      rgba(238, 234, 225, 0.018)
+    );
+
+  border-color: rgba(245, 158, 11, 0.16);
+}
+
+.cl-gap-card:hover {
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.cl-gap-badge {
+  border-color: rgba(245, 158, 11, 0.22);
+  background: rgba(245, 158, 11, 0.06);
+  color: #fbbf24;
+}
+
+/* Alternate subtle hues across gap cards without changing markup */
+.cl-gap-grid .cl-gap-card:nth-child(3n + 1) {
+  box-shadow:
+    inset 0 2px 0 rgba(245, 158, 11, 0.16);
+}
+
+.cl-gap-grid .cl-gap-card:nth-child(3n + 2) {
+  box-shadow:
+    inset 0 2px 0 rgba(96, 165, 250, 0.16);
+}
+
+.cl-gap-grid .cl-gap-card:nth-child(3n + 3) {
+  box-shadow:
+    inset 0 2px 0 rgba(139, 92, 246, 0.16);
+}
+
+/* =========================================================
+   RECOMMENDED PROJECT — CORAL
+========================================================= */
+
+.cl-project-card {
+  border-color: var(--rose-border);
+
+  background:
+    radial-gradient(
+      circle at 90% 10%,
+      rgba(251, 113, 133, 0.12),
+      transparent 30%
+    ),
+    linear-gradient(
+      145deg,
+      rgba(38, 24, 30, 0.96),
+      rgba(23, 29, 36, 0.95)
+    );
+}
+
+.cl-project-card .cl-result-label {
+  color: #fda4af;
+}
+
+/* =========================================================
+   CAREER REPORT — PREMIUM GOLD
+========================================================= */
+
+.cl-report-download-card {
+  border-color: rgba(201, 163, 78, 0.38);
+
+  background:
+    radial-gradient(
+      circle at 88% 10%,
+      rgba(201, 163, 78, 0.16),
+      transparent 30%
+    ),
+    linear-gradient(
+      145deg,
+      rgba(39, 31, 17, 0.96),
+      rgba(23, 29, 36, 0.95)
+    );
+}
+
+.cl-report-download-card .cl-result-label {
+  color: #f6d365;
+}
+
+.cl-download-report-button {
+  box-shadow:
+    0 14px 35px -18px
+    rgba(201, 163, 78, 0.95);
+}
+
+/* =========================================================
+   LEARNING RESOURCE MODAL — BLUE/VIOLET
+========================================================= */
+
+.cl-learning-modal {
+  border-color: rgba(96, 165, 250, 0.25);
+
+  background:
+    radial-gradient(
+      circle at 86% 10%,
+      rgba(139, 92, 246, 0.12),
+      transparent 28%
+    ),
+    #171c26;
+}
+
+.cl-learning-resources {
+  border-color: rgba(96, 165, 250, 0.2);
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(96, 165, 250, 0.05),
+      rgba(139, 92, 246, 0.035)
+    );
+}
+
+.cl-learning-resource-link:hover {
+  border-color: rgba(96, 165, 250, 0.32);
+  background: rgba(96, 165, 250, 0.065);
+}
+
+/* =========================================================
+   MICRO POLISH
+========================================================= */
+
+/* Give cards more visual rhythm */
+.cl-result-card,
+.cl-skill-dashboard,
+.cl-resume-quality-card,
+.cl-bullet-improver-card,
+.cl-action-plan-card,
+.cl-role-comparison-card,
+.cl-report-download-card {
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+@media (hover: hover) {
+  .cl-result-card:hover,
+  .cl-skill-dashboard:hover,
+  .cl-resume-quality-card:hover,
+  .cl-bullet-improver-card:hover,
+  .cl-action-plan-card:hover,
+  .cl-role-comparison-card:hover,
+  .cl-report-download-card:hover {
+    transform: translateY(-2px);
+  }
+}
+
+/* Slightly stronger section spacing to break monotony */
+.cl-readiness-hero,
+.cl-intelligence-card,
+.cl-skill-dashboard,
+.cl-resume-quality-card,
+.cl-bullet-improver-card,
+.cl-action-plan-card,
+.cl-role-comparison-card,
+.cl-report-download-card,
+.cl-gap-section,
+.cl-project-card {
+  margin-top: 1.6rem;
+}
+
+/* Responsive safety */
+@media (max-width: 760px) {
+  .cl-readiness-hero,
+  .cl-intelligence-card,
+  .cl-skill-dashboard,
+  .cl-resume-quality-card,
+  .cl-bullet-improver-card,
+  .cl-action-plan-card,
+  .cl-role-comparison-card,
+  .cl-report-download-card,
+  .cl-gap-section,
+  .cl-project-card {
+    border-radius: 0.95rem;
+  }
+}
+
