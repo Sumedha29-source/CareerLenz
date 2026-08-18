@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { jsPDF } from "jspdf";
 import "./App.css";
 
 const API_BASE_URL =
@@ -1532,6 +1533,565 @@ function ResumeBulletImprover({ improvements = [] }) {
 }
 
 
+
+function downloadCareerReport(data) {
+  const doc = new jsPDF({
+    unit: "pt",
+    format: "a4",
+  });
+
+  const pageWidth =
+    doc.internal.pageSize.getWidth();
+
+  const pageHeight =
+    doc.internal.pageSize.getHeight();
+
+  const margin = 46;
+  const contentWidth =
+    pageWidth - margin * 2;
+
+  let y = 52;
+
+  const ensureSpace = (needed = 70) => {
+    if (y + needed > pageHeight - 48) {
+      doc.addPage();
+      y = 52;
+    }
+  };
+  const addSectionTitle = (text) => {
+    ensureSpace(42);
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(12);
+
+    doc.text(
+      text.toUpperCase(),
+      margin,
+      y
+    );
+
+    y += 18;
+  };
+
+  const addParagraph = (
+    text,
+    {
+      size = 10,
+      bold = false,
+      indent = 0,
+      gap = 10,
+    } = {}
+  ) => {
+    if (!text) return;
+
+    doc.setFont(
+      "helvetica",
+      bold ? "bold" : "normal"
+    );
+
+    doc.setFontSize(size);
+
+    const lines =
+      doc.splitTextToSize(
+        String(text),
+        contentWidth - indent
+      );
+
+    const lineHeight =
+      size * 1.45;
+
+    ensureSpace(
+      lines.length * lineHeight + gap
+    );
+
+    doc.text(
+      lines,
+      margin + indent,
+      y
+    );
+
+    y +=
+      lines.length * lineHeight +
+      gap;
+  };
+
+  const addBullet = (text) => {
+    if (!text) return;
+
+    const bulletIndent = 14;
+
+    doc.setFont(
+      "helvetica",
+      "normal"
+    );
+
+    doc.setFontSize(9.5);
+
+    const lines =
+      doc.splitTextToSize(
+        String(text),
+        contentWidth - 24
+      );
+
+    const lineHeight = 14;
+
+    ensureSpace(
+      lines.length * lineHeight + 7
+    );
+
+    doc.text(
+      "•",
+      margin,
+      y
+    );
+
+    doc.text(
+      lines,
+      margin + bulletIndent,
+      y
+    );
+
+    y +=
+      lines.length * lineHeight +
+      7;
+  };
+
+  const addDivider = () => {
+    ensureSpace(20);
+
+    doc.setDrawColor(205);
+
+    doc.line(
+      margin,
+      y,
+      pageWidth - margin,
+      y
+    );
+
+    y += 18;
+  };
+
+  const role =
+    data.role || "Target Role";
+
+  doc.setProperties({
+    title:
+      `CareerLenz Career Report - ${role}`,
+    subject:
+      "Career readiness and development report",
+    author:
+      "CareerLenz",
+  });
+
+  doc.setFont(
+    "helvetica",
+    "bold"
+  );
+
+  doc.setFontSize(24);
+
+  doc.text(
+    "CareerLenz",
+    margin,
+    y
+  );
+
+  y += 25;
+
+  doc.setFont(
+    "helvetica",
+    "normal"
+  );
+
+  doc.setFontSize(11);
+
+  doc.text(
+    "Personalized Career Readiness Report",
+    margin,
+    y
+  );
+
+  y += 28;
+
+  addDivider();
+
+  addParagraph(
+    `Target Role: ${role}`,
+    {
+      size: 12,
+      bold: true,
+      gap: 6,
+    }
+  );
+
+  addParagraph(
+    `Career Readiness: ${data.readiness ?? 0}%`,
+    {
+      size: 12,
+      bold: true,
+      gap: 14,
+    }
+  );
+
+  if (data.careerSummary) {
+    addSectionTitle(
+      "Career Summary"
+    );
+
+    addParagraph(
+      data.careerSummary
+    );
+  }
+
+  if (data.strengthSummary) {
+    addSectionTitle(
+      "Strengths"
+    );
+
+    addParagraph(
+      data.strengthSummary
+    );
+  }
+
+  if (data.highestPriorityGap) {
+    addSectionTitle(
+      "Highest Priority Gap"
+    );
+
+    addParagraph(
+      data.highestPriorityGap,
+      {
+        bold: true,
+        gap: 5,
+      }
+    );
+
+    addParagraph(
+      data.whyPriorityGapMatters
+    );
+  }
+
+  addSectionTitle(
+    "Skill Snapshot"
+  );
+
+  addParagraph(
+    `Matched skills: ${
+      (data.matchedSkills || [])
+        .join(", ") ||
+      "None detected"
+    }`
+  );
+
+  addParagraph(
+    `Missing skills: ${
+      (data.missingSkills || [])
+        .join(", ") ||
+      "No tracked gaps"
+    }`
+  );
+
+  if (data.resumeQuality) {
+    addSectionTitle(
+      "Resume Quality"
+    );
+
+    addParagraph(
+      `Overall Score: ${
+        data.resumeQuality.overall_score ?? 0
+      }/100 - ${
+        data.resumeQuality.quality_label ||
+        "Not rated"
+      }`,
+      {
+        bold: true,
+        gap: 6,
+      }
+    );
+
+    addBullet(
+      `Skills Coverage: ${
+        data.resumeQuality.skills_score ?? 0
+      }%`
+    );
+
+    addBullet(
+      `Projects: ${
+        data.resumeQuality.projects_score ?? 0
+      }%`
+    );
+
+    addBullet(
+      `Experience: ${
+        data.resumeQuality.experience_score ?? 0
+      }%`
+    );
+
+    addBullet(
+      `Measurable Impact: ${
+        data.resumeQuality.impact_score ?? 0
+      }%`
+    );
+
+    addBullet(
+      `Completeness: ${
+        data.resumeQuality.completeness_score ?? 0
+      }%`
+    );
+
+    if (
+      data.resumeFeedback?.length
+    ) {
+      addParagraph(
+        "Top resume improvements:",
+        {
+          bold: true,
+          gap: 5,
+        }
+      );
+
+      data.resumeFeedback.forEach(
+        addBullet
+      );
+    }
+  }
+
+  if (
+    data.bulletImprovements?.length
+  ) {
+    addSectionTitle(
+      "Resume Bullet Improver"
+    );
+
+    data.bulletImprovements
+      .slice(0, 4)
+      .forEach(
+        (item, index) => {
+          addParagraph(
+            `Suggestion ${index + 1}`,
+            {
+              bold: true,
+              gap: 4,
+            }
+          );
+
+          addParagraph(
+            `Current: ${item.original}`,
+            {
+              size: 9.5,
+              gap: 5,
+            }
+          );
+
+          addParagraph(
+            `Suggested structure: ${item.suggestion}`,
+            {
+              size: 9.5,
+              gap: 5,
+            }
+          );
+
+          addParagraph(
+            `Why: ${item.reason}`,
+            {
+              size: 9,
+              gap: 12,
+            }
+          );
+        }
+      );
+
+    addParagraph(
+      "Important: Replace placeholders only with facts you can truthfully support.",
+      {
+        size: 8.5,
+        bold: true,
+      }
+    );
+  }
+
+  if (
+    data.roadmap?.length
+  ) {
+    addSectionTitle(
+      "Learning Roadmap"
+    );
+
+    data.roadmap.forEach(
+      (item, index) => {
+        addParagraph(
+          `${index + 1}. ${
+            item.title || item.skill
+          } - ${
+            item.time || ""
+          }`,
+          {
+            bold: true,
+            gap: 4,
+          }
+        );
+
+        addParagraph(
+          item.description,
+          {
+            size: 9.5,
+            gap: 4,
+          }
+        );
+
+        if (
+          item.topics?.length
+        ) {
+          addParagraph(
+            `Topics: ${item.topics.join(", ")}`,
+            {
+              size: 9,
+              gap: 5,
+            }
+          );
+        }
+
+        if (
+          item.resources?.length
+        ) {
+          item.resources.forEach(
+            (resource) => {
+              addBullet(
+                `${resource.title} - ${
+                  resource.provider
+                } (${resource.type})`
+              );
+            }
+          );
+        }
+
+        if (item.practice) {
+          addParagraph(
+            `Practice: ${item.practice}`,
+            {
+              size: 9,
+              gap: 10,
+            }
+          );
+        }
+      }
+    );
+  }
+
+  if (data.recommendedProject) {
+    addSectionTitle(
+      "Recommended Project"
+    );
+
+    addParagraph(
+      data.recommendedProject.title,
+      {
+        bold: true,
+        gap: 5,
+      }
+    );
+
+    addParagraph(
+      data.recommendedProject.description
+    );
+
+    if (
+      data.recommendedProject.skills?.length
+    ) {
+      addParagraph(
+        `Skills to demonstrate: ${
+          data.recommendedProject.skills.join(", ")
+        }`,
+        {
+          size: 9.5,
+        }
+      );
+    }
+  }
+
+  if (
+    data.actionPlan30Days?.weeks?.length
+  ) {
+    addSectionTitle(
+      "30-Day Action Plan"
+    );
+
+    data.actionPlan30Days.weeks.forEach(
+      (week) => {
+        addParagraph(
+          `Week ${week.week}: ${week.title}`,
+          {
+            bold: true,
+            gap: 5,
+          }
+        );
+
+        if (
+          week.focus_skills?.length
+        ) {
+          addParagraph(
+            `Focus: ${week.focus_skills.join(", ")}`,
+            {
+              size: 9,
+              gap: 4,
+            }
+          );
+        }
+
+        (week.tasks || []).forEach(
+          addBullet
+        );
+
+        y += 5;
+      }
+    );
+  }
+
+  if (
+    data.improvementAdvice ||
+    data.recommendedAction
+  ) {
+    addSectionTitle(
+      "Next Move"
+    );
+
+    addParagraph(
+      data.improvementAdvice
+    );
+
+    addParagraph(
+      data.recommendedAction
+    );
+  }
+
+  addDivider();
+
+  addParagraph(
+    "Generated by CareerLenz. This report is intended as career-planning guidance and should be reviewed before use in applications.",
+    {
+      size: 8,
+      gap: 0,
+    }
+  );
+
+  const safeRole =
+    role
+      .replace(
+        /[^a-z0-9]+/gi,
+        "-"
+      )
+      .replace(
+        /^-|-$/g,
+        ""
+      )
+      .toLowerCase();
+
+  doc.save(
+    `careerlenz-${safeRole || "career"}-report.pdf`
+  );
+}
+
+
 function Results({ data, onBack }) {
   const [activeSkill, setActiveSkill] =
     useState(null);
@@ -1680,6 +2240,39 @@ function Results({ data, onBack }) {
           Here's what CareerLenz found based on
           your target role and uploaded resume.
         </p>
+
+        <section className="cl-report-download-card">
+          <div className="cl-report-download-copy">
+            <p className="cl-result-label">
+              CAREERLENZ REPORT
+            </p>
+
+            <h2>
+              Take your career plan with you.
+            </h2>
+
+            <p>
+              Download a PDF containing your readiness
+              score, resume quality, skill gaps, learning
+              roadmap, course references, bullet
+              suggestions, recommended project, and
+              30-day action plan.
+            </p>
+          </div>
+
+          <button
+            type="button"
+            className="cl-download-report-button"
+            onClick={() =>
+              downloadCareerReport(data)
+            }
+          >
+            <span aria-hidden="true">
+              ↓
+            </span>
+            Download Career Report
+          </button>
+        </section>
 
         {data.roleRecognized === false && (
           <div
