@@ -5127,3 +5127,454 @@ button {
     flex-direction: column;
   }
 }
+/* =========================================================
+   RESUME ANALYSIS PAGE
+========================================================= */
+
+.cl-resume-quality-card,
+.cl-resume-metrics-card,
+.cl-resume-card,
+.cl-resume-feedback-card,
+.cl-resume-bullet-section {
+  margin-top: 28px;
+  padding: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.025);
+}
+
+
+/* ================= QUALITY SCORE ================= */
+
+.cl-resume-quality-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 40px;
+
+  border-color: rgba(224, 177, 69, 0.35);
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(224, 177, 69, 0.10),
+      rgba(255, 255, 255, 0.025)
+    );
+}
+
+.cl-resume-quality-card > div:first-child {
+  max-width: 720px;
+}
+
+.cl-resume-quality-card h2 {
+  font-size: 1.8rem;
+  margin: 12px 0;
+}
+
+.cl-resume-quality-copy {
+  color: #9aa3b4;
+  line-height: 1.7;
+  margin-bottom: 18px;
+}
+
+.cl-resume-quality-label {
+  display: inline-block;
+  padding: 8px 14px;
+
+  border-radius: 999px;
+
+  border: 1px solid rgba(224, 177, 69, 0.35);
+  background: rgba(224, 177, 69, 0.08);
+
+  color: #d9ae4b;
+
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.8rem;
+}
+
+.cl-resume-quality-score {
+  min-width: 190px;
+
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+}
+
+.cl-resume-quality-score strong {
+  font-size: 5.5rem;
+  line-height: 1;
+
+  color: #d9ae4b;
+}
+
+.cl-resume-quality-score span {
+  margin-left: 8px;
+
+  color: #8993a5;
+
+  font-family: "IBM Plex Mono", monospace;
+}
+
+
+/* ================= SCORE BREAKDOWN ================= */
+
+.cl-resume-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+
+  gap: 26px 40px;
+
+  margin-top: 28px;
+}
+
+.cl-resume-metric-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 10px;
+}
+
+.cl-resume-metric-heading span {
+  color: #c7ccd5;
+}
+
+.cl-resume-metric-heading strong {
+  color: #4fd3c4;
+  font-family: "IBM Plex Mono", monospace;
+}
+
+.cl-resume-metric-bar {
+  height: 8px;
+
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.07);
+
+  overflow: hidden;
+}
+
+.cl-resume-metric-fill {
+  height: 100%;
+
+  border-radius: inherit;
+
+  background: linear-gradient(
+    90deg,
+    #4fd3c4,
+    #67e1d2
+  );
+
+  transition: width 0.5s ease;
+}
+
+
+/* ================= TWO COLUMN CARDS ================= */
+
+.cl-resume-two-column {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+
+  gap: 24px;
+}
+
+.cl-resume-card {
+  min-height: 190px;
+}
+
+.cl-resume-tags {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 10px;
+
+  margin-top: 20px;
+}
+
+.cl-resume-tag {
+  padding: 9px 13px;
+
+  border-radius: 999px;
+
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.76rem;
+
+  text-transform: capitalize;
+}
+
+.cl-resume-tag.good {
+  color: #4fd3c4;
+
+  border: 1px solid rgba(79, 211, 197, 0.3);
+  background: rgba(79, 211, 197, 0.08);
+}
+
+.cl-resume-tag.missing {
+  color: #d9ae4b;
+
+  border: 1px solid rgba(224, 177, 69, 0.3);
+  background: rgba(224, 177, 69, 0.07);
+}
+
+.cl-resume-empty {
+  color: #8993a5;
+}
+
+.cl-resume-action-verbs {
+  margin-top: 24px;
+
+  color: #8993a5;
+
+  font-size: 0.9rem;
+}
+
+.cl-resume-action-verbs strong {
+  color: #f1eee7;
+}
+
+
+/* ================= FEEDBACK ================= */
+
+.cl-resume-feedback-card h2 {
+  margin: 12px 0 24px;
+
+  font-size: 1.8rem;
+}
+
+.cl-resume-feedback-list {
+  display: flex;
+  flex-direction: column;
+
+  gap: 12px;
+}
+
+.cl-resume-feedback-item {
+  display: flex;
+  align-items: flex-start;
+
+  gap: 18px;
+
+  padding: 18px;
+
+  border-radius: 14px;
+
+  border: 1px solid rgba(255, 255, 255, 0.06);
+
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.cl-resume-feedback-item > span {
+  color: #d9ae4b;
+
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.78rem;
+
+  padding-top: 3px;
+}
+
+.cl-resume-feedback-item p {
+  margin: 0;
+
+  color: #c3c8d2;
+
+  line-height: 1.6;
+}
+
+
+/* ================= BULLET IMPROVER ================= */
+
+.cl-resume-bullet-section {
+  margin-bottom: 50px;
+}
+
+.cl-resume-bullet-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  gap: 30px;
+
+  margin-bottom: 28px;
+}
+
+.cl-resume-bullet-header h2 {
+  margin: 10px 0;
+
+  font-size: 1.8rem;
+}
+
+.cl-resume-bullet-header > div > p:last-child {
+  color: #8993a5;
+
+  line-height: 1.7;
+
+  max-width: 700px;
+}
+
+.cl-resume-bullet-count {
+  white-space: nowrap;
+
+  padding: 9px 14px;
+
+  border-radius: 999px;
+
+  color: #4fd3c4;
+
+  border: 1px solid rgba(79, 211, 197, 0.3);
+  background: rgba(79, 211, 197, 0.07);
+
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.75rem;
+}
+
+.cl-resume-bullet-list {
+  display: flex;
+  flex-direction: column;
+
+  gap: 18px;
+}
+
+.cl-resume-bullet-item {
+  padding: 24px;
+
+  border-radius: 18px;
+
+  border: 1px solid rgba(255, 255, 255, 0.07);
+
+  background: rgba(255, 255, 255, 0.018);
+}
+
+.cl-resume-bullet-number {
+  margin-bottom: 18px;
+
+  color: #d9ae4b;
+
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.78rem;
+}
+
+.cl-resume-bullet-compare {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    40px
+    minmax(0, 1fr);
+
+  gap: 20px;
+
+  align-items: center;
+}
+
+.cl-resume-bullet-before,
+.cl-resume-bullet-after {
+  min-height: 130px;
+
+  padding: 20px;
+
+  border-radius: 14px;
+}
+
+.cl-resume-bullet-before {
+  background: rgba(224, 177, 69, 0.05);
+
+  border: 1px solid rgba(224, 177, 69, 0.16);
+}
+
+.cl-resume-bullet-after {
+  background: rgba(79, 211, 197, 0.05);
+
+  border: 1px solid rgba(79, 211, 197, 0.18);
+}
+
+.cl-resume-bullet-before > p:last-child,
+.cl-resume-bullet-after > p:last-child {
+  color: #c4c9d2;
+
+  line-height: 1.6;
+}
+
+.cl-resume-bullet-arrow {
+  text-align: center;
+
+  color: #4fd3c4;
+
+  font-size: 1.5rem;
+}
+
+.cl-resume-bullet-reason {
+  margin-top: 18px;
+
+  padding: 18px 20px;
+
+  border-left: 2px solid #4fd3c4;
+
+  background: rgba(79, 211, 197, 0.035);
+}
+
+.cl-resume-bullet-reason > p:last-child {
+  margin-bottom: 0;
+
+  color: #9ba5b6;
+
+  line-height: 1.6;
+}
+
+.cl-resume-bullet-warning {
+  margin-top: 14px;
+
+  padding: 16px 18px;
+
+  border-radius: 12px;
+
+  border: 1px solid rgba(224, 177, 69, 0.18);
+
+  background: rgba(224, 177, 69, 0.04);
+}
+
+.cl-resume-bullet-warning strong {
+  color: #d9ae4b;
+
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.72rem;
+}
+
+.cl-resume-bullet-warning p {
+  margin: 7px 0 0;
+
+  color: #9ba5b6;
+
+  line-height: 1.6;
+}
+
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 900px) {
+
+  .cl-resume-quality-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .cl-resume-quality-score {
+    justify-content: flex-start;
+  }
+
+  .cl-resume-metrics-grid,
+  .cl-resume-two-column {
+    grid-template-columns: 1fr;
+  }
+
+  .cl-resume-bullet-header {
+    flex-direction: column;
+  }
+
+  .cl-resume-bullet-compare {
+    grid-template-columns: 1fr;
+  }
+
+  .cl-resume-bullet-arrow {
+    transform: rotate(90deg);
+  }
+}
