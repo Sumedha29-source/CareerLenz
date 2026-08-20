@@ -1,6 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { jsPDF } from "jspdf";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import "./App.css";
+import Overview from "./pages/Overview";
+import ResumeAnalysis from "./pages/ResumeAnalysis";
+import SkillGap from "./pages/SkillGap";
+import Roadmap from "./pages/Roadmap";
+import Projects from "./pages/Projects";
+import Resources from "./pages/Resources";
 
 const API_BASE_URL =
   (import.meta.env && import.meta.env.VITE_API_BASE_URL) ||
@@ -3404,26 +3411,89 @@ const EMPTY_FORM = {
 };
 
 function App() {
-  const [page, setPage] =
-    useState("landing");
+  const navigate = useNavigate();
 
-  const [form, setForm] =
-    useState(EMPTY_FORM);
+  const [page, setPage] = useState("landing");
 
-  const [analysisData, setAnalysisData] =
-    useState(null);
+  const [form, setForm] = useState(EMPTY_FORM);
+
+  const [analysisData, setAnalysisData] = useState(() => {
+    try {
+      const saved = sessionStorage.getItem("careerlenz-analysis");
+      return saved ? JSON.parse(saved) : null;
+    } catch (error) {
+      console.error("Could not restore CareerLenz analysis:", error);
+      return null;
+    }
+  });
 
   const handleAnalyze = (data) => {
     setAnalysisData(data);
+
+    const storableData = {
+      ...data,
+      resume: data.resume
+        ? {
+            name: data.resume.name,
+            size: data.resume.size,
+            type: data.resume.type,
+          }
+        : null,
+    };
+
+    try {
+      sessionStorage.setItem(
+        "careerlenz-analysis",
+        JSON.stringify(storableData)
+      );
+    } catch (error) {
+      console.error("Could not save CareerLenz analysis:", error);
+    }
+
     setPage("results");
+    navigate("/dashboard");
   };
+
+  if (window.location.pathname.startsWith("/dashboard")) {
+    return (
+      <Routes>
+        <Route
+          path="/dashboard"
+          element={<Overview data={analysisData} />}
+        />
+
+        <Route
+          path="/dashboard/resume"
+          element={<ResumeAnalysis data={analysisData} />}
+        />
+
+        <Route
+          path="/dashboard/skills"
+          element={<SkillGap data={analysisData} />}
+        />
+
+        <Route
+          path="/dashboard/roadmap"
+          element={<Roadmap data={analysisData} />}
+        />
+
+        <Route
+          path="/dashboard/projects"
+          element={<Projects data={analysisData} />}
+        />
+
+        <Route
+          path="/dashboard/resources"
+          element={<Resources data={analysisData} />}
+        />
+      </Routes>
+    );
+  }
 
   if (page === "landing") {
     return (
       <LandingPage
-        onStart={() =>
-          setPage("analysis")
-        }
+        onStart={() => setPage("analysis")}
       />
     );
   }
@@ -3434,23 +3504,16 @@ function App() {
         form={form}
         setForm={setForm}
         onAnalyze={handleAnalyze}
-        onBack={() =>
-          setPage("landing")
-        }
+        onBack={() => setPage("landing")}
       />
     );
   }
 
-  if (
-    page === "results" &&
-    analysisData
-  ) {
+  if (page === "results" && analysisData) {
     return (
       <Results
         data={analysisData}
-        onBack={() =>
-          setPage("analysis")
-        }
+        onBack={() => setPage("analysis")}
       />
     );
   }

@@ -4754,3 +4754,104 @@ button {
   }
 }
 
+/* =========================================================
+   DASHBOARD NAVIGATION
+========================================================= */
+
+.cl-dashboard-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 2rem;
+
+  padding: 1rem 3rem;
+
+  border-bottom:
+    1px solid rgba(255, 255, 255, 0.07);
+
+  background:
+    rgba(14, 18, 25, 0.9);
+
+  backdrop-filter: blur(18px);
+}
+
+.cl-dashboard-nav-brand {
+  color: var(--paper);
+
+  font-family:
+    "Space Grotesk",
+    sans-serif;
+
+  font-size: 1.15rem;
+  font-weight: 700;
+
+  white-space: nowrap;
+}
+
+.cl-dashboard-nav-links {
+  display: flex;
+  align-items: center;
+
+  gap: 0.45rem;
+
+  flex-wrap: wrap;
+}
+
+.cl-dashboard-nav-link {
+  padding: 0.55rem 0.8rem;
+
+  border:
+    1px solid transparent;
+
+  border-radius: 999px;
+
+  color: var(--muted);
+
+  font-family:
+    "IBM Plex Mono",
+    monospace;
+
+  font-size: 0.72rem;
+
+  text-decoration: none;
+
+  transition:
+    color 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.cl-dashboard-nav-link:hover {
+  color: var(--paper);
+
+  background:
+    rgba(255, 255, 255, 0.04);
+}
+
+.cl-dashboard-nav-link.active {
+  color: var(--teal);
+
+  border-color:
+    rgba(73, 211, 196, 0.25);
+
+  background:
+    rgba(73, 211, 196, 0.07);
+}
+
+@media (max-width: 900px) {
+  .cl-dashboard-nav {
+    align-items: flex-start;
+    flex-direction: column;
+
+    padding: 1rem 1.3rem;
+  }
+
+  .cl-dashboard-nav-links {
+    width: 100%;
+  }
+}
