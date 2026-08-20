@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import DashboardNav from "../components/DashboardNav";
 
 function SkillGap({ data }) {
@@ -36,37 +36,40 @@ function SkillGap({ data }) {
     Math.min(100, Number(data.readiness) || 0)
   );
 
-  const skillDetails = useMemo(() => {
-    return missingSkills.map((skill) => {
-      const roadmapItem = roadmap.find(
-        (item) =>
-          (item.skill || item.title || "")
-            .toLowerCase() === skill.toLowerCase()
-      );
+  const skillDetails = missingSkills.map((skill) => {
+  const roadmapItem = roadmap.find(
+    (item) =>
+      (item.skill || item.title || "")
+        .toLowerCase() === skill.toLowerCase()
+  );
 
-      return {
-        skill,
-        difficulty:
-          roadmapItem?.difficulty || "Intermediate",
-        description:
-          roadmapItem?.description ||
-          `Build stronger ${skill} skills for ${data.role}.`,
-        topics:
-          roadmapItem?.topics || [
-            "Fundamentals",
-            "Practical Usage",
-            "Projects",
-          ],
-        time:
-          roadmapItem?.time || "5 days",
-        practice:
-          roadmapItem?.practice ||
-          `Build a small project using ${skill}.`,
-        resources:
-          roadmapItem?.resources || [],
-      };
-    });
-  }, [missingSkills, roadmap, data.role]);
+  return {
+    skill,
+    difficulty:
+      roadmapItem?.difficulty || "Intermediate",
+
+    description:
+      roadmapItem?.description ||
+      `Build stronger ${skill} skills for ${data.role}.`,
+
+    topics:
+      roadmapItem?.topics || [
+        "Fundamentals",
+        "Practical Usage",
+        "Projects",
+      ],
+
+    time:
+      roadmapItem?.time || "5 days",
+
+    practice:
+      roadmapItem?.practice ||
+      `Build a small project using ${skill}.`,
+
+    resources:
+      roadmapItem?.resources || [],
+  };
+});
 
   return (
     <main className="cl-analysis">
