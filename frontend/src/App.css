@@ -5923,3 +5923,555 @@ button {
     padding: 22px;
   }
 }
+/* =========================================================
+   ROADMAP PAGE
+   ========================================================= */
+
+.cl-roadmap-hero-card {
+  margin-top: 48px;
+  padding: 36px 40px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 40px;
+
+  border-radius: 28px;
+  border: 1px solid rgba(69, 211, 201, 0.22);
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(69, 211, 201, 0.07),
+      rgba(229, 184, 77, 0.035)
+    );
+}
+
+.cl-roadmap-hero-card > div:first-child {
+  max-width: 800px;
+}
+
+.cl-roadmap-hero-card h2 {
+  margin: 10px 0 14px;
+
+  font-size: 32px;
+  font-weight: 500;
+
+  color: #f3f0e8;
+}
+
+.cl-roadmap-hero-card > div:first-child > p:last-child {
+  color: #929cad;
+  line-height: 1.7;
+  font-size: 16px;
+}
+
+.cl-roadmap-days-badge {
+  min-width: 150px;
+  height: 150px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  border: 1px solid rgba(229, 184, 77, 0.35);
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(229, 184, 77, 0.09),
+      rgba(229, 184, 77, 0.02)
+    );
+}
+
+.cl-roadmap-days-badge strong {
+  font-size: 54px;
+  line-height: 1;
+
+  color: #e5b84d;
+}
+
+.cl-roadmap-days-badge span {
+  margin-top: 7px;
+
+  font-size: 11px;
+  letter-spacing: 0.25em;
+
+  color: #a6afbd;
+}
+
+
+/* =========================================================
+   SECTION HEADER
+   ========================================================= */
+
+.cl-roadmap-weeks-section,
+.cl-roadmap-learning-section {
+  margin-top: 70px;
+}
+
+.cl-roadmap-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+
+  gap: 30px;
+
+  margin-bottom: 32px;
+}
+
+.cl-roadmap-section-header h2 {
+  margin: 9px 0;
+
+  font-size: 38px;
+  font-weight: 500;
+
+  color: #f3f0e8;
+}
+
+.cl-roadmap-section-header > div > p:last-child {
+  max-width: 650px;
+
+  color: #929cad;
+
+  line-height: 1.65;
+}
+
+.cl-roadmap-week-count {
+  padding: 9px 14px;
+
+  border-radius: 999px;
+
+  border: 1px solid rgba(69, 211, 201, 0.3);
+
+  background: rgba(69, 211, 201, 0.05);
+
+  color: #55ddd1;
+
+  font-size: 13px;
+
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   WEEK TIMELINE
+   ========================================================= */
+
+.cl-roadmap-timeline {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 22px;
+}
+
+.cl-roadmap-timeline::before {
+  content: "";
+
+  position: absolute;
+
+  top: 40px;
+  bottom: 40px;
+  left: 34px;
+
+  width: 1px;
+
+  background:
+    linear-gradient(
+      to bottom,
+      #45d3c9,
+      rgba(69, 211, 201, 0.05)
+    );
+}
+
+.cl-roadmap-week {
+  position: relative;
+
+  display: grid;
+
+  grid-template-columns: 70px 1fr;
+
+  gap: 24px;
+}
+
+.cl-roadmap-week-number {
+  position: relative;
+  z-index: 2;
+
+  width: 68px;
+  height: 68px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  border: 1px solid rgba(69, 211, 201, 0.35);
+
+  background: #11171e;
+
+  color: #55ddd1;
+
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.cl-roadmap-week-content {
+  padding: 30px;
+
+  border-radius: 22px;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.035),
+      rgba(255, 255, 255, 0.015)
+    );
+}
+
+.cl-roadmap-week-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  gap: 25px;
+
+  padding-bottom: 22px;
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.cl-roadmap-week-heading h3 {
+  margin: 8px 0 0;
+
+  font-size: 27px;
+  font-weight: 500;
+
+  color: #f3f0e8;
+}
+
+
+/* FOCUS SKILLS */
+
+.cl-roadmap-focus-tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+
+  gap: 8px;
+}
+
+.cl-roadmap-focus-tags span {
+  padding: 8px 11px;
+
+  border-radius: 999px;
+
+  border: 1px solid rgba(229, 184, 77, 0.28);
+
+  background: rgba(229, 184, 77, 0.06);
+
+  color: #e5b84d;
+
+  font-size: 12px;
+
+  text-transform: capitalize;
+}
+
+
+/* WEEK TASKS */
+
+.cl-roadmap-task-list {
+  display: flex;
+  flex-direction: column;
+
+  gap: 12px;
+
+  margin-top: 22px;
+}
+
+.cl-roadmap-task {
+  display: flex;
+  align-items: flex-start;
+
+  gap: 14px;
+
+  padding: 14px 16px;
+
+  border-radius: 12px;
+
+  background: rgba(255, 255, 255, 0.025);
+
+  border: 1px solid rgba(255, 255, 255, 0.045);
+}
+
+.cl-roadmap-task span {
+  flex-shrink: 0;
+
+  width: 24px;
+  height: 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: rgba(69, 211, 201, 0.08);
+
+  color: #55ddd1;
+
+  font-size: 12px;
+}
+
+.cl-roadmap-task p {
+  margin: 0;
+
+  color: #c5cad3;
+
+  line-height: 1.55;
+}
+
+
+/* =========================================================
+   LEARNING ROADMAP
+   ========================================================= */
+
+.cl-roadmap-learning-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 20px;
+}
+
+.cl-roadmap-learning-card {
+  padding: 28px;
+
+  border-radius: 22px;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.035),
+      rgba(255, 255, 255, 0.015)
+    );
+}
+
+.cl-roadmap-learning-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 22px;
+}
+
+.cl-roadmap-learning-number {
+  font-size: 13px;
+  letter-spacing: 0.18em;
+
+  color: #55ddd1;
+}
+
+.cl-roadmap-learning-time {
+  padding: 7px 10px;
+
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.04);
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  color: #929cad;
+
+  font-size: 12px;
+}
+
+.cl-roadmap-learning-card h3 {
+  margin: 0 0 14px;
+
+  font-size: 27px;
+
+  color: #f3f0e8;
+
+  text-transform: capitalize;
+}
+
+.cl-roadmap-learning-description {
+  margin-bottom: 20px;
+
+  color: #929cad;
+
+  line-height: 1.65;
+}
+
+
+/* TOPICS */
+
+.cl-roadmap-topic-list {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 8px;
+
+  margin-bottom: 22px;
+}
+
+.cl-roadmap-topic-list span {
+  padding: 7px 10px;
+
+  border-radius: 8px;
+
+  background: rgba(69, 211, 201, 0.05);
+
+  border: 1px solid rgba(69, 211, 201, 0.12);
+
+  color: #aab4c1;
+
+  font-size: 12px;
+}
+
+
+/* PRACTICE PROJECT */
+
+.cl-roadmap-practice {
+  margin-top: 20px;
+
+  padding: 18px;
+
+  border-radius: 14px;
+
+  border-left: 2px solid #e5b84d;
+
+  background: rgba(229, 184, 77, 0.04);
+}
+
+.cl-roadmap-practice > p:last-child {
+  margin: 8px 0 0;
+
+  color: #c4cad3;
+
+  line-height: 1.55;
+}
+
+
+/* =========================================================
+   TIP
+   ========================================================= */
+
+.cl-roadmap-tip-card {
+  display: flex;
+  align-items: flex-start;
+
+  gap: 20px;
+
+  margin: 30px 0 70px;
+
+  padding: 22px 26px;
+
+  border-radius: 16px;
+
+  border: 1px solid rgba(69, 211, 201, 0.15);
+
+  background: rgba(69, 211, 201, 0.035);
+}
+
+.cl-roadmap-tip-label {
+  padding: 6px 9px;
+
+  border-radius: 6px;
+
+  background: rgba(69, 211, 201, 0.1);
+
+  color: #55ddd1;
+
+  font-size: 11px;
+
+  letter-spacing: 0.15em;
+}
+
+.cl-roadmap-tip-card p {
+  margin: 0;
+
+  color: #9da6b5;
+
+  line-height: 1.65;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 850px) {
+
+  .cl-roadmap-hero-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .cl-roadmap-days-badge {
+    width: 120px;
+    height: 120px;
+    min-width: 120px;
+  }
+
+  .cl-roadmap-days-badge strong {
+    font-size: 44px;
+  }
+
+  .cl-roadmap-section-header,
+  .cl-roadmap-week-heading {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .cl-roadmap-focus-tags {
+    justify-content: flex-start;
+  }
+
+  .cl-roadmap-learning-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+@media (max-width: 600px) {
+
+  .cl-roadmap-week {
+    grid-template-columns: 1fr;
+  }
+
+  .cl-roadmap-timeline::before {
+    display: none;
+  }
+
+  .cl-roadmap-week-number {
+    width: 54px;
+    height: 54px;
+  }
+
+  .cl-roadmap-hero-card,
+  .cl-roadmap-week-content,
+  .cl-roadmap-learning-card {
+    padding: 22px;
+  }
+
+  .cl-roadmap-section-header h2 {
+    font-size: 30px;
+  }
+
+  .cl-roadmap-tip-card {
+    flex-direction: column;
+  }
+}
